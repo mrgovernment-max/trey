@@ -2,20 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TREY · studio + cart & checkout</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"
+    />
+    <title>TREY · studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="style.css" />
   </head>
-  <link rel="stylesheet" href="style.css" />
   <body>
     <div class="site-wrapper">
       <header class="trey-header">
         <div class="logo">TREY <mark>—</mark> studio</div>
+        <div class="cart-badge" id="cartBadge" data-page="cart">
+          cart <span id="cartCount">0</span>
+        </div>
         <nav class="primary-nav" id="mainNav">
           <a href="#" data-page="home" class="active">home</a>
           <a href="#" data-page="products">products</a>
@@ -23,22 +29,18 @@
           <a href="#" data-page="contact">contact</a>
           <a href="#" data-page="cart">cart</a>
         </nav>
-        <!--<a href="index.html">reload</a>-->
-        <div class="cart-badge" id="cartBadge" data-page="cart">
-          cart <span id="cartCount">0</span>
-        </div>
       </header>
 
-      <!-- PAGES -->
+      <!-- PAGES (same structure, now responsive) -->
       <div id="homePage" class="page-section active-section">
-        [home content - same as before, compact]
         <div class="hero">
           <div>
             <h1 class="hero-title">
               two is <span>a compromise</span><br />the third dimension
             </h1>
             <p class="hero-text">
-              TREY invents objects that live in three states.
+              TREY invents objects that live in three states — now shipping to
+              Ghana 🇬🇭
             </p>
           </div>
           <div class="hero-visual">◈</div>
@@ -60,7 +62,7 @@
       </div>
 
       <div id="productsPage" class="page-section">
-        <h2 style="font-size: 2rem">products</h2>
+        <h2 style="font-size: 1.8rem">products</h2>
         <div class="product-grid" id="productGridContainer"></div>
       </div>
 
@@ -73,16 +75,20 @@
         <h2>gallery</h2>
         <div class="gallery-grid">
           <div class="gallery-card">
-            <div class="gallery-emoji">👟</div>
+            <div style="font-size: 3rem">👟</div>
             <h3>tri-sync</h3>
           </div>
           <div class="gallery-card">
-            <div class="gallery-emoji">🧥</div>
+            <div style="font-size: 3rem">🧥</div>
             <h3>field tee</h3>
           </div>
           <div class="gallery-card">
-            <div class="gallery-emoji">🦻</div>
+            <div style="font-size: 3rem">🦻</div>
             <h3>third ear</h3>
+          </div>
+          <div class="gallery-card">
+            <div style="font-size: 3rem">◈</div>
+            <h3>life</h3>
           </div>
         </div>
       </div>
@@ -91,11 +97,20 @@
         <h2>contact</h2>
         <div class="contact-grid">
           <div class="contact-info">
-            studio / showroom<br />trey@dimension.studio
+            <h3>studio / showroom</h3>
+            <p>trey@dimension.studio<br />+233 (0) 30 255 7890</p>
+            <p>34 independence ave, accra</p>
           </div>
           <div class="contact-form">
             <input placeholder="name" /><input placeholder="email" /><button
               class="form-btn"
+              style="
+                background: #1e1e1e;
+                color: white;
+                border: none;
+                padding: 0.8rem 2rem;
+                border-radius: 60px;
+              "
             >
               send
             </button>
@@ -103,31 +118,25 @@
         </div>
       </div>
 
-      <!-- CART PAGE -->
       <div id="cartPage" class="page-section">
-        <h2 style="font-size: 2rem; margin-bottom: 1.5rem">your cart</h2>
-        <div id="cartContainer" class="cart-container">
-          <!-- dynamic cart items -->
-        </div>
+        <h2 style="font-size: 1.8rem">your cart</h2>
+        <div id="cartContainer" class="cart-container"></div>
       </div>
 
-      <!-- CHECKOUT PAGE (hidden, shown after proceed) -->
       <div id="checkoutPage" class="page-section">
         <a class="back-link" id="backToCart">← back to cart</a>
-        <div id="checkoutContainer" class="checkout-container">
-          <!-- step content -->
-        </div>
+        <div id="checkoutContainer" class="checkout-container"></div>
       </div>
 
       <footer class="footer-minimal">
         <span>© TREY studio — two is a compromise</span>
-        <span>est. 2022 · three dimensions</span>
+        <span>accra · london · ny</span>
       </footer>
     </div>
 
     <script>
       (function () {
-        // ---------- DATA ----------
+        // ----- PRODUCT DATA (same) -----
         const products = [
           {
             id: "triSync",
@@ -135,7 +144,7 @@
             category: "tri‑sync",
             price: 420,
             emoji: "👟",
-            description: "Three soles",
+            description: "Three soles: hard, air, magnetic.",
             warranty: "3 year",
             type: "footwear",
             sizes: ["40", "41", "42", "43", "44"],
@@ -184,12 +193,9 @@
           },
         ];
 
-        // Cart array: { id, name, price, emoji, size, dimension (optional), quantity }
         let cart = JSON.parse(localStorage.getItem("treyCart")) || [];
-
-        let cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+        let cartCount = cart.reduce((acc, i) => acc + i.quantity, 0);
         const cartSpan = document.getElementById("cartCount");
-        const cartBadge = document.getElementById("cartBadge");
         function updateCartBadge() {
           cartCount = cart.reduce((acc, i) => acc + i.quantity, 0);
           cartSpan.textContent = cartCount;
@@ -197,7 +203,7 @@
         }
         updateCartBadge();
 
-        // ---------- PAGE NAVIGATION ----------
+        // navigation
         const sections = {
           home: document.getElementById("homePage"),
           products: document.getElementById("productsPage"),
@@ -207,35 +213,26 @@
           cart: document.getElementById("cartPage"),
           checkout: document.getElementById("checkoutPage"),
         };
-        const navLinks = document.querySelectorAll(
-          ".primary-nav a, .cart-badge"
-        );
-
         function showPage(pageId) {
           Object.values(sections).forEach((s) =>
             s?.classList.remove("active-section")
           );
           if (sections[pageId])
             sections[pageId].classList.add("active-section");
-          navLinks.forEach((link) => {
-            if (link.classList.contains("primary-nav")) return;
-            link.classList.remove("active");
-            if (link.dataset.page === pageId) link.classList.add("active");
-          });
-          // if cart shown, render cart
           if (pageId === "cart") renderCart();
-          if (pageId === "checkout") renderCheckoutStep(1);
+          if (pageId === "checkout") renderCheckout();
         }
 
-        navLinks.forEach((link) => {
-          link.addEventListener("click", (e) => {
-            e.preventDefault();
-            const page = link.dataset.page;
-            if (page) showPage(page);
+        document
+          .querySelectorAll(".primary-nav a, .cart-badge")
+          .forEach((el) => {
+            el.addEventListener("click", (e) => {
+              e.preventDefault();
+              if (el.dataset.page) showPage(el.dataset.page);
+            });
           });
-        });
 
-        // ---------- BUILD PRODUCT GRID ----------
+        // build product grid
         const gridContainer = document.getElementById("productGridContainer");
         function buildProductGrid() {
           let html = "";
@@ -246,36 +243,33 @@
           document.querySelectorAll(".product-card").forEach((card) => {
             card.addEventListener("click", () => {
               const pid = card.dataset.productId;
-              const product = products.find((p) => p.id === pid);
-              if (product) showProductDetail(product);
+              showProductDetail(products.find((p) => p.id === pid));
             });
           });
         }
 
-        // ---------- PRODUCT DETAIL ----------
+        // product detail (responsive)
         function showProductDetail(product) {
-          let sizeOptions = "";
-          if (product.sizes.length) {
-            product.sizes.forEach((sz, idx) => {
-              sizeOptions += `<div class="size-option ${
-                idx === 0 ? "active" : ""
-              }" data-size="${sz}">${sz}</div>`;
-            });
-          } else {
-            sizeOptions = `<div class="size-option active" data-size="one">one size</div>`;
-          }
-
-          let dimHtml = "";
-          if (product.dimensions) {
-            let btns = "";
-            product.dimOptions.forEach((opt, i) => {
-              btns += `<div class="dim-option ${
-                i === 0 ? "active" : ""
-              }">${opt}</div>`;
-            });
-            dimHtml = `<div class="dimension-selector">${btns}</div>`;
-          }
-
+          let sizeOptions = product.sizes.length
+            ? product.sizes
+                .map(
+                  (sz, idx) =>
+                    `<div class="size-option ${
+                      idx === 0 ? "active" : ""
+                    }" data-size="${sz}">${sz}</div>`
+                )
+                .join("")
+            : `<div class="size-option active" data-size="one">one size</div>`;
+          let dimHtml = product.dimensions
+            ? `<div class="dimension-selector">${product.dimOptions
+                .map(
+                  (opt, i) =>
+                    `<div class="dim-option ${
+                      i === 0 ? "active" : ""
+                    }">${opt}</div>`
+                )
+                .join("")}</div>`
+            : "";
           const detailHtml = `
                     <div class="detail-grid">
                         <div class="detail-visual">${product.emoji}</div>
@@ -284,37 +278,32 @@
                             <div class="detail-name">${product.name}</div>
                             <div class="detail-price">$${product.price}</div>
                             <div class="desc-block">${product.description}</div>
-                            <div class="specs-grid"><div class="spec-item"><span class="spec-label">type</span> ${product.type}</div><div class="spec-item"><span class="spec-label">release</span> ${product.release}</div></div>
+                            <div class="specs-grid"><div><span class="spec-label">type</span> ${product.type}</div><div><span class="spec-label">release</span> ${product.release}</div></div>
                             <div class="warranty-badge">🛡️ ${product.warranty}</div>
-                            <div style="font-weight:500;">size</div>
-                            <div class="size-selector">${sizeOptions}</div>
-                            ${dimHtml}
+                            <div style="font-weight:500;">size</div><div class="size-selector">${sizeOptions}</div>${dimHtml}
                             <button class="add-to-cart-detail" id="detailAddBtn">add to cart <span>+</span></button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
           document.getElementById("detailContainer").innerHTML = detailHtml;
           showPage("detail");
 
-          // size click
-          document.querySelectorAll(".size-option").forEach((opt) => {
-            opt.addEventListener("click", function () {
+          document.querySelectorAll(".size-option").forEach((o) =>
+            o.addEventListener("click", function () {
               document
                 .querySelectorAll(".size-option")
-                .forEach((o) => o.classList.remove("active"));
+                .forEach((oo) => oo.classList.remove("active"));
               this.classList.add("active");
-            });
-          });
-          if (product.dimensions) {
-            document.querySelectorAll(".dim-option").forEach((d) => {
+            })
+          );
+          if (product.dimensions)
+            document.querySelectorAll(".dim-option").forEach((d) =>
               d.addEventListener("click", function () {
                 document
                   .querySelectorAll(".dim-option")
                   .forEach((dd) => dd.classList.remove("active"));
                 this.classList.add("active");
-              });
-            });
-          }
+              })
+            );
 
           document
             .getElementById("detailAddBtn")
@@ -326,157 +315,134 @@
                 ? document.querySelector(".dim-option.active")?.textContent ||
                   "hard"
                 : null;
-
-              // add to cart
-              const cartItem = {
-                id:
-                  product.id +
-                  (selectedDim ? "-" + selectedDim : "") +
-                  selectedSize,
-                productId: product.id,
-                name: product.name,
-                price: product.price,
-                emoji: product.emoji,
-                size: selectedSize,
-                dimension: selectedDim,
-                quantity: 1,
-              };
-
-              // check if same options exist
-              const existing = cart.find((item) => item.id === cartItem.id);
-              if (existing) {
-                existing.quantity += 1;
-              } else {
-                cart.push(cartItem);
-              }
+              const itemId = product.id + (selectedDim || "") + selectedSize;
+              const existing = cart.find((i) => i.id === itemId);
+              if (existing) existing.quantity += 1;
+              else
+                cart.push({
+                  id: itemId,
+                  productId: product.id,
+                  name: product.name,
+                  price: product.price,
+                  emoji: product.emoji,
+                  size: selectedSize,
+                  dimension: selectedDim,
+                  quantity: 1,
+                });
               updateCartBadge();
-
-              // feedback
-              const btn = this;
-              const orig = btn.innerHTML;
-              btn.innerHTML = `added (${selectedSize}) ✓`;
-              btn.style.background = "#2b4b3b";
+              this.innerHTML = `added (${selectedSize}) ✓`;
+              this.style.background = "#2b4b3b";
               setTimeout(() => {
-                btn.innerHTML = orig;
-                btn.style.background = "#1e1e1e";
-              }, 1200);
+                this.innerHTML = "add to cart <span>+</span>";
+                this.style.background = "#1e1e1e";
+              }, 1000);
             });
         }
 
-        // ---------- RENDER CART ----------
+        // render cart (responsive)
         function renderCart() {
           const container = document.getElementById("cartContainer");
           if (!cart.length) {
             container.innerHTML =
-              '<div class="empty-cart">your cart is empty</div><button class="checkout-btn" onclick="showPage(\'products\')">continue shopping</button>';
+              '<div class="empty-cart">your cart is empty</div><button class="checkout-btn" onclick="showPage(\'products\')">shop now</button>';
             return;
           }
-
           let itemsHtml = "";
-          cart.forEach((item, index) => {
-            itemsHtml += `
-                        <div class="cart-item" data-index="${index}">
-                            <span class="cart-item-emoji">${item.emoji}</span>
-                            <div class="cart-item-details">
-                                <strong>${item.name}</strong>
-                                <p>size: ${item.size} ${
+          cart.forEach((item, idx) => {
+            itemsHtml += `<div class="cart-item" data-index="${idx}"><span class="cart-item-emoji">${
+              item.emoji
+            }</span><div class="cart-item-details"><strong>${
+              item.name
+            }</strong><p>size: ${item.size} ${
               item.dimension ? "· " + item.dimension : ""
-            }</p>
-                            </div>
-                            <div class="cart-item-price">$${item.price}</div>
-                            <div class="cart-qty">
-                                <button class="qty-down" data-index="${index}">−</button>
-                                <span>${item.quantity}</span>
-                                <button class="qty-up" data-index="${index}">+</button>
-                            </div>
-                            <div>$${item.price * item.quantity}</div>
-                            <button class="cart-remove" data-index="${index}">✕</button>
-                        </div>
-                    `;
+            }</p></div><div>$${
+              item.price
+            }</div><div class="cart-qty"><button class="qty-down" data-index="${idx}">−</button><span>${
+              item.quantity
+            }</span><button class="qty-up" data-index="${idx}">+</button></div><div>$${
+              item.price * item.quantity
+            }</div><button class="cart-remove" data-index="${idx}">✕</button></div>`;
           });
-
-          const total = cart.reduce((acc, i) => acc + i.price * i.quantity, 0);
+          const total = cart.reduce((a, i) => a + i.price * i.quantity, 0);
           container.innerHTML =
             itemsHtml +
-            `
-                    <div class="cart-summary">total: $${total}</div>
-                    <button class="checkout-btn" id="proceedToCheckout">proceed to checkout</button>
-                `;
-
-          // attach events
-          document.querySelectorAll(".qty-up").forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-              const idx = e.target.dataset.index;
-              cart[idx].quantity += 1;
+            `<div class="cart-summary">total: GHS ${Math.round(
+              total * 15
+            )} · ($${total})</div><button class="checkout-btn" id="proceedToCheckout">proceed to checkout</button>`;
+          document.querySelectorAll(".qty-up").forEach((b) =>
+            b.addEventListener("click", (e) => {
+              cart[e.target.dataset.index].quantity++;
               updateCartBadge();
               renderCart();
-            });
-          });
-          document.querySelectorAll(".qty-down").forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-              const idx = e.target.dataset.index;
-              if (cart[idx].quantity > 1) {
-                cart[idx].quantity -= 1;
-              } else {
-                cart.splice(idx, 1);
-              }
+            })
+          );
+          document.querySelectorAll(".qty-down").forEach((b) =>
+            b.addEventListener("click", (e) => {
+              let idx = e.target.dataset.index;
+              if (cart[idx].quantity > 1) cart[idx].quantity--;
+              else cart.splice(idx, 1);
               updateCartBadge();
               renderCart();
-            });
-          });
-          document.querySelectorAll(".cart-remove").forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-              const idx = e.target.dataset.index;
-              cart.splice(idx, 1);
+            })
+          );
+          document.querySelectorAll(".cart-remove").forEach((b) =>
+            b.addEventListener("click", (e) => {
+              cart.splice(e.target.dataset.index, 1);
               updateCartBadge();
               renderCart();
-            });
-          });
-
+            })
+          );
           document
             .getElementById("proceedToCheckout")
-            ?.addEventListener("click", () => {
-              showPage("checkout");
-            });
+            ?.addEventListener("click", () => showPage("checkout"));
         }
 
-        // ---------- CHECKOUT STEPS ----------
-        let checkoutStep = 1;
-        function renderCheckoutStep(step) {
+        // checkout with mobile money (Ghana)
+        function renderCheckout() {
+          const total = cart.reduce((a, i) => a + i.price * i.quantity, 0);
           const container = document.getElementById("checkoutContainer");
-          let html = "";
-          if (step === 1) {
-            html = `<div class="checkout-step"><h3>shipping info</h3><input placeholder="name"><input placeholder="address"><input placeholder="city"></div>
-                            <div class="checkout-buttons"><button class="checkout-next" id="checkoutNext">next</button></div>`;
-          } else if (step === 2) {
-            html = `<div class="checkout-step"><h3>payment</h3><input placeholder="card number"><input placeholder="expiry"><input placeholder="cvc"></div>
-                            <div class="checkout-buttons"><button class="checkout-prev" id="checkoutPrev">back</button><button class="place-order" id="placeOrder">place order</button></div>`;
-          }
-          container.innerHTML = html;
-
-          document
-            .getElementById("checkoutNext")
-            ?.addEventListener("click", () => {
-              checkoutStep = 2;
-              renderCheckoutStep(2);
+          container.innerHTML = `
+                    <h3 style="margin-bottom:1.5rem;">checkout · pay with mobile money</h3>
+                    <div class="payment-option selected" id="mtnOption">
+                        <input type="radio" name="payment" value="mtn" checked> <span style="font-weight:600;">MTN Mobile Money</span>
+                    </div>
+                    <div class="payment-option" id="vodOption">
+                        <input type="radio" name="payment" value="vodafone"> <span style="font-weight:600;">Vodafone Cash</span>
+                    </div>
+                    <div class="payment-option" id="tigoOption">
+                        <input type="radio" name="payment" value="tigo"> <span style="font-weight:600;">AirtelTigo Money</span>
+                    </div>
+                    <div class="momo-details" id="momoDetails">
+                        <input type="text" placeholder="mobile money number (e.g. 0244xxxxxx)">
+                        <input type="text" placeholder="name on account">
+                        <p style="font-size:0.9rem; color:#666;">You'll receive an OTP prompt on your phone to confirm payment.</p>
+                    </div>
+                    <div style="margin:1.5rem 0;"><strong>total: GHS ${Math.round(
+                      total * 15
+                    )}</strong> (approx $${total})</div>
+                    <button class="place-order" id="placeOrderBtn">place order · pay with MoMo</button>
+                `;
+          document.querySelectorAll(".payment-option").forEach((opt) => {
+            opt.addEventListener("click", function () {
+              document
+                .querySelectorAll(".payment-option")
+                .forEach((o) => o.classList.remove("selected"));
+              this.classList.add("selected");
+              this.querySelector('input[type="radio"]').checked = true;
             });
+          });
           document
-            .getElementById("checkoutPrev")
-            ?.addEventListener("click", () => {
-              checkoutStep = 1;
-              renderCheckoutStep(1);
-            });
-          document
-            .getElementById("placeOrder")
-            ?.addEventListener("click", () => {
-              alert("order placed (demo) — cart cleared");
+            .getElementById("placeOrderBtn")
+            .addEventListener("click", () => {
+              alert(
+                "Payment initiated (demo) · check your phone for OTP. Order placed!"
+              );
               cart = [];
               updateCartBadge();
               showPage("home");
             });
         }
 
-        // back to products / cart
         document
           .getElementById("backToProducts")
           .addEventListener("click", (e) => {
@@ -490,8 +456,6 @@
 
         buildProductGrid();
         showPage("home");
-
-        // expose for onclick
         window.showPage = showPage;
       })();
     </script>
