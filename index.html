@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TREY · studio + cart & checkout</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <link rel="stylesheet" href="style.css" />
+  <body>
+    <div class="site-wrapper">
+      <header class="trey-header">
+        <div class="logo">TREY <mark>—</mark> studio</div>
+        <nav class="primary-nav" id="mainNav">
+          <a href="#" data-page="home" class="active">home</a>
+          <a href="#" data-page="products">products</a>
+          <a href="#" data-page="gallery">gallery</a>
+          <a href="#" data-page="contact">contact</a>
+          <a href="#" data-page="cart">cart</a>
+        </nav>
+        <!--<a href="index.html">reload</a>-->
+        <div class="cart-badge" id="cartBadge" data-page="cart">
+          cart <span id="cartCount">0</span>
+        </div>
+      </header>
+
+      <!-- PAGES -->
+      <div id="homePage" class="page-section active-section">
+        [home content - same as before, compact]
+        <div class="hero">
+          <div>
+            <h1 class="hero-title">
+              two is <span>a compromise</span><br />the third dimension
+            </h1>
+            <p class="hero-text">
+              TREY invents objects that live in three states.
+            </p>
+          </div>
+          <div class="hero-visual">◈</div>
+        </div>
+        <div class="gallery-preview">
+          <div class="gallery-item">
+            👟
+            <p>tri‑sync</p>
+          </div>
+          <div class="gallery-item">
+            🧥
+            <p>hologram</p>
+          </div>
+          <div class="gallery-item">
+            🦻
+            <p>third ear</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="productsPage" class="page-section">
+        <h2 style="font-size: 2rem">products</h2>
+        <div class="product-grid" id="productGridContainer"></div>
+      </div>
+
+      <div id="detailPage" class="page-section">
+        <a class="back-link" id="backToProducts">← back to products</a>
+        <div id="detailContainer" class="detail-container"></div>
+      </div>
+
+      <div id="galleryPage" class="page-section">
+        <h2>gallery</h2>
+        <div class="gallery-grid">
+          <div class="gallery-card">
+            <div class="gallery-emoji">👟</div>
+            <h3>tri-sync</h3>
+          </div>
+          <div class="gallery-card">
+            <div class="gallery-emoji">🧥</div>
+            <h3>field tee</h3>
+          </div>
+          <div class="gallery-card">
+            <div class="gallery-emoji">🦻</div>
+            <h3>third ear</h3>
+          </div>
+        </div>
+      </div>
+
+      <div id="contactPage" class="page-section">
+        <h2>contact</h2>
+        <div class="contact-grid">
+          <div class="contact-info">
+            studio / showroom<br />trey@dimension.studio
+          </div>
+          <div class="contact-form">
+            <input placeholder="name" /><input placeholder="email" /><button
+              class="form-btn"
+            >
+              send
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CART PAGE -->
+      <div id="cartPage" class="page-section">
+        <h2 style="font-size: 2rem; margin-bottom: 1.5rem">your cart</h2>
+        <div id="cartContainer" class="cart-container">
+          <!-- dynamic cart items -->
+        </div>
+      </div>
+
+      <!-- CHECKOUT PAGE (hidden, shown after proceed) -->
+      <div id="checkoutPage" class="page-section">
+        <a class="back-link" id="backToCart">← back to cart</a>
+        <div id="checkoutContainer" class="checkout-container">
+          <!-- step content -->
+        </div>
+      </div>
+
+      <footer class="footer-minimal">
+        <span>© TREY studio — two is a compromise</span>
+        <span>est. 2022 · three dimensions</span>
+      </footer>
+    </div>
+
+    <script>
+      (function () {
+        // ---------- DATA ----------
+        const products = [
+          {
+            id: "triSync",
+            name: "Tri‑Sync sneaker",
+            category: "tri‑sync",
+            price: 420,
+            emoji: "👟",
+            description: "Three soles",
+            warranty: "3 year",
+            type: "footwear",
+            sizes: ["40", "41", "42", "43", "44"],
+            release: "spring 2025",
+            dimensions: true,
+            dimOptions: ["hard", "air", "magnetic"],
+          },
+          {
+            id: "hologramTee",
+            name: "Hologram field tee",
+            category: "apparel",
+            price: 280,
+            emoji: "🧥",
+            description: "Black indoors — galaxy under sun.",
+            warranty: "2 year",
+            type: "apparel",
+            sizes: ["S", "M", "L", "XL"],
+            release: "fall 2024",
+            dimensions: false,
+          },
+          {
+            id: "thirdEar",
+            name: "Third ear",
+            category: "audio",
+            price: 540,
+            emoji: "🦻",
+            description: "Personal sound bubble.",
+            warranty: "18 month",
+            type: "audio",
+            sizes: ["one size"],
+            release: "summer 2025",
+            dimensions: false,
+          },
+          {
+            id: "treyLife",
+            name: "Trey of life",
+            category: "subscription",
+            price: 890,
+            emoji: "◈",
+            description: "Physical + digital + code.",
+            warranty: "lifetime",
+            type: "membership",
+            sizes: [],
+            release: "ongoing",
+            dimensions: false,
+          },
+        ];
+
+        // Cart array: { id, name, price, emoji, size, dimension (optional), quantity }
+        let cart = JSON.parse(localStorage.getItem("treyCart")) || [];
+
+        let cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+        const cartSpan = document.getElementById("cartCount");
+        const cartBadge = document.getElementById("cartBadge");
+        function updateCartBadge() {
+          cartCount = cart.reduce((acc, i) => acc + i.quantity, 0);
+          cartSpan.textContent = cartCount;
+          localStorage.setItem("treyCart", JSON.stringify(cart));
+        }
+        updateCartBadge();
+
+        // ---------- PAGE NAVIGATION ----------
+        const sections = {
+          home: document.getElementById("homePage"),
+          products: document.getElementById("productsPage"),
+          detail: document.getElementById("detailPage"),
+          gallery: document.getElementById("galleryPage"),
+          contact: document.getElementById("contactPage"),
+          cart: document.getElementById("cartPage"),
+          checkout: document.getElementById("checkoutPage"),
+        };
+        const navLinks = document.querySelectorAll(
+          ".primary-nav a, .cart-badge"
+        );
+
+        function showPage(pageId) {
+          Object.values(sections).forEach((s) =>
+            s?.classList.remove("active-section")
+          );
+          if (sections[pageId])
+            sections[pageId].classList.add("active-section");
+          navLinks.forEach((link) => {
+            if (link.classList.contains("primary-nav")) return;
+            link.classList.remove("active");
+            if (link.dataset.page === pageId) link.classList.add("active");
+          });
+          // if cart shown, render cart
+          if (pageId === "cart") renderCart();
+          if (pageId === "checkout") renderCheckoutStep(1);
+        }
+
+        navLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const page = link.dataset.page;
+            if (page) showPage(page);
+          });
+        });
+
+        // ---------- BUILD PRODUCT GRID ----------
+        const gridContainer = document.getElementById("productGridContainer");
+        function buildProductGrid() {
+          let html = "";
+          products.forEach((p) => {
+            html += `<div class="product-card" data-product-id="${p.id}"><div class="card-emoji">${p.emoji}</div><div class="card-title">${p.name}</div><div class="card-price">$${p.price}</div></div>`;
+          });
+          gridContainer.innerHTML = html;
+          document.querySelectorAll(".product-card").forEach((card) => {
+            card.addEventListener("click", () => {
+              const pid = card.dataset.productId;
+              const product = products.find((p) => p.id === pid);
+              if (product) showProductDetail(product);
+            });
+          });
+        }
+
+        // ---------- PRODUCT DETAIL ----------
+        function showProductDetail(product) {
+          let sizeOptions = "";
+          if (product.sizes.length) {
+            product.sizes.forEach((sz, idx) => {
+              sizeOptions += `<div class="size-option ${
+                idx === 0 ? "active" : ""
+              }" data-size="${sz}">${sz}</div>`;
+            });
+          } else {
+            sizeOptions = `<div class="size-option active" data-size="one">one size</div>`;
+          }
+
+          let dimHtml = "";
+          if (product.dimensions) {
+            let btns = "";
+            product.dimOptions.forEach((opt, i) => {
+              btns += `<div class="dim-option ${
+                i === 0 ? "active" : ""
+              }">${opt}</div>`;
+            });
+            dimHtml = `<div class="dimension-selector">${btns}</div>`;
+          }
+
+          const detailHtml = `
+                    <div class="detail-grid">
+                        <div class="detail-visual">${product.emoji}</div>
+                        <div class="detail-info">
+                            <div class="detail-category">${product.category}</div>
+                            <div class="detail-name">${product.name}</div>
+                            <div class="detail-price">$${product.price}</div>
+                            <div class="desc-block">${product.description}</div>
+                            <div class="specs-grid"><div class="spec-item"><span class="spec-label">type</span> ${product.type}</div><div class="spec-item"><span class="spec-label">release</span> ${product.release}</div></div>
+                            <div class="warranty-badge">🛡️ ${product.warranty}</div>
+                            <div style="font-weight:500;">size</div>
+                            <div class="size-selector">${sizeOptions}</div>
+                            ${dimHtml}
+                            <button class="add-to-cart-detail" id="detailAddBtn">add to cart <span>+</span></button>
+                        </div>
+                    </div>
+                `;
+          document.getElementById("detailContainer").innerHTML = detailHtml;
+          showPage("detail");
+
+          // size click
+          document.querySelectorAll(".size-option").forEach((opt) => {
+            opt.addEventListener("click", function () {
+              document
+                .querySelectorAll(".size-option")
+                .forEach((o) => o.classList.remove("active"));
+              this.classList.add("active");
+            });
+          });
+          if (product.dimensions) {
+            document.querySelectorAll(".dim-option").forEach((d) => {
+              d.addEventListener("click", function () {
+                document
+                  .querySelectorAll(".dim-option")
+                  .forEach((dd) => dd.classList.remove("active"));
+                this.classList.add("active");
+              });
+            });
+          }
+
+          document
+            .getElementById("detailAddBtn")
+            .addEventListener("click", function () {
+              const selectedSize =
+                document.querySelector(".size-option.active")?.dataset.size ||
+                "one";
+              const selectedDim = product.dimensions
+                ? document.querySelector(".dim-option.active")?.textContent ||
+                  "hard"
+                : null;
+
+              // add to cart
+              const cartItem = {
+                id:
+                  product.id +
+                  (selectedDim ? "-" + selectedDim : "") +
+                  selectedSize,
+                productId: product.id,
+                name: product.name,
+                price: product.price,
+                emoji: product.emoji,
+                size: selectedSize,
+                dimension: selectedDim,
+                quantity: 1,
+              };
+
+              // check if same options exist
+              const existing = cart.find((item) => item.id === cartItem.id);
+              if (existing) {
+                existing.quantity += 1;
+              } else {
+                cart.push(cartItem);
+              }
+              updateCartBadge();
+
+              // feedback
+              const btn = this;
+              const orig = btn.innerHTML;
+              btn.innerHTML = `added (${selectedSize}) ✓`;
+              btn.style.background = "#2b4b3b";
+              setTimeout(() => {
+                btn.innerHTML = orig;
+                btn.style.background = "#1e1e1e";
+              }, 1200);
+            });
+        }
+
+        // ---------- RENDER CART ----------
+        function renderCart() {
+          const container = document.getElementById("cartContainer");
+          if (!cart.length) {
+            container.innerHTML =
+              '<div class="empty-cart">your cart is empty</div><button class="checkout-btn" onclick="showPage(\'products\')">continue shopping</button>';
+            return;
+          }
+
+          let itemsHtml = "";
+          cart.forEach((item, index) => {
+            itemsHtml += `
+                        <div class="cart-item" data-index="${index}">
+                            <span class="cart-item-emoji">${item.emoji}</span>
+                            <div class="cart-item-details">
+                                <strong>${item.name}</strong>
+                                <p>size: ${item.size} ${
+              item.dimension ? "· " + item.dimension : ""
+            }</p>
+                            </div>
+                            <div class="cart-item-price">$${item.price}</div>
+                            <div class="cart-qty">
+                                <button class="qty-down" data-index="${index}">−</button>
+                                <span>${item.quantity}</span>
+                                <button class="qty-up" data-index="${index}">+</button>
+                            </div>
+                            <div>$${item.price * item.quantity}</div>
+                            <button class="cart-remove" data-index="${index}">✕</button>
+                        </div>
+                    `;
+          });
+
+          const total = cart.reduce((acc, i) => acc + i.price * i.quantity, 0);
+          container.innerHTML =
+            itemsHtml +
+            `
+                    <div class="cart-summary">total: $${total}</div>
+                    <button class="checkout-btn" id="proceedToCheckout">proceed to checkout</button>
+                `;
+
+          // attach events
+          document.querySelectorAll(".qty-up").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const idx = e.target.dataset.index;
+              cart[idx].quantity += 1;
+              updateCartBadge();
+              renderCart();
+            });
+          });
+          document.querySelectorAll(".qty-down").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const idx = e.target.dataset.index;
+              if (cart[idx].quantity > 1) {
+                cart[idx].quantity -= 1;
+              } else {
+                cart.splice(idx, 1);
+              }
+              updateCartBadge();
+              renderCart();
+            });
+          });
+          document.querySelectorAll(".cart-remove").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const idx = e.target.dataset.index;
+              cart.splice(idx, 1);
+              updateCartBadge();
+              renderCart();
+            });
+          });
+
+          document
+            .getElementById("proceedToCheckout")
+            ?.addEventListener("click", () => {
+              showPage("checkout");
+            });
+        }
+
+        // ---------- CHECKOUT STEPS ----------
+        let checkoutStep = 1;
+        function renderCheckoutStep(step) {
+          const container = document.getElementById("checkoutContainer");
+          let html = "";
+          if (step === 1) {
+            html = `<div class="checkout-step"><h3>shipping info</h3><input placeholder="name"><input placeholder="address"><input placeholder="city"></div>
+                            <div class="checkout-buttons"><button class="checkout-next" id="checkoutNext">next</button></div>`;
+          } else if (step === 2) {
+            html = `<div class="checkout-step"><h3>payment</h3><input placeholder="card number"><input placeholder="expiry"><input placeholder="cvc"></div>
+                            <div class="checkout-buttons"><button class="checkout-prev" id="checkoutPrev">back</button><button class="place-order" id="placeOrder">place order</button></div>`;
+          }
+          container.innerHTML = html;
+
+          document
+            .getElementById("checkoutNext")
+            ?.addEventListener("click", () => {
+              checkoutStep = 2;
+              renderCheckoutStep(2);
+            });
+          document
+            .getElementById("checkoutPrev")
+            ?.addEventListener("click", () => {
+              checkoutStep = 1;
+              renderCheckoutStep(1);
+            });
+          document
+            .getElementById("placeOrder")
+            ?.addEventListener("click", () => {
+              alert("order placed (demo) — cart cleared");
+              cart = [];
+              updateCartBadge();
+              showPage("home");
+            });
+        }
+
+        // back to products / cart
+        document
+          .getElementById("backToProducts")
+          .addEventListener("click", (e) => {
+            e.preventDefault();
+            showPage("products");
+          });
+        document.getElementById("backToCart").addEventListener("click", (e) => {
+          e.preventDefault();
+          showPage("cart");
+        });
+
+        buildProductGrid();
+        showPage("home");
+
+        // expose for onclick
+        window.showPage = showPage;
+      })();
+    </script>
+  </body>
+</html>
