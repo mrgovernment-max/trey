@@ -121,6 +121,7 @@ body {
   grid-template-columns: 1fr;
   gap: 1.8rem;
   margin-bottom: 2.5rem;
+  margin-top: 2%;
 }
 @media (min-width: 700px) {
   .hero {
@@ -167,7 +168,7 @@ body {
 .gallery-item {
   background: #fff;
   border-radius: 18px;
-  padding: 1rem;
+  padding: 2rem;
   text-align: center;
   border: 1px solid #edf0f5;
   font-size: 2rem;
