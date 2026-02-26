@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"
     />
-    <title>TREY · product gallery 4 images</title>
+    <title>TREY · separate pages</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -19,19 +19,20 @@
     <div class="site-wrapper">
       <header class="trey-header">
         <div class="logo">TREY <mark>—</mark> studio</div>
-        <div class="cart-badge" id="cartBadge" data-page="cart">
+        <div class="cart-badge" id="cartBadge">
           cart <span id="cartCount">0</span>
         </div>
         <nav class="primary-nav" id="mainNav">
-          <a href="#" data-page="home" class="active navsel">home</a>
-          <a href="#" class="navsel" data-page="products">products</a>
-          <a href="#" class="navsel" data-page="gallery">gallery</a>
-          <a href="#" class="navsel" data-page="contact">contact</a>
-          <a href="#" class="navsel" data-page="cart">cart</a>
+          <!-- data-page indicates which page-section to show -->
+          <a href="#" data-page="home" class="active">home</a>
+          <a href="#" data-page="products">products</a>
+          <a href="#" data-page="gallery">gallery</a>
+          <a href="#" data-page="contact">contact</a>
+          <a href="#" data-page="cart">cart</a>
         </nav>
       </header>
 
-      <!-- PAGES (minimal home, products, etc) -->
+      <!-- INDIVIDUAL PAGES (each its own section) -->
       <div id="homePage" class="page-section active-section">
         <div class="hero">
           <div>
@@ -45,26 +46,31 @@
       </div>
 
       <div id="productsPage" class="page-section">
-        <h2 style="font-size: 1.8rem">products</h2>
+        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem">products</h2>
         <div class="product-grid" id="productGridContainer"></div>
       </div>
 
-      <!-- DETAIL PAGE (with 4-image gallery) -->
+      <!-- DETAIL PAGE (4‑image gallery) – standalone -->
       <div id="detailPage" class="page-section">
         <a class="back-link" id="backToProducts">← back to products</a>
         <div id="detailContainer" class="detail-container"></div>
       </div>
 
-      <!-- other pages (minimal) -->
+      <!-- other static pages (minimal) -->
       <div id="galleryPage" class="page-section"><h2>gallery</h2></div>
       <div id="contactPage" class="page-section"><h2>contact</h2></div>
       <div id="cartPage" class="page-section">
-        <h2>your cart</h2>
+        <h2 style="margin-bottom: 1rem">your cart</h2>
         <div id="cartContainer" class="cart-container"></div>
       </div>
       <div id="checkoutPage" class="page-section">
         <a class="back-link" id="backToCart">← back to cart</a>
-        <div id="checkoutContainer"></div>
+        <div
+          id="checkoutContainer"
+          style="background: #fffcf8; padding: 2rem; border-radius: 24px"
+        >
+          checkout dummy — replace with real form
+        </div>
       </div>
 
       <footer class="footer-minimal">
@@ -73,313 +79,6 @@
       </footer>
     </div>
 
-    <script>
-      (function () {
-        // ----- PRODUCT DATA with 4 emoji images per product (for gallery) -----
-        const products = [
-          {
-            id: "triSync",
-            name: "Tri‑Sync sneaker",
-            category: "tri‑sync",
-            price: 420,
-            mainEmoji: "👟", // main display
-            galleryEmojis: ["👟", "👞", "👠", "👡"], // 4 alternates
-            description: "Three soles: hard, air, magnetic.",
-            warranty: "3 year",
-            type: "footwear",
-            sizes: ["40", "41", "42", "43", "44"],
-            release: "spring 2025",
-            dimensions: true,
-            dimOptions: ["hard", "air", "magnetic"],
-          },
-          {
-            id: "hologramTee",
-            name: "Hologram field tee",
-            category: "apparel",
-            price: 280,
-            mainEmoji: "🧥",
-            galleryEmojis: ["🧥", "👕", "👚", "🧶"],
-            description: "Black indoors — galaxy under sun.",
-            warranty: "2 year",
-            type: "apparel",
-            sizes: ["S", "M", "L", "XL"],
-            release: "fall 2024",
-            dimensions: false,
-          },
-          {
-            id: "thirdEar",
-            name: "Third ear",
-            category: "audio",
-            price: 540,
-            mainEmoji: "🦻",
-            galleryEmojis: ["🦻", "🎧", "📻", "🔊"],
-            description: "Personal sound bubble.",
-            warranty: "18 month",
-            type: "audio",
-            sizes: ["one size"],
-            release: "summer 2025",
-            dimensions: false,
-          },
-          {
-            id: "treyLife",
-            name: "Trey of life",
-            category: "subscription",
-            price: 890,
-            mainEmoji: "◈",
-            galleryEmojis: ["◈", "🔷", "💠", "🔶"],
-            description: "Physical + digital + code.",
-            warranty: "lifetime",
-            type: "membership",
-            sizes: [],
-            release: "ongoing",
-            dimensions: false,
-          },
-        ];
-
-        // cart management
-        let cart = JSON.parse(localStorage.getItem("treyCart")) || [];
-        const cartSpan = document.getElementById("cartCount");
-        function updateCartBadge() {
-          cartSpan.textContent = cart.reduce((acc, i) => acc + i.quantity, 0);
-          localStorage.setItem("treyCart", JSON.stringify(cart));
-        }
-        updateCartBadge();
-
-        //update current section
-        Navs = document.querySelectorAll(".navsel");
-        Navs.forEach((n) => {
-          n.addEventListener("click", () => {
-            Navs.forEach((nn) => {
-              nn.classList.remove("active");
-            });
-            n.classList.add("active");
-          });
-        });
-
-        // navigation
-        const sections = {
-          home: document.getElementById("homePage"),
-          products: document.getElementById("productsPage"),
-          detail: document.getElementById("detailPage"),
-          gallery: document.getElementById("galleryPage"),
-          contact: document.getElementById("contactPage"),
-          cart: document.getElementById("cartPage"),
-          checkout: document.getElementById("checkoutPage"),
-        };
-        function showPage(pageId) {
-          Object.values(sections).forEach((s) =>
-            s?.classList.remove("active-section")
-          );
-          if (sections[pageId])
-            sections[pageId].classList.add("active-section");
-          if (pageId === "cart") renderCart();
-        }
-
-        document
-          .querySelectorAll(".primary-nav a, .cart-badge")
-          .forEach((el) => {
-            el.addEventListener("click", (e) => {
-              e.preventDefault();
-              if (el.dataset.page) showPage(el.dataset.page);
-            });
-          });
-
-        // product grid
-        const gridContainer = document.getElementById("productGridContainer");
-        function buildProductGrid() {
-          let html = "";
-          products.forEach((p) => {
-            html += `<div class="product-card" data-product-id="${p.id}"><div class="card-emoji">${p.mainEmoji}</div><div class="card-title">${p.name}</div><div class="card-price">$${p.price}</div></div>`;
-          });
-          gridContainer.innerHTML = html;
-          document.querySelectorAll(".product-card").forEach((card) => {
-            card.addEventListener("click", () => {
-              const pid = card.dataset.productId;
-              showProductDetail(products.find((p) => p.id === pid));
-            });
-          });
-        }
-
-        // ---------- DETAIL PAGE with 4-image gallery ----------
-        function showProductDetail(product) {
-          // generate size options
-          let sizeOptions = "";
-          if (product.sizes.length) {
-            product.sizes.forEach((sz, idx) => {
-              sizeOptions += `<div class="size-option ${
-                idx === 0 ? "active" : ""
-              }" data-size="${sz}">${sz}</div>`;
-            });
-          } else {
-            sizeOptions = `<div class="size-option active" data-size="one">one size</div>`;
-          }
-
-          // dimension options if any
-          let dimHtml = "";
-          if (product.dimensions) {
-            let btns = "";
-            product.dimOptions.forEach((opt, i) => {
-              btns += `<div class="dim-option ${
-                i === 0 ? "active" : ""
-              }">${opt}</div>`;
-            });
-            dimHtml = `<div class="dimension-selector">${btns}</div>`;
-          }
-
-          // Build thumbnail images from galleryEmojis (4 items)
-          const gallery = product.galleryEmojis || [
-            product.mainEmoji,
-            product.mainEmoji,
-            product.mainEmoji,
-            product.mainEmoji,
-          ];
-          // ensure at least 4
-          while (gallery.length < 4) gallery.push(product.mainEmoji);
-          const thumbnailsHtml = gallery
-            .map((emoji, index) => {
-              return `<div class="thumbnail ${
-                index === 0 ? "active" : ""
-              }" data-emoji="${emoji}">${emoji}</div>`;
-            })
-            .join("");
-
-          const detailHtml = `
-                    <div class="detail-grid">
-                        <!-- LEFT column with gallery -->
-                        <div class="detail-visual-col">
-                            <div class="main-image-container" id="mainImageContainer">
-                                <div class="main-emoji" id="mainProductEmoji">${product.mainEmoji}</div>
-                            </div>
-                            <div class="thumbnail-strip" id="thumbnailStrip">
-                                ${thumbnailsHtml}
-                            </div>
-                        </div>
-                        <!-- RIGHT details -->
-                        <div class="detail-info">
-                            <div class="detail-category">${product.category}</div>
-                            <div class="detail-name">${product.name}</div>
-                            <div class="detail-price">$${product.price}</div>
-                            <div class="desc-block">${product.description}</div>
-                            <div class="specs-grid">
-                                <div><span class="spec-label">type</span> ${product.type}</div>
-                                <div><span class="spec-label">release</span> ${product.release}</div>
-                            </div>
-                            <div class="warranty-badge">🛡️ ${product.warranty}</div>
-                            <div style="font-weight:500;">size</div>
-                            <div class="size-selector">${sizeOptions}</div>
-                            ${dimHtml}
-                            <button class="add-to-cart-detail" id="detailAddBtn">add to cart <span>+</span></button>
-                        </div>
-                    </div>
-                `;
-
-          document.getElementById("detailContainer").innerHTML = detailHtml;
-          showPage("detail");
-
-          // ----- THUMBNAIL CLICK HANDLER (update main image) -----
-          const mainEmojiDiv = document.getElementById("mainProductEmoji");
-          const thumbnails = document.querySelectorAll(".thumbnail");
-          thumbnails.forEach((thumb) => {
-            thumb.addEventListener("click", function () {
-              // remove active from all thumbs
-              thumbnails.forEach((t) => t.classList.remove("active"));
-              this.classList.add("active");
-              // update main emoji
-              const newEmoji = this.dataset.emoji;
-              if (mainEmojiDiv) mainEmojiDiv.textContent = newEmoji;
-            });
-          });
-
-          // size/dimension click handlers (same as before)
-          document.querySelectorAll(".size-option").forEach((opt) => {
-            opt.addEventListener("click", function () {
-              document
-                .querySelectorAll(".size-option")
-                .forEach((o) => o.classList.remove("active"));
-              this.classList.add("active");
-            });
-          });
-          if (product.dimensions) {
-            document.querySelectorAll(".dim-option").forEach((d) => {
-              d.addEventListener("click", function () {
-                document
-                  .querySelectorAll(".dim-option")
-                  .forEach((dd) => dd.classList.remove("active"));
-                this.classList.add("active");
-              });
-            });
-          }
-
-          // add to cart logic
-          document
-            .getElementById("detailAddBtn")
-            .addEventListener("click", function () {
-              const selectedSize =
-                document.querySelector(".size-option.active")?.dataset.size ||
-                "one";
-              const selectedDim = product.dimensions
-                ? document.querySelector(".dim-option.active")?.textContent ||
-                  "hard"
-                : null;
-              const itemId = product.id + (selectedDim || "") + selectedSize;
-              const existing = cart.find((i) => i.id === itemId);
-              if (existing) existing.quantity += 1;
-              else {
-                cart.push({
-                  id: itemId,
-                  productId: product.id,
-                  name: product.name,
-                  price: product.price,
-                  emoji: product.mainEmoji,
-                  size: selectedSize,
-                  dimension: selectedDim,
-                  quantity: 1,
-                });
-              }
-              updateCartBadge();
-              this.innerHTML = `added (${selectedSize}) ✓`;
-              this.style.background = "#2b4b3b";
-              setTimeout(() => {
-                this.innerHTML = "add to cart <span>+</span>";
-                this.style.background = "#1e1e1e";
-              }, 1000);
-            });
-        }
-
-        // basic cart render (simplified for demo)
-        function renderCart() {
-          const container = document.getElementById("cartContainer");
-          if (!cart.length) {
-            container.innerHTML = "<div>cart empty</div>";
-            return;
-          }
-          let itemsHtml = "";
-          cart.forEach((item, idx) => {
-            itemsHtml += `<div>${item.emoji} ${item.name} (${item.size}) x${
-              item.quantity
-            } = $${item.price * item.quantity}</div>`;
-          });
-          container.innerHTML =
-            itemsHtml +
-            `<button onclick="showPage('checkout')">checkout</button>`;
-        }
-
-        // back links
-        document
-          .getElementById("backToProducts")
-          .addEventListener("click", (e) => {
-            e.preventDefault();
-            showPage("products");
-          });
-        document.getElementById("backToCart").addEventListener("click", (e) => {
-          e.preventDefault();
-          showPage("cart");
-        });
-
-        buildProductGrid();
-        showPage("home");
-        window.showPage = showPage;
-      })();
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
