@@ -68,17 +68,6 @@
 
   // navigation
 
-  //update current section
-  Navs = document.querySelectorAll(".navsel");
-  Navs.forEach((n) => {
-    n.addEventListener("click", () => {
-      Navs.forEach((nn) => {
-        nn.classList.remove("active");
-      });
-      n.classList.add("active");
-    });
-  });
-
   const sections = {
     home: document.getElementById("homePage"),
     products: document.getElementById("productsPage"),
