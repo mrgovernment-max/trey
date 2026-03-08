@@ -2,8 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TREY · studio essentials</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
+    />
+    <title>TREY · studio essentials (fully responsive)</title>
     <!-- Font Awesome 6 (free) -->
     <link
       rel="stylesheet"
@@ -47,12 +50,13 @@
         border-radius: 20px;
       }
 
-      /* navigation */
+      /* === RESPONSIVE NAVIGATION === */
       .navbar {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
-        padding: 2rem 5%;
+        padding: 1.5rem 5%;
         background: #ffffffd9;
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
@@ -60,7 +64,7 @@
         position: sticky;
         top: 0;
         z-index: 100;
-        transition: padding 0.2s;
+        gap: 1rem 2rem;
       }
 
       .logo {
@@ -76,7 +80,8 @@
 
       .nav-links {
         display: flex;
-        gap: 3rem;
+        flex-wrap: wrap;
+        gap: 1.5rem 2rem;
         font-weight: 400;
         font-size: 1rem;
         text-transform: uppercase;
@@ -85,8 +90,9 @@
       .nav-links a {
         text-decoration: none;
         color: #343432;
-        transition: color 0.2s, transform 0.1s;
+        transition: color 0.2s;
         position: relative;
+        white-space: nowrap;
       }
       .nav-links a:hover {
         color: #000;
@@ -112,6 +118,7 @@
         display: flex;
         align-items: center;
         gap: 6px;
+        white-space: nowrap;
       }
       .cart-icon i {
         font-size: 1.5rem;
@@ -131,7 +138,7 @@
       /* page sections (SPA behaviour) */
       .page {
         display: none;
-        padding: 3rem 5% 5rem;
+        padding: 2rem 5% 4rem;
         max-width: 1400px;
         margin: 0 auto;
         width: 100%;
@@ -140,13 +147,13 @@
         display: block;
       }
 
-      /* home */
+      /* === HOME (responsive hero) === */
       .hero {
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-        padding: 4rem 1rem 5rem;
+        padding: 3rem 1rem 4rem;
         animation: slideUp 0.7s ease;
       }
       @keyframes slideUp {
@@ -160,17 +167,18 @@
         }
       }
       .hero h1 {
-        font-size: 4.5rem;
+        font-size: clamp(2.5rem, 10vw, 4.5rem);
         font-weight: 450;
         letter-spacing: -0.03em;
         line-height: 1.1;
+        max-width: 900px;
       }
       .hero h1 .light {
         font-weight: 280;
         color: #5f5f5b;
       }
       .hero p {
-        font-size: 1.4rem;
+        font-size: clamp(1.1rem, 4vw, 1.4rem);
         color: #3b3b38;
         margin: 1.5rem 0 2.5rem;
         font-weight: 300;
@@ -179,7 +187,7 @@
       .btn {
         border: 1px solid #232321;
         background: transparent;
-        padding: 1rem 3rem;
+        padding: 0.9rem 2.5rem;
         font-size: 1rem;
         text-transform: uppercase;
         letter-spacing: 2px;
@@ -194,15 +202,16 @@
         color: white;
       }
 
+      /* featured grid — responsive */
       .featured-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 2rem;
-        margin: 5rem 0;
+        margin: 4rem 0;
       }
       .featured-item {
         background: #f2f2ef;
-        padding: 2rem;
+        padding: 1.5rem;
         transition: transform 0.3s, background 0.2s;
         cursor: pointer;
         border-radius: 0px;
@@ -217,26 +226,26 @@
         aspect-ratio: 1/1.1;
         object-fit: cover;
         filter: grayscale(15%);
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
       }
 
-      /* products grid */
+      /* products grid — fully responsive */
       .section-title {
-        font-size: 2.8rem;
+        font-size: clamp(2rem, 6vw, 2.8rem);
         font-weight: 380;
         letter-spacing: -0.02em;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2rem;
         border-bottom: 1px solid #dbdbd5;
-        padding-bottom: 1rem;
+        padding-bottom: 0.8rem;
       }
       .products-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 2.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 2rem;
       }
       .product-card {
         background: #ffffff;
-        padding: 1.5rem 1.5rem 2rem;
+        padding: 1.2rem 1.2rem 1.8rem;
         border: 1px solid #efefea;
         transition: all 0.25s;
         cursor: pointer;
@@ -260,7 +269,7 @@
         width: 100%;
         aspect-ratio: 1/1.2;
         object-fit: cover;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         transition: transform 0.5s ease;
       }
       .product-card:hover img {
@@ -268,28 +277,27 @@
       }
       .product-card h3 {
         font-weight: 450;
-        font-size: 1.4rem;
+        font-size: 1.3rem;
         margin-bottom: 0.2rem;
       }
       .product-price {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: 350;
         color: #464641;
-        margin: 0.5rem 0;
       }
 
-      /* product detail page */
+      /* === PRODUCT DETAIL — fully responsive column on mobile === */
       .detail-wrapper {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4rem;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem 3rem;
         align-items: start;
         animation: fadeIn 0.5s;
       }
       .detail-gallery {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1rem;
       }
       .main-img {
         width: 100%;
@@ -299,11 +307,13 @@
       }
       .thumbnails {
         display: flex;
-        gap: 1rem;
+        flex-wrap: wrap;
+        gap: 0.8rem;
       }
       .thumb {
-        width: 90px;
-        height: 100px;
+        width: clamp(70px, 15vw, 90px);
+        height: auto;
+        aspect-ratio: 1/1.1;
         object-fit: cover;
         cursor: pointer;
         opacity: 0.7;
@@ -316,46 +326,50 @@
         border-color: #232321;
       }
       .detail-info {
-        padding: 1rem 0;
+        padding: 0.5rem 0;
       }
       .detail-info h2 {
-        font-size: 3rem;
+        font-size: clamp(2rem, 5vw, 3rem);
         font-weight: 400;
         letter-spacing: -0.02em;
+        word-break: break-word;
       }
       .detail-id {
         font-size: 1rem;
         color: #6f6f69;
         border-bottom: 1px solid #dddcd6;
-        padding-bottom: 1.5rem;
-        margin-bottom: 2rem;
+        padding-bottom: 1.2rem;
+        margin-bottom: 1.5rem;
       }
       .detail-description {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: 300;
-        margin: 2rem 0;
+        margin: 1.5rem 0;
       }
       .detail-meta {
         list-style: none;
-        margin: 2rem 0;
+        margin: 1.5rem 0;
       }
       .detail-meta li {
         padding: 0.8rem 0;
         border-bottom: 1px dashed #e2e2db;
         display: flex;
-        gap: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
       }
       .meta-label {
-        width: 120px;
+        width: 100px;
         font-weight: 400;
         color: #4d4d48;
       }
       .meta-value {
         font-weight: 350;
+        word-break: break-word;
+        flex: 1;
       }
       .add-to-cart-btn {
         width: 100%;
-        padding: 1.3rem;
+        padding: 1.2rem;
         background: #232321;
         color: white;
         border: none;
@@ -364,30 +378,41 @@
         text-transform: uppercase;
         cursor: pointer;
         transition: 0.25s;
-        margin-top: 2rem;
+        margin-top: 1.5rem;
       }
       .add-to-cart-btn:hover {
         background: #3b3b38;
       }
 
-      /* cart page (checkout inside) */
+      /* === CART PAGE — responsive stacking === */
       .cart-container {
         display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 3rem;
-        align-items: start;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      @media (min-width: 800px) {
+        .cart-container {
+          grid-template-columns: 2fr 1fr;
+        }
       }
       .cart-items {
         background: #f9f9f6;
         border: 1px solid #ecece5;
+        overflow-x: auto;
       }
       .cart-item {
         display: grid;
-        grid-template-columns: 100px 2fr 0.5fr 0.5fr;
+        grid-template-columns: 80px 1fr 0.7fr 0.5fr 30px;
         align-items: center;
-        gap: 1.5rem;
-        padding: 2rem;
+        gap: 1rem;
+        padding: 1.5rem;
         border-bottom: 1px solid #e3e3db;
+        min-width: 500px; /* ensures usability on small screens with scroll */
+      }
+      @media (max-width: 600px) {
+        .cart-item {
+          min-width: 440px;
+        }
       }
       .cart-item img {
         width: 100%;
@@ -396,12 +421,13 @@
       }
       .cart-item h4 {
         font-weight: 450;
+        font-size: 1rem;
       }
       .cart-item-price {
         font-weight: 350;
       }
       .cart-item input {
-        width: 60px;
+        width: 65px;
         padding: 0.4rem;
         border: 1px solid #cbcbc3;
         background: white;
@@ -411,13 +437,14 @@
         cursor: pointer;
         font-size: 1.2rem;
         transition: color 0.2s;
+        text-align: center;
       }
       .remove-item:hover {
         color: #c00;
       }
       .cart-summary {
         background: #f2f2ef;
-        padding: 2.5rem;
+        padding: 2rem;
         border: 1px solid #e0e0d8;
         position: sticky;
         top: 120px;
@@ -427,21 +454,21 @@
         background: #232321;
         color: white;
         border: none;
-        padding: 1.4rem;
+        padding: 1.2rem;
         font-size: 1rem;
         letter-spacing: 2px;
-        margin: 2rem 0 0;
+        margin: 1.5rem 0 0;
         transition: 0.2s;
       }
       .checkout-btn:hover {
         background: #3f3f3b;
       }
 
-      /* gallery */
+      /* === GALLERY — responsive grid === */
       .gallery-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.2rem;
       }
       .gallery-grid img {
         width: 100%;
@@ -460,25 +487,25 @@
       .footer {
         text-align: center;
         color: #7a7a75;
-        padding: 3rem 5% 2rem;
+        padding: 2.5rem 5% 2rem;
         border-top: 1px solid #e5e5df;
       }
 
-      /* utils */
       .back-link {
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
         display: inline-block;
         cursor: pointer;
         border-bottom: 1px solid #a3a39b;
+        font-size: 0.95rem;
       }
     </style>
   </head>
   <body>
-    <!-- navigation -->
+    <!-- navigation (flex-wrap handles small screens) -->
     <nav class="navbar">
       <div class="logo">TREY <span>studio</span></div>
       <div class="nav-links">
-        <a href="index.html" data-page="home">Home</a>
+        <a href="#" data-page="home">Home</a>
         <a href="#" data-page="products">Products</a>
         <a href="#" data-page="gallery">Gallery</a>
         <a href="#" data-page="cart">Cart</a>
@@ -520,7 +547,7 @@
       </div>
     </section>
 
-    <!-- PRODUCTS (overview) -->
+    <!-- PRODUCTS overview -->
     <section id="products" class="page">
       <h2 class="section-title">all objects</h2>
       <div class="products-grid" id="products-grid"></div>
@@ -651,7 +678,6 @@
         const cartContainer = document.getElementById("cart-container");
         const cartCountSpan = document.getElementById("cart-count");
 
-        // show page
         function showPage(pageId) {
           pages.forEach((p) => p.classList.remove("active-page"));
           const target = document.getElementById(pageId);
@@ -661,7 +687,6 @@
           if (pageId === "cart") renderCart();
         }
 
-        // render product overview
         function renderProducts() {
           if (!productGrid) return;
           productGrid.innerHTML = products
@@ -675,7 +700,6 @@
                 `
             )
             .join("");
-          // attach listeners to cards
           document.querySelectorAll(".product-card").forEach((card) => {
             card.addEventListener("click", (e) => {
               const id = card.dataset.productId;
@@ -684,11 +708,9 @@
           });
         }
 
-        // product detail view
         function showProductDetail(productId) {
           const product = products.find((p) => p.id === productId);
           if (!product) return;
-          // build detail html
           let mainImage = product.images[0];
           detailContainer.innerHTML = `
                     <div class="detail-gallery">
@@ -726,7 +748,6 @@
                         }">add to cart</button>
                     </div>
                 `;
-          // thumb switcher
           setTimeout(() => {
             const thumbs = document.querySelectorAll(".thumb");
             const mainImg = document.getElementById("detail-main-img");
@@ -744,11 +765,9 @@
                 addToCart(pid);
               });
           }, 50);
-
           showPage("product-detail");
         }
 
-        // add to cart
         function addToCart(productId) {
           const product = products.find((p) => p.id === productId);
           if (!product) return;
@@ -760,8 +779,7 @@
           }
           updateCartStorage();
           renderCartCount();
-          // subtle animation feedback
-          alert("added to cart ✓"); // minimal, can be replaced with subtle toast
+          alert("added to cart ✓");
         }
 
         function removeFromCart(productId) {
@@ -818,14 +836,13 @@
           html += `
                     <div class="cart-summary">
                         <h3>summary</h3>
-                        <p style="margin: 2rem 0; font-size: 2rem;">$${total}</p>
+                        <p style="margin: 1.5rem 0; font-size: 2rem;">$${total}</p>
                         <button class="checkout-btn" id="fake-checkout">proceed to checkout</button>
                         <p style="margin-top:1rem; font-size:0.8rem;">(demo — no payment)</p>
                     </div>
                 `;
           cartContainer.innerHTML = html;
 
-          // attach qty listeners
           document.querySelectorAll(".cart-qty").forEach((inp) => {
             inp.addEventListener("change", (e) => {
               const id = parseInt(e.target.dataset.id);
@@ -862,7 +879,6 @@
           });
         });
 
-        // back from detail
         document
           .getElementById("back-to-products")
           ?.addEventListener("click", () => {
@@ -870,7 +886,6 @@
             showPage("products");
           });
 
-        // home featured click
         document.querySelectorAll(".featured-item").forEach((el) => {
           el.addEventListener("click", () => {
             const id = parseInt(el.dataset.productId);
@@ -878,18 +893,14 @@
           });
         });
 
-        // initial load
         renderProducts();
         renderCartCount();
-        if (!window.location.hash) showPage("home");
+        showPage("home");
 
-        // cart icon click
         document.querySelector(".cart-icon").addEventListener("click", (e) => {
           renderCart();
           showPage("cart");
         });
-
-        // ensure gallery lazy
       })();
     </script>
   </body>
