@@ -2,83 +2,895 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"
-    />
-    <title>TREY · separate pages</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TREY · studio essentials</title>
+    <!-- Font Awesome 6 (free) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
       rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <link rel="stylesheet" href="style.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, sans-serif;
+      }
+
+      body {
+        background: #fafaf8;
+        color: #1e1e1e;
+        line-height: 1.5;
+        opacity: 0;
+        animation: pageFadeIn 0.6s ease-out forwards;
+      }
+
+      @keyframes pageFadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      /* modern minimalist scroll */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #eee;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #aaa;
+        border-radius: 20px;
+      }
+
+      /* navigation */
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 5%;
+        background: #ffffffd9;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid #eaeae7;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        transition: padding 0.2s;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        color: #252523;
+      }
+      .logo span {
+        font-weight: 300;
+        color: #7c7c7a;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 3rem;
+        font-weight: 400;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: #343432;
+        transition: color 0.2s, transform 0.1s;
+        position: relative;
+      }
+      .nav-links a:hover {
+        color: #000;
+      }
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        left: 0;
+        width: 0%;
+        height: 1.5px;
+        background: #1e1e1e;
+        transition: width 0.25s ease;
+      }
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      .cart-icon {
+        font-size: 1.3rem;
+        cursor: pointer;
+        transition: transform 0.15s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .cart-icon i {
+        font-size: 1.5rem;
+      }
+      .cart-icon:hover {
+        transform: scale(1.03);
+      }
+      #cart-count {
+        background: #222;
+        color: white;
+        border-radius: 40px;
+        padding: 0.1rem 0.55rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      /* page sections (SPA behaviour) */
+      .page {
+        display: none;
+        padding: 3rem 5% 5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      .active-page {
+        display: block;
+      }
+
+      /* home */
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 4rem 1rem 5rem;
+        animation: slideUp 0.7s ease;
+      }
+      @keyframes slideUp {
+        0% {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .hero h1 {
+        font-size: 4.5rem;
+        font-weight: 450;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+      }
+      .hero h1 .light {
+        font-weight: 280;
+        color: #5f5f5b;
+      }
+      .hero p {
+        font-size: 1.4rem;
+        color: #3b3b38;
+        margin: 1.5rem 0 2.5rem;
+        font-weight: 300;
+        max-width: 700px;
+      }
+      .btn {
+        border: 1px solid #232321;
+        background: transparent;
+        padding: 1rem 3rem;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: #232321;
+        display: inline-block;
+      }
+      .btn:hover {
+        background: #232321;
+        color: white;
+      }
+
+      .featured-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin: 5rem 0;
+      }
+      .featured-item {
+        background: #f2f2ef;
+        padding: 2rem;
+        transition: transform 0.3s, background 0.2s;
+        cursor: pointer;
+        border-radius: 0px;
+      }
+      .featured-item:hover {
+        transform: translateY(-8px);
+        background: #eaeae4;
+      }
+      .featured-item img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1/1.1;
+        object-fit: cover;
+        filter: grayscale(15%);
+        margin-bottom: 1.5rem;
+      }
+
+      /* products grid */
+      .section-title {
+        font-size: 2.8rem;
+        font-weight: 380;
+        letter-spacing: -0.02em;
+        margin-bottom: 2.5rem;
+        border-bottom: 1px solid #dbdbd5;
+        padding-bottom: 1rem;
+      }
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 2.5rem;
+      }
+      .product-card {
+        background: #ffffff;
+        padding: 1.5rem 1.5rem 2rem;
+        border: 1px solid #efefea;
+        transition: all 0.25s;
+        cursor: pointer;
+        animation: fadeCard 0.6s;
+      }
+      @keyframes fadeCard {
+        0% {
+          opacity: 0;
+          transform: scale(0.98);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .product-card:hover {
+        box-shadow: 0 20px 30px -15px rgba(0, 0, 0, 0.05);
+        border-color: #c2c2ba;
+      }
+      .product-card img {
+        width: 100%;
+        aspect-ratio: 1/1.2;
+        object-fit: cover;
+        margin-bottom: 1.5rem;
+        transition: transform 0.5s ease;
+      }
+      .product-card:hover img {
+        transform: scale(1.02);
+      }
+      .product-card h3 {
+        font-weight: 450;
+        font-size: 1.4rem;
+        margin-bottom: 0.2rem;
+      }
+      .product-price {
+        font-size: 1.2rem;
+        font-weight: 350;
+        color: #464641;
+        margin: 0.5rem 0;
+      }
+
+      /* product detail page */
+      .detail-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: start;
+        animation: fadeIn 0.5s;
+      }
+      .detail-gallery {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .main-img {
+        width: 100%;
+        aspect-ratio: 1/1.1;
+        object-fit: cover;
+        border: 1px solid #e3e3dd;
+      }
+      .thumbnails {
+        display: flex;
+        gap: 1rem;
+      }
+      .thumb {
+        width: 90px;
+        height: 100px;
+        object-fit: cover;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: 0.2s;
+        border: 1px solid transparent;
+      }
+      .thumb:hover,
+      .thumb.active-thumb {
+        opacity: 1;
+        border-color: #232321;
+      }
+      .detail-info {
+        padding: 1rem 0;
+      }
+      .detail-info h2 {
+        font-size: 3rem;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+      }
+      .detail-id {
+        font-size: 1rem;
+        color: #6f6f69;
+        border-bottom: 1px solid #dddcd6;
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .detail-description {
+        font-size: 1.2rem;
+        font-weight: 300;
+        margin: 2rem 0;
+      }
+      .detail-meta {
+        list-style: none;
+        margin: 2rem 0;
+      }
+      .detail-meta li {
+        padding: 0.8rem 0;
+        border-bottom: 1px dashed #e2e2db;
+        display: flex;
+        gap: 2rem;
+      }
+      .meta-label {
+        width: 120px;
+        font-weight: 400;
+        color: #4d4d48;
+      }
+      .meta-value {
+        font-weight: 350;
+      }
+      .add-to-cart-btn {
+        width: 100%;
+        padding: 1.3rem;
+        background: #232321;
+        color: white;
+        border: none;
+        font-size: 1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: 0.25s;
+        margin-top: 2rem;
+      }
+      .add-to-cart-btn:hover {
+        background: #3b3b38;
+      }
+
+      /* cart page (checkout inside) */
+      .cart-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 3rem;
+        align-items: start;
+      }
+      .cart-items {
+        background: #f9f9f6;
+        border: 1px solid #ecece5;
+      }
+      .cart-item {
+        display: grid;
+        grid-template-columns: 100px 2fr 0.5fr 0.5fr;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 2rem;
+        border-bottom: 1px solid #e3e3db;
+      }
+      .cart-item img {
+        width: 100%;
+        aspect-ratio: 1/1.2;
+        object-fit: cover;
+      }
+      .cart-item h4 {
+        font-weight: 450;
+      }
+      .cart-item-price {
+        font-weight: 350;
+      }
+      .cart-item input {
+        width: 60px;
+        padding: 0.4rem;
+        border: 1px solid #cbcbc3;
+        background: white;
+      }
+      .remove-item {
+        color: #a3a39b;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: color 0.2s;
+      }
+      .remove-item:hover {
+        color: #c00;
+      }
+      .cart-summary {
+        background: #f2f2ef;
+        padding: 2.5rem;
+        border: 1px solid #e0e0d8;
+        position: sticky;
+        top: 120px;
+      }
+      .checkout-btn {
+        width: 100%;
+        background: #232321;
+        color: white;
+        border: none;
+        padding: 1.4rem;
+        font-size: 1rem;
+        letter-spacing: 2px;
+        margin: 2rem 0 0;
+        transition: 0.2s;
+      }
+      .checkout-btn:hover {
+        background: #3f3f3b;
+      }
+
+      /* gallery */
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+      }
+      .gallery-grid img {
+        width: 100%;
+        aspect-ratio: 1/1.3;
+        object-fit: cover;
+        filter: grayscale(0.2);
+        transition: transform 0.4s, filter 0.3s;
+        cursor: pointer;
+      }
+      .gallery-grid img:hover {
+        transform: scale(1.02);
+        filter: grayscale(0);
+      }
+
+      /* footer */
+      .footer {
+        text-align: center;
+        color: #7a7a75;
+        padding: 3rem 5% 2rem;
+        border-top: 1px solid #e5e5df;
+      }
+
+      /* utils */
+      .back-link {
+        margin-bottom: 2rem;
+        display: inline-block;
+        cursor: pointer;
+        border-bottom: 1px solid #a3a39b;
+      }
+    </style>
   </head>
   <body>
-    <div class="site-wrapper">
-      <header class="trey-header">
-        <div class="logo">TREY <mark>—</mark> studio</div>
-        <div class="cart-badge" id="cartBadge">
-          cart <span id="cartCount">0</span>
+    <!-- navigation -->
+    <nav class="navbar">
+      <div class="logo">TREY <span>studio</span></div>
+      <div class="nav-links">
+        <a href="index.html" data-page="home">Home</a>
+        <a href="#" data-page="products">Products</a>
+        <a href="#" data-page="gallery">Gallery</a>
+        <a href="#" data-page="cart">Cart</a>
+      </div>
+      <div class="cart-icon" data-page="cart">
+        <i class="fa-regular fa-bag-shopping"></i>
+        <span id="cart-count">0</span>
+      </div>
+    </nav>
+
+    <!-- PAGES -->
+    <!-- HOME -->
+    <section id="home" class="page active-page">
+      <div class="hero">
+        <h1>essentials <span class="light">for the</span> modern studio</h1>
+        <p>Minimal, tactile, precise — TREY objects are made to last.</p>
+        <button class="btn" data-page="products">explore collection</button>
+      </div>
+      <div class="featured-grid">
+        <div class="featured-item" data-product-id="1">
+          <img
+            src="https://placecats.com/400/500?random=1"
+            alt="TREY console"
+            loading="lazy"
+          />
+          <h3>desk console</h3>
+          <span>aluminium / oak</span>
         </div>
-        <nav class="primary-nav" id="mainNav">
-          <!-- data-page indicates which page-section to show -->
-          <a href="#" data-page="home" class="active">home</a>
-          <a href="#" data-page="products">products</a>
-          <a href="#" data-page="gallery">gallery</a>
-          <a href="#" data-page="contact">contact</a>
-          <a href="#" data-page="cart">cart</a>
-        </nav>
-      </header>
-
-      <!-- INDIVIDUAL PAGES (each its own section) -->
-      <div id="homePage" class="page-section active-section">
-        <div class="hero">
-          <div>
-            <h1 class="hero-title">
-              two is <span style="color: #9b7f62"> a compromise</span><br />the
-              third dimension
-            </h1>
-          </div>
-          <div class="hero-visual">◈</div>
+        <div class="featured-item" data-product-id="2">
+          <img src="https://placecats.com/401/500?random=2" alt="TREY lamp" />
+          <h3>arc lamp</h3>
+          <span>brass · led</span>
         </div>
-      </div>
-
-      <div id="productsPage" class="page-section">
-        <h2 style="font-size: 1.8rem; margin-bottom: 1.5rem">products</h2>
-        <div class="product-grid" id="productGridContainer"></div>
-      </div>
-
-      <!-- DETAIL PAGE (4‑image gallery) – standalone -->
-      <div id="detailPage" class="page-section">
-        <a class="back-link" id="backToProducts">← back to products</a>
-        <div id="detailContainer" class="detail-container"></div>
-      </div>
-
-      <!-- other static pages (minimal) -->
-      <div id="galleryPage" class="page-section"><h2>gallery</h2></div>
-      <div id="contactPage" class="page-section"><h2>contact</h2></div>
-      <div id="cartPage" class="page-section">
-        <h2 style="margin-bottom: 1rem">your cart</h2>
-        <div id="cartContainer" class="cart-container"></div>
-      </div>
-      <div id="checkoutPage" class="page-section">
-        <a class="back-link" id="backToCart">← back to cart</a>
-        <div
-          id="checkoutContainer"
-          style="background: #fffcf8; padding: 2rem; border-radius: 24px"
-        >
-          checkout dummy — replace with real form
+        <div class="featured-item" data-product-id="3">
+          <img src="https://placecats.com/402/500?random=3" alt="TREY shelf" />
+          <h3>wall shelf</h3>
+          <span>walnut / steel</span>
         </div>
       </div>
+    </section>
 
-      <footer class="footer-minimal">
-        <span>© TREY studio — two is a compromise</span>
-        <span>accra · london · ny</span>
-      </footer>
-    </div>
+    <!-- PRODUCTS (overview) -->
+    <section id="products" class="page">
+      <h2 class="section-title">all objects</h2>
+      <div class="products-grid" id="products-grid"></div>
+    </section>
 
-    <script src="script.js"></script>
+    <!-- PRODUCT DETAIL (hidden by default) -->
+    <section id="product-detail" class="page">
+      <div class="back-link" id="back-to-products">
+        <i class="fa-regular fa-arrow-left"></i> back to products
+      </div>
+      <div id="detail-container" class="detail-wrapper"></div>
+    </section>
+
+    <!-- CART / checkout -->
+    <section id="cart" class="page">
+      <h2 class="section-title">your cart</h2>
+      <div class="cart-container" id="cart-container"></div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" class="page">
+      <h2 class="section-title">spatial archive</h2>
+      <div class="gallery-grid">
+        <img src="https://placecats.com/500/650?random=10" alt="gallery 1" />
+        <img src="https://placecats.com/501/650?random=11" alt="gallery 2" />
+        <img src="https://placecats.com/502/650?random=12" alt="gallery 3" />
+        <img src="https://placecats.com/503/650?random=13" alt="gallery 4" />
+        <img src="https://placecats.com/504/650?random=14" alt="gallery 5" />
+        <img src="https://placecats.com/505/650?random=15" alt="gallery 6" />
+        <img src="https://placecats.com/506/650?random=16" alt="gallery 7" />
+        <img src="https://placecats.com/507/650?random=17" alt="gallery 8" />
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>TREY · functional aesthetics · est. 2025</p>
+    </footer>
+
+    <script>
+      (function () {
+        // ---------- data ----------
+        const products = [
+          {
+            id: 1,
+            name: "desk console",
+            price: 620,
+            description: "Solid aluminium legs, oiled oak top. 140x60cm.",
+            release: "spring 2025",
+            availability: "in stock",
+            sizes: "100cm · 140cm · 180cm",
+            images: [
+              "https://placecats.com/600/700?r=1",
+              "https://placecats.com/601/701?r=2",
+              "https://placecats.com/602/702?r=3",
+              "https://placecats.com/603/703?r=4",
+            ],
+          },
+          {
+            id: 2,
+            name: "arc lamp",
+            price: 380,
+            description: "Brass arc with linen shade. dimmable LED.",
+            release: "autumn 2024",
+            availability: "pre-order",
+            sizes: "standard · long arm",
+            images: [
+              "https://placecats.com/604/704?r=5",
+              "https://placecats.com/605/705?r=6",
+              "https://placecats.com/606/706?r=7",
+              "https://placecats.com/607/707?r=8",
+            ],
+          },
+          {
+            id: 3,
+            name: "wall shelf",
+            price: 210,
+            description: "Walnut veneer, powder-coated steel bracket.",
+            release: "winter 2024",
+            availability: "in stock",
+            sizes: "60cm · 90cm · 120cm",
+            images: [
+              "https://placecats.com/608/708?r=9",
+              "https://placecats.com/609/709?r=10",
+              "https://placecats.com/610/710?r=11",
+              "https://placecats.com/611/711?r=12",
+            ],
+          },
+          {
+            id: 4,
+            name: "coffee table",
+            price: 490,
+            description: "Marble top, black steel base.",
+            release: "spring 2025",
+            availability: "limited",
+            sizes: "90x90cm",
+            images: [
+              "https://placecats.com/612/712?r=13",
+              "https://placecats.com/613/713?r=14",
+              "https://placecats.com/614/714?r=15",
+              "https://placecats.com/615/715?r=16",
+            ],
+          },
+          {
+            id: 5,
+            name: "stool",
+            price: 170,
+            description: "Ash wood and linoleum seat.",
+            release: "autumn 2024",
+            availability: "in stock",
+            sizes: "45cm · 65cm",
+            images: [
+              "https://placecats.com/616/716?r=17",
+              "https://placecats.com/617/717?r=18",
+              "https://placecats.com/618/718?r=19",
+              "https://placecats.com/619/719?r=20",
+            ],
+          },
+        ];
+
+        let cart = JSON.parse(localStorage.getItem("trey_cart")) || [];
+
+        // DOM elements
+        const pages = document.querySelectorAll(".page");
+        const navLinks = document.querySelectorAll("[data-page]");
+        const productGrid = document.getElementById("products-grid");
+        const detailPage = document.getElementById("product-detail");
+        const detailContainer = document.getElementById("detail-container");
+        const cartContainer = document.getElementById("cart-container");
+        const cartCountSpan = document.getElementById("cart-count");
+
+        // show page
+        function showPage(pageId) {
+          pages.forEach((p) => p.classList.remove("active-page"));
+          const target = document.getElementById(pageId);
+          if (target) target.classList.add("active-page");
+          else document.getElementById("home").classList.add("active-page");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          if (pageId === "cart") renderCart();
+        }
+
+        // render product overview
+        function renderProducts() {
+          if (!productGrid) return;
+          productGrid.innerHTML = products
+            .map(
+              (p) => `
+                    <div class="product-card" data-product-id="${p.id}">
+                        <img src="${p.images[0]}" alt="${p.name}" loading="lazy">
+                        <h3>${p.name}</h3>
+                        <div class="product-price">$${p.price}</div>
+                    </div>
+                `
+            )
+            .join("");
+          // attach listeners to cards
+          document.querySelectorAll(".product-card").forEach((card) => {
+            card.addEventListener("click", (e) => {
+              const id = card.dataset.productId;
+              showProductDetail(parseInt(id));
+            });
+          });
+        }
+
+        // product detail view
+        function showProductDetail(productId) {
+          const product = products.find((p) => p.id === productId);
+          if (!product) return;
+          // build detail html
+          let mainImage = product.images[0];
+          detailContainer.innerHTML = `
+                    <div class="detail-gallery">
+                        <img src="${mainImage}" class="main-img" id="detail-main-img">
+                        <div class="thumbnails" id="detail-thumbs">
+                            ${product.images
+                              .map(
+                                (img, i) =>
+                                  `<img src="${img}" class="thumb ${
+                                    i === 0 ? "active-thumb" : ""
+                                  }" data-img="${img}">`
+                              )
+                              .join("")}
+                        </div>
+                    </div>
+                    <div class="detail-info">
+                        <h2>${product.name}</h2>
+                        <div class="detail-id">$${product.price} USD</div>
+                        <div class="detail-description">${
+                          product.description
+                        }</div>
+                        <ul class="detail-meta">
+                            <li><span class="meta-label">size</span><span class="meta-value">${
+                              product.sizes
+                            }</span></li>
+                            <li><span class="meta-label">release</span><span class="meta-value">${
+                              product.release
+                            }</span></li>
+                            <li><span class="meta-label">availability</span><span class="meta-value">${
+                              product.availability
+                            }</span></li>
+                        </ul>
+                        <button class="add-to-cart-btn" data-product-id="${
+                          product.id
+                        }">add to cart</button>
+                    </div>
+                `;
+          // thumb switcher
+          setTimeout(() => {
+            const thumbs = document.querySelectorAll(".thumb");
+            const mainImg = document.getElementById("detail-main-img");
+            thumbs.forEach((t) =>
+              t.addEventListener("click", function () {
+                mainImg.src = this.dataset.img;
+                thumbs.forEach((th) => th.classList.remove("active-thumb"));
+                this.classList.add("active-thumb");
+              })
+            );
+            document
+              .querySelector(".add-to-cart-btn")
+              .addEventListener("click", (e) => {
+                const pid = parseInt(e.target.dataset.productId);
+                addToCart(pid);
+              });
+          }, 50);
+
+          showPage("product-detail");
+        }
+
+        // add to cart
+        function addToCart(productId) {
+          const product = products.find((p) => p.id === productId);
+          if (!product) return;
+          const existing = cart.find((item) => item.id === productId);
+          if (existing) {
+            existing.qty += 1;
+          } else {
+            cart.push({ ...product, qty: 1 });
+          }
+          updateCartStorage();
+          renderCartCount();
+          // subtle animation feedback
+          alert("added to cart ✓"); // minimal, can be replaced with subtle toast
+        }
+
+        function removeFromCart(productId) {
+          cart = cart.filter((item) => item.id !== productId);
+          updateCartStorage();
+          renderCartCount();
+          renderCart();
+        }
+
+        function updateQty(productId, newQty) {
+          const item = cart.find((i) => i.id === productId);
+          if (item) {
+            const qty = parseInt(newQty);
+            if (qty <= 0) removeFromCart(productId);
+            else {
+              item.qty = qty;
+              updateCartStorage();
+              renderCartCount();
+              renderCart();
+            }
+          }
+        }
+
+        function updateCartStorage() {
+          localStorage.setItem("trey_cart", JSON.stringify(cart));
+        }
+
+        function renderCartCount() {
+          const total = cart.reduce((acc, i) => acc + i.qty, 0);
+          cartCountSpan.innerText = total;
+        }
+
+        function renderCart() {
+          if (!cartContainer) return;
+          if (cart.length === 0) {
+            cartContainer.innerHTML =
+              '<p style="padding: 3rem; background: #f6f6f2;">your cart is empty.</p>';
+            return;
+          }
+          let html = `<div class="cart-items">`;
+          cart.forEach((item) => {
+            html += `
+                        <div class="cart-item" data-id="${item.id}">
+                            <img src="${item.images[0]}" alt="${item.name}">
+                            <h4>${item.name}</h4>
+                            <span class="cart-item-price">$${item.price}</span>
+                            <input type="number" min="1" value="${item.qty}" class="cart-qty" data-id="${item.id}">
+                            <i class="fa-regular fa-trash-can remove-item" data-id="${item.id}"></i>
+                        </div>
+                    `;
+          });
+          const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+          html += `</div>`;
+          html += `
+                    <div class="cart-summary">
+                        <h3>summary</h3>
+                        <p style="margin: 2rem 0; font-size: 2rem;">$${total}</p>
+                        <button class="checkout-btn" id="fake-checkout">proceed to checkout</button>
+                        <p style="margin-top:1rem; font-size:0.8rem;">(demo — no payment)</p>
+                    </div>
+                `;
+          cartContainer.innerHTML = html;
+
+          // attach qty listeners
+          document.querySelectorAll(".cart-qty").forEach((inp) => {
+            inp.addEventListener("change", (e) => {
+              const id = parseInt(e.target.dataset.id);
+              updateQty(id, e.target.value);
+            });
+          });
+          document.querySelectorAll(".remove-item").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const id = parseInt(e.target.dataset.id);
+              removeFromCart(id);
+            });
+          });
+          document
+            .getElementById("fake-checkout")
+            ?.addEventListener("click", () => {
+              alert("checkout demo — items would be purchased. thank you.");
+            });
+        }
+
+        // navigation
+        navLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const page = link.dataset.page;
+            if (page === "home") showPage("home");
+            else if (page === "products") {
+              renderProducts();
+              showPage("products");
+            } else if (page === "gallery") showPage("gallery");
+            else if (page === "cart") {
+              renderCart();
+              showPage("cart");
+            }
+          });
+        });
+
+        // back from detail
+        document
+          .getElementById("back-to-products")
+          ?.addEventListener("click", () => {
+            renderProducts();
+            showPage("products");
+          });
+
+        // home featured click
+        document.querySelectorAll(".featured-item").forEach((el) => {
+          el.addEventListener("click", () => {
+            const id = parseInt(el.dataset.productId);
+            showProductDetail(id);
+          });
+        });
+
+        // initial load
+        renderProducts();
+        renderCartCount();
+        if (!window.location.hash) showPage("home");
+
+        // cart icon click
+        document.querySelector(".cart-icon").addEventListener("click", (e) => {
+          renderCart();
+          showPage("cart");
+        });
+
+        // ensure gallery lazy
+      })();
+    </script>
   </body>
 </html>
