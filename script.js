@@ -1,7 +1,8 @@
 (function () {
   // ---------- state ----------
   let products = []; // will be filled from API
-  let cart = JSON.parse(localStorage.getItem("trey_cart")) || [];
+  let cart = [];
+  let msize = null;
 
   // DOM elements
   const pages = document.querySelectorAll(".page");
@@ -73,7 +74,7 @@
   // render first 3 as featured (or any logic)
   function renderHomeFeatured() {
     if (!homeFeatured || products.length === 0) return;
-    const featured = products.slice(3, 8);
+    const featured = products.slice(0, 3);
     homeFeatured.innerHTML = featured
       .map(
         (p) => `
@@ -102,7 +103,7 @@
   function renderProducts() {
     if (!productGrid) return;
     if (products.length === 0) {
-      productGrid.innerHTML = '<div class="loading">loading objects...</div>';
+      productGrid.innerHTML = '<div class="loading">loading merch...</div>';
       return;
     }
     productGrid.innerHTML = products
@@ -152,7 +153,7 @@
     const brandDesc =
       product.brand_description || "designed for everyday elegance.";
 
-    // build image gallery (using images array we created)
+    // build image gallery using images array  created
     const images =
       product.images && product.images.length
         ? product.images
@@ -246,115 +247,200 @@
 
         s.classList.add("selected");
         //this  contains the size
-        let msize = s;
+        msize = s.dataset.size;
       });
     });
 
     showPage("product-detail");
   }
 
-  // cart functions (unchanged, but adapt to product structure)
-  function addToCart(productId) {
-    const product = products.find((p) => p.id === productId);
-    if (!product) return;
-    const existing = cart.find((item) => item.id === productId);
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({
-        id: product.id,
-        name: product.name,
-        price: parseFloat(product.price),
-        img_url: product.img_url,
-        qty: 1,
-      });
+  // cart functions
+  async function addToCart(productId) {
+    const userId = sessionStorage.getItem("userId");
+    if (!userId) {
+      alert("Please login first");
+      return;
     }
-    updateCartStorage();
-    renderCartCount();
-    alert("added to cart ✓");
-  }
 
-  function removeFromCart(productId) {
-    cart = cart.filter((item) => item.id !== productId);
-    updateCartStorage();
-    renderCartCount();
-    renderCart();
-  }
+    if (!msize) {
+      alert("Please select a size");
+      return;
+    }
 
-  function updateQty(productId, newQty) {
-    const item = cart.find((i) => i.id === productId);
-    if (item) {
-      const qty = parseInt(newQty);
-      if (qty <= 0) removeFromCart(productId);
-      else {
-        item.qty = qty;
-        updateCartStorage();
-        renderCartCount();
-        renderCart();
+    try {
+      const res = await fetch(
+        "https://backendroutes-lcpt.onrender.com/cartoj",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userId,
+            productId: productId,
+            size: msize,
+            quantity: 1,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Added to cart ✓");
+        console.log(data.message);
+      } else {
+        console.error(data);
       }
+    } catch (err) {
+      console.error("Cart error:", err);
+    }
+
+    renderCartCount();
+  }
+
+  //remove from cart
+  async function removeFromCart(cartId, userId) {
+    try {
+      const res = await fetch(
+        `https://backendroutes-lcpt.onrender.com/ojcartrmv`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cartId: cartId,
+            userId: userId,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        console.log(data.message);
+        renderCart(); // reload cart items
+        renderCartCount(); // update badge
+      }
+    } catch (err) {
+      console.error("Remove cart error:", err);
     }
   }
 
-  function updateCartStorage() {
-    localStorage.setItem("trey_cart", JSON.stringify(cart));
+  async function renderCartCount() {
+    const userId = sessionStorage.getItem("userId");
+
+    if (!userId) {
+      cartCountSpan.innerText = 0;
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        "https://backendroutes-lcpt.onrender.com/ojcartget",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId }),
+        }
+      );
+
+      const cart = await res.json();
+
+      const total = cart.reduce((acc, i) => acc + i.quantity, 0);
+
+      cartCountSpan.innerText = total;
+    } catch (err) {
+      console.error("Cart count error:", err);
+    }
   }
 
-  function renderCartCount() {
-    const total = cart.reduce((acc, i) => acc + i.qty, 0);
-    cartCountSpan.innerText = total;
-  }
-
-  function renderCart() {
+  async function renderCart() {
     if (!cartContainer) return;
+
+    const userId = sessionStorage.getItem("userId");
+
+    const res = await fetch(
+      "https://backendroutes-lcpt.onrender.com/ojcartget",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId }),
+      }
+    );
+
+    const cart = await res.json();
+
     if (cart.length === 0) {
       cartContainer.innerHTML =
         '<p style="padding: 3rem; background: #f6f6f2;">your cart is empty.</p>';
       return;
     }
+
     let html = `<div class="cart-items">`;
+
     cart.forEach((item) => {
       html += `
-                  <div class="cart-item" data-id="${item.id}">
-                      <img src="${item.img_url}" alt="${item.name}">
-                      <h4>${item.name}</h4>
-                      <span class="cart-item-price">$${item.price.toFixed(
-                        2
-                      )}</span>
-                      <input type="number" min="1" value="${
-                        item.qty
-                      }" class="cart-qty" data-id="${item.id}">
-                      <i class="fa-regular fa-trash-can remove-item" data-id="${
-                        item.id
-                      }"></i>
-                  </div>
-              `;
+        <div class="cart-item" data-id="${item.cartId}">
+          <img src="${item.img_url}" alt="${item.name}">
+          <h4>${item.name}</h4>
+          <span class="cart-item-price">$${parseFloat(item.price).toFixed(
+            2
+          )}</span>
+  
+          <input 
+            type="number" 
+            min="1" 
+            value="${item.quantity}" 
+            class="cart-qty" 
+            data-id="${item.cartId}"
+          >
+  
+          <i class="fa-regular fa-trash-can remove-item" data-id="${
+            item.cartId
+          }"></i>
+        </div>
+      `;
     });
-    const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+
+    const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
     html += `</div>`;
+
     html += `
-              <div class="cart-summary">
-                  <h3>summary</h3>
-                  <p style="margin: 1.5rem 0; font-size: 2rem;">$${total.toFixed(
-                    2
-                  )}</p>
-                  <button class="checkout-btn" id="fake-checkout">proceed to checkout</button>
-                  <p style="margin-top:1rem; font-size:0.8rem;">(demo — no payment)</p>
-              </div>
-          `;
+      <div class="cart-summary">
+        <h3>summary</h3>
+        <p style="margin: 1.5rem 0; font-size: 2rem;">$${total.toFixed(2)}</p>
+        <button class="checkout-btn" id="fake-checkout">proceed to checkout</button>
+        <p style="margin-top:1rem; font-size:0.8rem;">(demo — no payment)</p>
+      </div>
+    `;
+
     cartContainer.innerHTML = html;
 
+    // update quantity
     document.querySelectorAll(".cart-qty").forEach((inp) => {
       inp.addEventListener("change", (e) => {
-        const id = parseInt(e.target.dataset.id);
-        updateQty(id, e.target.value);
+        const cartId = parseInt(e.target.dataset.id);
+        const qty = parseInt(e.target.value);
+
+        updateQty(cartId, qty);
       });
     });
+
+    // remove item
     document.querySelectorAll(".remove-item").forEach((btn) => {
       btn.addEventListener("click", (e) => {
-        const id = parseInt(e.target.dataset.id);
-        removeFromCart(id);
+        const cartId = parseInt(e.target.dataset.id);
+        removeFromCart(cartId, userId);
       });
     });
+
     document.getElementById("fake-checkout")?.addEventListener("click", () => {
       alert("checkout demo — items would be purchased. thank you.");
     });
