@@ -6,502 +6,16 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
     />
-    <title>TREY · studio essentials (fully responsive)</title>
-    <!-- Font Awesome 6 (free) -->
+    <title>TREY · studio (live products)</title>
+
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", Roboto, sans-serif;
-      }
-
-      body {
-        background: #fafaf8;
-        color: #1e1e1e;
-        line-height: 1.5;
-        opacity: 0;
-        animation: pageFadeIn 0.6s ease-out forwards;
-      }
-
-      @keyframes pageFadeIn {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: 1;
-        }
-      }
-
-      /* modern minimalist scroll */
-      ::-webkit-scrollbar {
-        width: 6px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #eee;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #aaa;
-        border-radius: 20px;
-      }
-
-      /* === RESPONSIVE NAVIGATION === */
-      .navbar {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.5rem 5%;
-        background: #ffffffd9;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border-bottom: 1px solid #eaeae7;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        gap: 1rem 2rem;
-      }
-
-      .logo {
-        font-size: 1.8rem;
-        font-weight: 500;
-        letter-spacing: -0.02em;
-        color: #252523;
-      }
-      .logo span {
-        font-weight: 300;
-        color: #7c7c7a;
-      }
-
-      .nav-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem 2rem;
-        font-weight: 400;
-        font-size: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-      .nav-links a {
-        text-decoration: none;
-        color: #343432;
-        transition: color 0.2s;
-        position: relative;
-        white-space: nowrap;
-      }
-      .nav-links a:hover {
-        color: #000;
-      }
-      .nav-links a::after {
-        content: "";
-        position: absolute;
-        bottom: -6px;
-        left: 0;
-        width: 0%;
-        height: 1.5px;
-        background: #1e1e1e;
-        transition: width 0.25s ease;
-      }
-      .nav-links a:hover::after {
-        width: 100%;
-      }
-
-      .cart-icon {
-        font-size: 1.3rem;
-        cursor: pointer;
-        transition: transform 0.15s;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        white-space: nowrap;
-      }
-      .cart-icon i {
-        font-size: 1.5rem;
-      }
-      .cart-icon:hover {
-        transform: scale(1.03);
-      }
-      #cart-count {
-        background: #222;
-        color: white;
-        border-radius: 40px;
-        padding: 0.1rem 0.55rem;
-        font-size: 0.8rem;
-        font-weight: 500;
-      }
-
-      /* page sections (SPA behaviour) */
-      .page {
-        display: none;
-        padding: 2rem 5% 4rem;
-        max-width: 1400px;
-        margin: 0 auto;
-        width: 100%;
-      }
-      .active-page {
-        display: block;
-      }
-
-      /* === HOME (responsive hero) === */
-      .hero {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 3rem 1rem 4rem;
-        animation: slideUp 0.7s ease;
-      }
-      @keyframes slideUp {
-        0% {
-          opacity: 0;
-          transform: translateY(30px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .hero h1 {
-        font-size: clamp(2.5rem, 10vw, 4.5rem);
-        font-weight: 450;
-        letter-spacing: -0.03em;
-        line-height: 1.1;
-        max-width: 900px;
-      }
-      .hero h1 .light {
-        font-weight: 280;
-        color: #5f5f5b;
-      }
-      .hero p {
-        font-size: clamp(1.1rem, 4vw, 1.4rem);
-        color: #3b3b38;
-        margin: 1.5rem 0 2.5rem;
-        font-weight: 300;
-        max-width: 700px;
-      }
-      .btn {
-        border: 1px solid #232321;
-        background: transparent;
-        padding: 0.9rem 2.5rem;
-        font-size: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        color: #232321;
-        display: inline-block;
-      }
-      .btn:hover {
-        background: #232321;
-        color: white;
-      }
-
-      /* featured grid — responsive */
-      .featured-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 2rem;
-        margin: 4rem 0;
-      }
-      .featured-item {
-        background: #f2f2ef;
-        padding: 1.5rem;
-        transition: transform 0.3s, background 0.2s;
-        cursor: pointer;
-        border-radius: 0px;
-      }
-      .featured-item:hover {
-        transform: translateY(-8px);
-        background: #eaeae4;
-      }
-      .featured-item img {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1/1.1;
-        object-fit: cover;
-        filter: grayscale(15%);
-        margin-bottom: 1rem;
-      }
-
-      /* products grid — fully responsive */
-      .section-title {
-        font-size: clamp(2rem, 6vw, 2.8rem);
-        font-weight: 380;
-        letter-spacing: -0.02em;
-        margin-bottom: 2rem;
-        border-bottom: 1px solid #dbdbd5;
-        padding-bottom: 0.8rem;
-      }
-      .products-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 2rem;
-      }
-      .product-card {
-        background: #ffffff;
-        padding: 1.2rem 1.2rem 1.8rem;
-        border: 1px solid #efefea;
-        transition: all 0.25s;
-        cursor: pointer;
-        animation: fadeCard 0.6s;
-      }
-      @keyframes fadeCard {
-        0% {
-          opacity: 0;
-          transform: scale(0.98);
-        }
-        100% {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-      .product-card:hover {
-        box-shadow: 0 20px 30px -15px rgba(0, 0, 0, 0.05);
-        border-color: #c2c2ba;
-      }
-      .product-card img {
-        width: 100%;
-        aspect-ratio: 1/1.2;
-        object-fit: cover;
-        margin-bottom: 1rem;
-        transition: transform 0.5s ease;
-      }
-      .product-card:hover img {
-        transform: scale(1.02);
-      }
-      .product-card h3 {
-        font-weight: 450;
-        font-size: 1.3rem;
-        margin-bottom: 0.2rem;
-      }
-      .product-price {
-        font-size: 1.1rem;
-        font-weight: 350;
-        color: #464641;
-      }
-
-      /* === PRODUCT DETAIL — fully responsive column on mobile === */
-      .detail-wrapper {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem 3rem;
-        align-items: start;
-        animation: fadeIn 0.5s;
-      }
-      .detail-gallery {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-      }
-      .main-img {
-        width: 100%;
-        aspect-ratio: 1/1.1;
-        object-fit: cover;
-        border: 1px solid #e3e3dd;
-      }
-      .thumbnails {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.8rem;
-      }
-      .thumb {
-        width: clamp(70px, 15vw, 90px);
-        height: auto;
-        aspect-ratio: 1/1.1;
-        object-fit: cover;
-        cursor: pointer;
-        opacity: 0.7;
-        transition: 0.2s;
-        border: 1px solid transparent;
-      }
-      .thumb:hover,
-      .thumb.active-thumb {
-        opacity: 1;
-        border-color: #232321;
-      }
-      .detail-info {
-        padding: 0.5rem 0;
-      }
-      .detail-info h2 {
-        font-size: clamp(2rem, 5vw, 3rem);
-        font-weight: 400;
-        letter-spacing: -0.02em;
-        word-break: break-word;
-      }
-      .detail-id {
-        font-size: 1rem;
-        color: #6f6f69;
-        border-bottom: 1px solid #dddcd6;
-        padding-bottom: 1.2rem;
-        margin-bottom: 1.5rem;
-      }
-      .detail-description {
-        font-size: 1.1rem;
-        font-weight: 300;
-        margin: 1.5rem 0;
-      }
-      .detail-meta {
-        list-style: none;
-        margin: 1.5rem 0;
-      }
-      .detail-meta li {
-        padding: 0.8rem 0;
-        border-bottom: 1px dashed #e2e2db;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
-      .meta-label {
-        width: 100px;
-        font-weight: 400;
-        color: #4d4d48;
-      }
-      .meta-value {
-        font-weight: 350;
-        word-break: break-word;
-        flex: 1;
-      }
-      .add-to-cart-btn {
-        width: 100%;
-        padding: 1.2rem;
-        background: #232321;
-        color: white;
-        border: none;
-        font-size: 1rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: 0.25s;
-        margin-top: 1.5rem;
-      }
-      .add-to-cart-btn:hover {
-        background: #3b3b38;
-      }
-
-      /* === CART PAGE — responsive stacking === */
-      .cart-container {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-      @media (min-width: 800px) {
-        .cart-container {
-          grid-template-columns: 2fr 1fr;
-        }
-      }
-      .cart-items {
-        background: #f9f9f6;
-        border: 1px solid #ecece5;
-        overflow-x: auto;
-      }
-      .cart-item {
-        display: grid;
-        grid-template-columns: 80px 1fr 0.7fr 0.5fr 30px;
-        align-items: center;
-        gap: 1rem;
-        padding: 1.5rem;
-        border-bottom: 1px solid #e3e3db;
-        min-width: 500px; /* ensures usability on small screens with scroll */
-      }
-      @media (max-width: 600px) {
-        .cart-item {
-          min-width: 440px;
-        }
-      }
-      .cart-item img {
-        width: 100%;
-        aspect-ratio: 1/1.2;
-        object-fit: cover;
-      }
-      .cart-item h4 {
-        font-weight: 450;
-        font-size: 1rem;
-      }
-      .cart-item-price {
-        font-weight: 350;
-      }
-      .cart-item input {
-        width: 65px;
-        padding: 0.4rem;
-        border: 1px solid #cbcbc3;
-        background: white;
-      }
-      .remove-item {
-        color: #a3a39b;
-        cursor: pointer;
-        font-size: 1.2rem;
-        transition: color 0.2s;
-        text-align: center;
-      }
-      .remove-item:hover {
-        color: #c00;
-      }
-      .cart-summary {
-        background: #f2f2ef;
-        padding: 2rem;
-        border: 1px solid #e0e0d8;
-        position: sticky;
-        top: 120px;
-      }
-      .checkout-btn {
-        width: 100%;
-        background: #232321;
-        color: white;
-        border: none;
-        padding: 1.2rem;
-        font-size: 1rem;
-        letter-spacing: 2px;
-        margin: 1.5rem 0 0;
-        transition: 0.2s;
-      }
-      .checkout-btn:hover {
-        background: #3f3f3b;
-      }
-
-      /* === GALLERY — responsive grid === */
-      .gallery-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1.2rem;
-      }
-      .gallery-grid img {
-        width: 100%;
-        aspect-ratio: 1/1.3;
-        object-fit: cover;
-        filter: grayscale(0.2);
-        transition: transform 0.4s, filter 0.3s;
-        cursor: pointer;
-      }
-      .gallery-grid img:hover {
-        transform: scale(1.02);
-        filter: grayscale(0);
-      }
-
-      /* footer */
-      .footer {
-        text-align: center;
-        color: #7a7a75;
-        padding: 2.5rem 5% 2rem;
-        border-top: 1px solid #e5e5df;
-      }
-
-      .back-link {
-        margin-bottom: 1.5rem;
-        display: inline-block;
-        cursor: pointer;
-        border-bottom: 1px solid #a3a39b;
-        font-size: 0.95rem;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- navigation (flex-wrap handles small screens) -->
+    <!-- navigation -->
     <nav class="navbar">
       <div class="logo">TREY <span>studio</span></div>
       <div class="nav-links">
@@ -511,397 +25,132 @@
         <a href="#" data-page="cart">Cart</a>
       </div>
       <div class="cart-icon" data-page="cart">
-        <i class="fa-regular fa-bag-shopping"></i>
+        <i class="fa-solid fa-cart-shopping"></i></i>
         <span id="cart-count">0</span>
       </div>
     </nav>
 
     <!-- PAGES -->
-    <!-- HOME -->
     <section id="home" class="page active-page">
       <div class="hero">
-        <h1>essentials <span class="light">for the</span> modern studio</h1>
-        <p>Minimal, tactile, precise — TREY objects are made to last.</p>
+        <h1>Minimal <span class="light">Precise</span> TREY</h1>
+        <p>Made in GH. Shipping Worldwide.</p>
         <button class="btn" data-page="products">explore collection</button>
       </div>
-      <div class="featured-grid">
-        <div class="featured-item" data-product-id="1">
-          <img
-            src="https://placecats.com/400/500?random=1"
-            alt="TREY console"
-            loading="lazy"
-          />
-          <h3>desk console</h3>
-          <span>aluminium / oak</span>
-        </div>
-        <div class="featured-item" data-product-id="2">
-          <img src="https://placecats.com/401/500?random=2" alt="TREY lamp" />
-          <h3>arc lamp</h3>
-          <span>brass · led</span>
-        </div>
-        <div class="featured-item" data-product-id="3">
-          <img src="https://placecats.com/402/500?random=3" alt="TREY shelf" />
-          <h3>wall shelf</h3>
-          <span>walnut / steel</span>
-        </div>
+      <div class="vid-reveal">
+        <video autoplay loop muted playsinline src="trey.mp4"></video>
+      </div>
+      <div class="featured-grid" id="home-featured">
+        <!-- dynamic featured from JS -->
       </div>
     </section>
 
-    <!-- PRODUCTS overview -->
     <section id="products" class="page">
-      <h2 class="section-title">all objects</h2>
+      <h2 class="section-title">Trey Merch</h2>
       <div class="products-grid" id="products-grid"></div>
     </section>
 
-    <!-- PRODUCT DETAIL (hidden by default) -->
     <section id="product-detail" class="page">
       <div class="back-link" id="back-to-products">
-        <i class="fa-regular fa-arrow-left"></i> back to products
+        <i class="fa-solid fa-arrow-left"></i></i> back to products
       </div>
       <div id="detail-container" class="detail-wrapper"></div>
     </section>
 
-    <!-- CART / checkout -->
     <section id="cart" class="page">
       <h2 class="section-title">your cart</h2>
       <div class="cart-container" id="cart-container"></div>
     </section>
 
-    <!-- GALLERY -->
     <section id="gallery" class="page">
-      <h2 class="section-title">spatial archive</h2>
-      <div class="gallery-grid">
-        <img src="https://placecats.com/500/650?random=10" alt="gallery 1" />
-        <img src="https://placecats.com/501/650?random=11" alt="gallery 2" />
-        <img src="https://placecats.com/502/650?random=12" alt="gallery 3" />
-        <img src="https://placecats.com/503/650?random=13" alt="gallery 4" />
-        <img src="https://placecats.com/504/650?random=14" alt="gallery 5" />
-        <img src="https://placecats.com/505/650?random=15" alt="gallery 6" />
-        <img src="https://placecats.com/506/650?random=16" alt="gallery 7" />
-        <img src="https://placecats.com/507/650?random=17" alt="gallery 8" />
+      <h2 class="section-title">Trey Lens</h2>
+      <div class="gallery-grid" id="gallery-grid">
+        <!-- placeholder images, will keep as is (can also be replaced) -->
+        <img src="https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/50728167-e683-4f00-98c0-5718c32469b9/M+NK+DF+NAC+FLEECE+PO+HOODIE.png" alt="gallery 1" />
+        <img src="https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/ece9d068-79b5-48bb-bb60-19821225fffc/M+NK+DF+NAC+FLC+SLVLS+HOODIE.png" alt="gallery 2" />
+        <img src="https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/3d9032fa-7103-419e-ab7b-444e965c96fd/M+NK+DF+NAC+FLEECE+PO+HOODIE.png" alt="gallery 3" />
+        <img src="https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/85d955dc-8bb5-4817-9fec-12699ef49b1a/M+NP+DF+NPT+MIDLAYER+HOODIE.png" alt="gallery 4" />
+        <img src="https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/70c5dbb1-4439-401c-82fa-d56def4d0270/M+NK+DF+TEE+RLGD+RESET.png" alt="gallery 5" />
+        <img src="https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/88e9b551-7145-4e1d-96ea-df2ef74b7a00/M+NK+DF+TEE+RLGD+LS+RESET.png" alt="gallery 6" />
+        <img src="https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/4ba2c043-9d40-4209-8eb7-23afd024540f/M+NK+DF+TEE+RLGD+SL+RESET.png" alt="gallery 7" />
+        <img src="https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/815ebfa2-a1a2-4074-a1d1-476ce4c83258/M+NK+DF+UV+HYVERSE+SS+GFX.png" alt="gallery 8" />
       </div>
     </section>
+
+    <section id="newsletter" class="newsletter-section">
+      <div class="newsletter-container">
+          <div class="newsletter-content">
+              <h2 class="newsletter-title">get the latest <span class="title-light">TREY releases</span></h2>
+              <p class="newsletter-subtitle">worldwide shipping — direct to your inbox</p>
+              
+              <form class="newsletter-form" id="treyNewsletterForm" onsubmit="event.preventDefault(); alert('📬 demo: you would be subscribed. (thanks!)');">
+                  <div class="form-row">
+                      <input type="email" name="email" id="newsletter-email" placeholder="your@email.com" class="newsletter-input" required>
+                      <button type="submit" class="newsletter-btn">subscribe</button>
+                  </div>
+                  <div class="form-footnote">
+                      <span class="dot-small"></span>
+                      <span class="footnote-text">no spam — just seasonal updates</span>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </section>
+  
+    <!--Contact-->
+
+    <section id="contact" class="contact-section">
+      <div class="contact-container">
+          <div class="contact-header">
+              <h2 class="contact-title">Reach <span class="title-light">TREY</span></h2>
+              <p class="contact-subtitle">for inquiries, commissions, or just to say hello</p>
+          </div>
+  
+          <div class="contact-grid">
+              <!-- contact form -->
+              <form class="contact-form" id="treyContactForm" onsubmit="event.preventDefault(); alert('📨 demo: your message would be sent. (thanks!)');">
+                  <div class="form-group">
+                      <label for="name" class="field-label">name</label>
+                      <input type="text" id="name" name="name" placeholder="your name" class="form-input" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="email" class="field-label">email</label>
+                      <input type="email" id="email" name="email" placeholder="your@email.com" class="form-input" required>
+                  </div>
+                  <div class="form-group">
+                      <label for="message" class="field-label">message</label>
+                      <textarea id="message" name="message" rows="4" placeholder="tell us anything..." class="form-input" required></textarea>
+                  </div>
+                  <button type="submit" class="contact-submit-btn">send message</button>
+              </form>
+  
+              <!-- contact info + subtle studio visual -->
+              <div class="contact-info">
+                  <div class="info-card">
+                      <h3 class="info-heading">studio</h3>
+                      <p class="info-text">trey@studio.com</p>
+                      <p class="info-text">+1 (000) 000 0000</p>
+                      <p class="info-text address">77 unknown street<br>Unknown, ny 00000</p>
+                  </div>
+                  <div class="info-card">
+                      <h3 class="info-heading">social</h3>
+                      <p class="info-text">instagram  <i style="font-size: xx-large;" class="fa-brands fa-instagram"></i></p> 
+                      <p class="info-text">Snapchat  <i  style="font-size: xx-large;" class="fa-brands fa-snapchat"></i>  </p>
+                      <p class="info-text">Any other media can be added here</p>
+                  </div>
+                  <div class="studio-note">
+                      <span class="dot-pattern"></span>
+                      <p>all collaborations are<br>crafted in small batches</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
 
     <footer class="footer">
       <p>TREY · functional aesthetics · est. 2025</p>
     </footer>
 
-    <script>
-      (function () {
-        // ---------- data ----------
-        const products = [
-          {
-            id: 1,
-            name: "desk console",
-            price: 620,
-            description: "Solid aluminium legs, oiled oak top. 140x60cm.",
-            release: "spring 2025",
-            availability: "in stock",
-            sizes: "100cm · 140cm · 180cm",
-            images: [
-              "https://placecats.com/600/700?r=1",
-              "https://placecats.com/601/701?r=2",
-              "https://placecats.com/602/702?r=3",
-              "https://placecats.com/603/703?r=4",
-            ],
-          },
-          {
-            id: 2,
-            name: "arc lamp",
-            price: 380,
-            description: "Brass arc with linen shade. dimmable LED.",
-            release: "autumn 2024",
-            availability: "pre-order",
-            sizes: "standard · long arm",
-            images: [
-              "https://placecats.com/604/704?r=5",
-              "https://placecats.com/605/705?r=6",
-              "https://placecats.com/606/706?r=7",
-              "https://placecats.com/607/707?r=8",
-            ],
-          },
-          {
-            id: 3,
-            name: "wall shelf",
-            price: 210,
-            description: "Walnut veneer, powder-coated steel bracket.",
-            release: "winter 2024",
-            availability: "in stock",
-            sizes: "60cm · 90cm · 120cm",
-            images: [
-              "https://placecats.com/608/708?r=9",
-              "https://placecats.com/609/709?r=10",
-              "https://placecats.com/610/710?r=11",
-              "https://placecats.com/611/711?r=12",
-            ],
-          },
-          {
-            id: 4,
-            name: "coffee table",
-            price: 490,
-            description: "Marble top, black steel base.",
-            release: "spring 2025",
-            availability: "limited",
-            sizes: "90x90cm",
-            images: [
-              "https://placecats.com/612/712?r=13",
-              "https://placecats.com/613/713?r=14",
-              "https://placecats.com/614/714?r=15",
-              "https://placecats.com/615/715?r=16",
-            ],
-          },
-          {
-            id: 5,
-            name: "stool",
-            price: 170,
-            description: "Ash wood and linoleum seat.",
-            release: "autumn 2024",
-            availability: "in stock",
-            sizes: "45cm · 65cm",
-            images: [
-              "https://placecats.com/616/716?r=17",
-              "https://placecats.com/617/717?r=18",
-              "https://placecats.com/618/718?r=19",
-              "https://placecats.com/619/719?r=20",
-            ],
-          },
-        ];
-
-        let cart = JSON.parse(localStorage.getItem("trey_cart")) || [];
-
-        // DOM elements
-        const pages = document.querySelectorAll(".page");
-        const navLinks = document.querySelectorAll("[data-page]");
-        const productGrid = document.getElementById("products-grid");
-        const detailPage = document.getElementById("product-detail");
-        const detailContainer = document.getElementById("detail-container");
-        const cartContainer = document.getElementById("cart-container");
-        const cartCountSpan = document.getElementById("cart-count");
-
-        function showPage(pageId) {
-          pages.forEach((p) => p.classList.remove("active-page"));
-          const target = document.getElementById(pageId);
-          if (target) target.classList.add("active-page");
-          else document.getElementById("home").classList.add("active-page");
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          if (pageId === "cart") renderCart();
-        }
-
-        function renderProducts() {
-          if (!productGrid) return;
-          productGrid.innerHTML = products
-            .map(
-              (p) => `
-                    <div class="product-card" data-product-id="${p.id}">
-                        <img src="${p.images[0]}" alt="${p.name}" loading="lazy">
-                        <h3>${p.name}</h3>
-                        <div class="product-price">$${p.price}</div>
-                    </div>
-                `
-            )
-            .join("");
-          document.querySelectorAll(".product-card").forEach((card) => {
-            card.addEventListener("click", (e) => {
-              const id = card.dataset.productId;
-              showProductDetail(parseInt(id));
-            });
-          });
-        }
-
-        function showProductDetail(productId) {
-          const product = products.find((p) => p.id === productId);
-          if (!product) return;
-          let mainImage = product.images[0];
-          detailContainer.innerHTML = `
-                    <div class="detail-gallery">
-                        <img src="${mainImage}" class="main-img" id="detail-main-img">
-                        <div class="thumbnails" id="detail-thumbs">
-                            ${product.images
-                              .map(
-                                (img, i) =>
-                                  `<img src="${img}" class="thumb ${
-                                    i === 0 ? "active-thumb" : ""
-                                  }" data-img="${img}">`
-                              )
-                              .join("")}
-                        </div>
-                    </div>
-                    <div class="detail-info">
-                        <h2>${product.name}</h2>
-                        <div class="detail-id">$${product.price} USD</div>
-                        <div class="detail-description">${
-                          product.description
-                        }</div>
-                        <ul class="detail-meta">
-                            <li><span class="meta-label">size</span><span class="meta-value">${
-                              product.sizes
-                            }</span></li>
-                            <li><span class="meta-label">release</span><span class="meta-value">${
-                              product.release
-                            }</span></li>
-                            <li><span class="meta-label">availability</span><span class="meta-value">${
-                              product.availability
-                            }</span></li>
-                        </ul>
-                        <button class="add-to-cart-btn" data-product-id="${
-                          product.id
-                        }">add to cart</button>
-                    </div>
-                `;
-          setTimeout(() => {
-            const thumbs = document.querySelectorAll(".thumb");
-            const mainImg = document.getElementById("detail-main-img");
-            thumbs.forEach((t) =>
-              t.addEventListener("click", function () {
-                mainImg.src = this.dataset.img;
-                thumbs.forEach((th) => th.classList.remove("active-thumb"));
-                this.classList.add("active-thumb");
-              })
-            );
-            document
-              .querySelector(".add-to-cart-btn")
-              .addEventListener("click", (e) => {
-                const pid = parseInt(e.target.dataset.productId);
-                addToCart(pid);
-              });
-          }, 50);
-          showPage("product-detail");
-        }
-
-        function addToCart(productId) {
-          const product = products.find((p) => p.id === productId);
-          if (!product) return;
-          const existing = cart.find((item) => item.id === productId);
-          if (existing) {
-            existing.qty += 1;
-          } else {
-            cart.push({ ...product, qty: 1 });
-          }
-          updateCartStorage();
-          renderCartCount();
-          alert("added to cart ✓");
-        }
-
-        function removeFromCart(productId) {
-          cart = cart.filter((item) => item.id !== productId);
-          updateCartStorage();
-          renderCartCount();
-          renderCart();
-        }
-
-        function updateQty(productId, newQty) {
-          const item = cart.find((i) => i.id === productId);
-          if (item) {
-            const qty = parseInt(newQty);
-            if (qty <= 0) removeFromCart(productId);
-            else {
-              item.qty = qty;
-              updateCartStorage();
-              renderCartCount();
-              renderCart();
-            }
-          }
-        }
-
-        function updateCartStorage() {
-          localStorage.setItem("trey_cart", JSON.stringify(cart));
-        }
-
-        function renderCartCount() {
-          const total = cart.reduce((acc, i) => acc + i.qty, 0);
-          cartCountSpan.innerText = total;
-        }
-
-        function renderCart() {
-          if (!cartContainer) return;
-          if (cart.length === 0) {
-            cartContainer.innerHTML =
-              '<p style="padding: 3rem; background: #f6f6f2;">your cart is empty.</p>';
-            return;
-          }
-          let html = `<div class="cart-items">`;
-          cart.forEach((item) => {
-            html += `
-                        <div class="cart-item" data-id="${item.id}">
-                            <img src="${item.images[0]}" alt="${item.name}">
-                            <h4>${item.name}</h4>
-                            <span class="cart-item-price">$${item.price}</span>
-                            <input type="number" min="1" value="${item.qty}" class="cart-qty" data-id="${item.id}">
-                            <i class="fa-regular fa-trash-can remove-item" data-id="${item.id}"></i>
-                        </div>
-                    `;
-          });
-          const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-          html += `</div>`;
-          html += `
-                    <div class="cart-summary">
-                        <h3>summary</h3>
-                        <p style="margin: 1.5rem 0; font-size: 2rem;">$${total}</p>
-                        <button class="checkout-btn" id="fake-checkout">proceed to checkout</button>
-                        <p style="margin-top:1rem; font-size:0.8rem;">(demo — no payment)</p>
-                    </div>
-                `;
-          cartContainer.innerHTML = html;
-
-          document.querySelectorAll(".cart-qty").forEach((inp) => {
-            inp.addEventListener("change", (e) => {
-              const id = parseInt(e.target.dataset.id);
-              updateQty(id, e.target.value);
-            });
-          });
-          document.querySelectorAll(".remove-item").forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-              const id = parseInt(e.target.dataset.id);
-              removeFromCart(id);
-            });
-          });
-          document
-            .getElementById("fake-checkout")
-            ?.addEventListener("click", () => {
-              alert("checkout demo — items would be purchased. thank you.");
-            });
-        }
-
-        // navigation
-        navLinks.forEach((link) => {
-          link.addEventListener("click", (e) => {
-            e.preventDefault();
-            const page = link.dataset.page;
-            if (page === "home") showPage("home");
-            else if (page === "products") {
-              renderProducts();
-              showPage("products");
-            } else if (page === "gallery") showPage("gallery");
-            else if (page === "cart") {
-              renderCart();
-              showPage("cart");
-            }
-          });
-        });
-
-        document
-          .getElementById("back-to-products")
-          ?.addEventListener("click", () => {
-            renderProducts();
-            showPage("products");
-          });
-
-        document.querySelectorAll(".featured-item").forEach((el) => {
-          el.addEventListener("click", () => {
-            const id = parseInt(el.dataset.productId);
-            showProductDetail(id);
-          });
-        });
-
-        renderProducts();
-        renderCartCount();
-        showPage("home");
-
-        document.querySelector(".cart-icon").addEventListener("click", (e) => {
-          renderCart();
-          showPage("cart");
-        });
-      })();
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
