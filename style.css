@@ -934,3 +934,152 @@ textarea.form-input {
 .size-btn.selected::after {
   display: none;
 }
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background: #f9f9f6;
+  border: 1px solid #eaeae4;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #e2e2db;
+  border-top-color: #232321;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner p {
+  color: #5f5f5b;
+  font-size: 0.95rem;
+  font-weight: 320;
+  letter-spacing: 0.3px;
+}
+
+/* Disabled button state */
+.add-to-cart-btn.disabled,
+.add-to-cart-btn:disabled {
+  background: #d4d4ce !important;
+  border-color: #d4d4ce !important;
+  color: #6f6f69 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Success animation for add-to-cart */
+.add-to-cart-btn.success {
+  background: #2b5e2b !important;
+  border-color: #2b5e2b !important;
+  animation: buttonPulse 0.5s ease;
+}
+
+@keyframes buttonPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+    background: #3b7a3b;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Toast notification - minimal TREY style */
+.trey-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #232321;
+  color: white;
+  padding: 1rem 1.8rem;
+  font-size: 0.95rem;
+  font-weight: 350;
+  letter-spacing: 0.3px;
+  border-left: 4px solid #c9a46c;
+  box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.2s forwards;
+  max-width: 320px;
+  pointer-events: none;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+}
+
+/* Toast icon and message */
+.trey-toast i {
+  margin-right: 10px;
+  color: #c9a46c;
+}
+
+.trey-toast span {
+  line-height: 1.5;
+}
+
+/* Size selector enhancement */
+.size-btn {
+  /* your existing styles plus: */
+  transition: all 0.2s ease;
+}
+
+.size-btn.selected {
+  background: #232321;
+  border-color: #232321;
+  color: white;
+  transform: scale(1.02);
+}
+
+/* Login reminder in detail page */
+.login-reminder-badge {
+  background: #f2f2ef;
+  border-left: 4px solid #c9a46c;
+  padding: 0.8rem 1.2rem;
+  margin: 1rem 0 0.5rem;
+  font-size: 0.9rem;
+  color: #4a4a46;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.login-reminder-badge i {
+  color: #c9a46c;
+  font-size: 1.1rem;
+}
+
+.login-reminder-badge a {
+  color: #232321;
+  text-decoration: underline;
+  font-weight: 450;
+  margin-left: 5px;
+}
