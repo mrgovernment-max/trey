@@ -92,7 +92,7 @@ body {
   font-size: 1.3rem;
   cursor: pointer;
   transition: transform 0.15s;
-  display: flex;
+  display: inline;
   align-items: center;
   gap: 6px;
   white-space: nowrap;
