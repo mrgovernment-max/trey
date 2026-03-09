@@ -49,8 +49,24 @@
     } catch (error) {
       console.error("Failed to load products:", error);
       productGrid.innerHTML =
-        '<div class="loading">⚠️ could not load products. please refresh.</div>';
-      homeFeatured.innerHTML = '<div class="loading">⚠️</div>';
+        '<div class="loading">could not load products. please refresh.</div>';
+      homeFeatured.innerHTML = `<div class="loading"><button 
+      style="
+        padding: 12px 25px; 
+        background-color: #111; 
+        color: #fff; 
+        border: none; 
+        border-radius: 30px; 
+        cursor: pointer; 
+        font-weight: 600;
+        transition: 0.3s;
+      " 
+      onclick="location.reload()"
+      onmouseover="this.style.background='#c9a46c'"
+      onmouseout="this.style.background='#111'"
+    >
+      Products failed Reload Page
+    </button></div>`;
     }
   }
 
