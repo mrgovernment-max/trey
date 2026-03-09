@@ -137,6 +137,8 @@
 
   // show detailed view using all DB fields + default fallbacks for missing fields
   function showProductDetail(productId) {
+    //size select
+
     const product = products.find((p) => p.id === productId);
     if (!product) return;
 
@@ -190,6 +192,18 @@
                       <li><span class="meta-label">release</span><span class="meta-value">${releaseDate}</span></li>
                       <li><span class="meta-label">availability</span><span class="meta-value">${availability}</span></li>
                   </ul>
+
+                  <!-- === TREY size selector - minimal, professional === -->
+<div class="trey-size-selector">
+    <span class="size-label">select size</span>
+    <div class="size-options">
+        <button type="button" class="size-btn" data-size="XS">XS</button>
+        <button type="button" class="size-btn" data-size="S">S</button>
+        <button type="button" class="size-btn" data-size="M">M</button>
+        <button type="button" class="size-btn" data-size="L">L</button>
+        <button type="button" class="size-btn" data-size="XL">XL</button>
+    </div>
+</div>
                   <button class="add-to-cart-btn" data-product-id="${
                     product.id
                   }">add to cart</button>
@@ -220,6 +234,21 @@
           addToCart(pid);
         });
     }, 50);
+
+    //active size
+
+    const activeSize = document.querySelectorAll(".size-btn");
+    activeSize.forEach((s) => {
+      s.addEventListener("click", () => {
+        activeSize.forEach((ss) => {
+          ss.classList.remove("selected");
+        });
+
+        s.classList.add("selected");
+        //this  contains the size
+        let msize = s;
+      });
+    });
 
     showPage("product-detail");
   }

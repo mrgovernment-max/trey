@@ -372,6 +372,7 @@
 
           const result = await res.json();
 
+          sessionStorage.setItem("isLoggedIn", "yes");
           sessionStorage.setItem("userId", result.userId);
           sessionStorage.setItem("userName", result.userName);
 

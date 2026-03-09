@@ -852,3 +852,85 @@ textarea.form-input {
   background: #c9c9c0;
   color: #1c1c1a;
 }
+
+/* === TREY size selector - pure CSS, no logic === */
+.trey-size-selector {
+  margin: 2rem 0 1.5rem;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+}
+
+.size-label {
+  display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #4a4a46;
+  font-weight: 400;
+  margin-bottom: 0.9rem;
+}
+
+.size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.size-btn {
+  min-width: 56px;
+  height: 48px;
+  padding: 0 1.2rem;
+  background: transparent;
+  border: 1px solid #d4d4ce;
+  font-size: 1rem;
+  font-weight: 350;
+  color: #2e2e2b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  border-radius: 0; /* sharp edges — minimal */
+}
+
+.size-btn:hover {
+  border-color: #232321;
+  background: #f2f2ef;
+}
+
+.size-btn.selected {
+  background: #232321;
+  border-color: #232321;
+  color: white;
+}
+
+.size-btn:focus-visible {
+  outline: 2px solid #c9a46c;
+  outline-offset: 2px;
+}
+
+/* subtle animation */
+.size-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.size-btn::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #232321;
+  transition: width 0.2s;
+}
+
+.size-btn:hover::after {
+  width: 100%;
+}
+
+.size-btn.selected::after {
+  display: none;
+}
