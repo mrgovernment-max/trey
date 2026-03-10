@@ -327,7 +327,7 @@
         </div>
 
         <div class="forgot-link">
-          <a href="#">forgot password?</a>
+          <a href="signup.html">Sign Up?</a>
         </div>
 
         <button type="submit" class="signin-btn">
@@ -381,6 +381,9 @@
           if (res.ok) {
             statusDiv.classList.add("success");
             statusDiv.innerHTML = `<i class="fa-regular fa-circle-check" style="color:#c9a46c;"></i> <span>${result.message}</span>`;
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 2000);
           } else {
             statusDiv.classList.add("error");
             statusDiv.innerHTML = `<i class="fa-regular fa-circle-exclamation" style="color:#d86767;"></i> <span>${result.message}</span>`;

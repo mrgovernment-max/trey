@@ -221,7 +221,7 @@
               !isLoggedIn
                 ? `
                 <div class="login-reminder-badge">
-                    <i class="fa-regular fa-lock"></i>
+                <i class="fa-solid fa-lock"></i>
                     <span>please <a href="/login.html">sign in</a> to add items to cart</span>
                 </div>
             `
@@ -452,7 +452,7 @@
 
     if (!userId) {
       cartContainer.innerHTML =
-        '<p style="padding: 3rem; background: #f6f6f2;">Login to see Cart</p>';
+        '<p style="padding: 3rem; background: #f6f6f2;"><a style ="color:black;" href="login.html"> Login </a> to see Cart</p>';
       return;
     }
 
