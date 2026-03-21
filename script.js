@@ -1,7 +1,6 @@
 (function () {
   // ---------- state ----------
   let products = []; // will be filled from API
-  let cart = [];
   let msize = null;
 
   //AOS animation
@@ -546,8 +545,6 @@
       } else if (page === "gallery") {
         showPage("gallery");
       } else if (page === "cart") {
-        if (currentUser.id) fetchUserCart();
-        else renderCartWithMessage();
         showPage("cart");
       } else if (page === "contact") {
         showPage("contact");

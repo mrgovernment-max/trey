@@ -1235,16 +1235,12 @@ body {
 }
 .cart-container {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
 @media (max-width: 800px) {
   .cart-container {
-    grid-template-columns: 2fr 1fr;
-  }
-  .vid-reveal video,
-  .vid-reveal iframe {
-    width: 97%;
+    grid-template-columns: 1fr;
   }
 }
 .cart-items {
