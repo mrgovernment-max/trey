@@ -416,6 +416,7 @@
       );
 
       const cart = await res.json();
+      console.log(cart);
 
       const total = cart.reduce((acc, i) => acc + i.quantity, 0);
 
@@ -476,21 +477,28 @@
 
     cart.forEach((item) => {
       html += `
-            <div class="cart-item" data-id="${item.cartId}">
-                <img src="${item.img_url}" alt="${item.name}">
-                <h4>${item.name}</h4>
-                <span class="cart-item-price">$${parseFloat(item.price).toFixed(
-                  2
-                )}</span>
-                
-                <span class="cart-qty" data-id="${item.cartId}"> 
-                    ${item.quantity}
-                </span>
-
-                <i class="fa-regular fa-trash-can remove-item" data-id="${
-                  item.cartId
-                }"></i>
-            </div>
+      <div class="cart-item" data-cart-id="${item.cartId}">
+      <div class="cart-img">
+          <img src="${item.img_url}" alt="${item.name}">
+      </div>
+      <div class="cart-name">
+          <h4>${item.name}</h4>
+      </div>
+      <div class="cart-price">
+          <span>$${parseFloat(item.price).toFixed(2)}</span>
+      </div>
+      <div class="cart-quantity">
+      <span class="size-badge">${item.quantity}</span>
+      </div>
+      <div class="cart-size">
+          <span class="size-badge">${item.size || "M"}</span>
+      </div>
+      <div class="cart-remove">
+          <i class="fa-regular fa-trash-can remove-item" data-cart-id="${
+            item.cartId
+          }"></i>
+      </div>
+  </div>
         `;
     });
 
