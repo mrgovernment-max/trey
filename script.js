@@ -36,7 +36,7 @@
   async function fetchProducts() {
     try {
       const response = await fetch(
-        "https://backendroutes-lcpt.onrender.com/products"
+        "https://backendroutes-lcpt.onrender.com/ojmerch"
       );
       if (!response.ok) throw new Error("Network error");
       products = await response.json();
