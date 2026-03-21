@@ -25,7 +25,6 @@
   function showPage(pageId) {
     pages.forEach((p) => p.classList.remove("active-page"));
     const target = document.getElementById(pageId);
-    console.log(pageId);
     if (target) target.classList.add("active-page");
     else document.getElementById("home").classList.add("active-page");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -521,11 +520,10 @@
     // remove item
     document.querySelectorAll(".remove-item").forEach((btn) => {
       btn.addEventListener("click", (e) => {
-        const cartId = parseInt(e.target.dataset.id);
+        const cartId = parseInt(e.target.dataset.cartId);
         removeFromCart(cartId, userId);
       });
     });
-
     document.getElementById("fake-checkout")?.addEventListener("click", () => {
       alert("checkout demo — items would be purchased. thank you.");
     });
@@ -560,6 +558,8 @@
         showPage("policy");
       } else if (page === "terms") {
         showPage("terms");
+      } else if (page === "thrift") {
+        showPage("thrift");
       }
     });
   });
