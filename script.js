@@ -4,6 +4,15 @@
   let cart = [];
   let msize = null;
 
+  //AOS animation
+  AOS.init({
+    duration: 1000, // animation duration (ms)
+    easing: "ease-in-out", // smooth animation
+    once: true, // animation happens only once
+    offset: 120, // trigger point (px from bottom)
+    delay: 100, // delay before animation starts
+    mirror: false, // no repeat when scrolling up
+  });
   // DOM elements
   const pages = document.querySelectorAll(".page");
   const navLinks = document.querySelectorAll("[data-page]");

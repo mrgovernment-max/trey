@@ -7,7 +7,8 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
     />
     <title>OJ || studios</title>
-
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -17,14 +18,14 @@
   <body>
     <!-- navigation -->
     <nav class="navbar">
-      <div class="logo">OJ || studios </div>
-      <div class="nav-links">
+      <div data-aos="fade-right" class="logo">OJ || studios </div>
+      <div class="nav-links" data-aos="fade-down">
         <a href="#" data-page="home">Home</a>
         <a href="#" data-page="products">Products</a>
         <a href="#" data-page="gallery">Gallery</a>
         
       </div>
-      <div class="cart-icon" data-page="cart">
+      <div data-aos="fade-left" class="cart-icon" data-page="cart">
         <i class="fa-solid fa-cart-shopping"></i></i>
         <span id="cart-count">0</span>
       </div>
@@ -32,13 +33,14 @@
 
     <!-- PAGES -->
     <section id="home" class="page active-page">
-      <div class="hero">
+      <div class="hero" data-aos="zoom-in-up">
         <h1>OJ || studios</h1>
         <p>Made in GH. Shipping Worldwide.</p>
         <button class="btn" data-page="products">explore collection</button>
       </div>
       <div class="vid-reveal">
-        <video autoplay loop muted playsinline src="trey.mp4"></video>
+        <iframe data-aos="fade-right" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127066.72272953182!2d-0.2621327771020004!3d5.591373810816487!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdf9084b2b7a773%3A0xbed14ed8650e2dd3!2sAccra%2C%20Ghana!5e0!3m2!1sen!2suk!4v1774107995158!5m2!1sen!2suk"  style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <video data-aos="fade-left" autoplay loop muted playsinline src="trey.mp4"></video>
       </div>
       <div class="featured-grid" id="home-featured">
         <!-- dynamic featured from JS -->
