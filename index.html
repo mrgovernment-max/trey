@@ -40,9 +40,9 @@
       </div>
 
 
-      <!-- === TREY location + features combined section === -->
+      <!--TREY location + features combined section -->
 <div id="locfeat" class="trey-location-features">
-  <!-- Left side: Location card (your existing styled card) -->
+  <!-- Left side: Location card  -->
   <div class="trey-location-card" data-aos="fade-left">
       <div class="location-badge">
           <span class="badge-dot"></span>
@@ -160,7 +160,7 @@
       </div>
       
       <div class="features-footer">
-          <span class="footer-badge">✦ join 5,000+ intentional collectors ✦</span>
+          <span class="footer-badge">✦ join 1,000+ intentional collectors ✦</span>
       </div>
   </div>
 </div>
@@ -226,11 +226,14 @@
 
     </section>
 
+    <!--PRODUCTS SECTION-->
+
     <section id="products" class="page">
       <h2 class="section-title">OJ || studios Merch</h2>
       <div class="products-grid" id="products-grid"></div>
     </section>
-
+    
+<!--PRODUCTS-DETAIL SECTION-->
     <section id="product-detail" class="page">
       <div class="back-link" id="back-to-products">
         <i class="fa-solid fa-arrow-left"></i></i> back to products
@@ -260,77 +263,1211 @@
       </div>
     </section>
 
-    <section id="newsletter" class="newsletter-section">
-      <div class="newsletter-container">
-          <div class="newsletter-content">
-              <h2 class="newsletter-title">get the latest <span class="title-light">OJ || studios releases</span></h2>
-              <p class="newsletter-subtitle">worldwide shipping — direct to your inbox</p>
-              
-              <form class="newsletter-form" id="treyNewsletterForm" onsubmit="event.preventDefault(); alert('📬 demo: you would be subscribed. (thanks!)');">
-                  <div class="form-row">
-                      <input type="email" name="email" id="newsletter-email" placeholder="your@email.com" class="newsletter-input" required>
-                      <button type="submit" class="newsletter-btn">subscribe</button>
-                  </div>
-                  <div class="form-footnote">
-                      <span class="dot-small"></span>
-                      <span class="footnote-text">no spam — just seasonal updates</span>
-                  </div>
-              </form>
-          </div>
-      </div>
-  </section>
   
-    <!--Contact-->
 
-    <section id="contact" class="contact-section">
-      <div class="contact-container">
-          <div class="contact-header">
-              <h2 class="contact-title">Reach <span class="title-light">OJ || studios</span></h2>
-              <p class="contact-subtitle">for inquiries, commissions, or just to say hello</p>
-          </div>
-  
-          <div class="contact-grid">
-              <!-- contact form -->
-              <form class="contact-form" id="treyContactForm" onsubmit="event.preventDefault(); alert('📨 demo: your message would be sent. (thanks!)');">
+  <!--Contact-->
+
+  <!-- TREY contact form -->
+  <section id="contact" class="page">
+<div class=" trey-contact-section">
+  <div class="contact-container">
+      <div class="contact-header">
+          <span class="contact-badge">get in touch</span>
+          <h2 class="contact-title">reach <span class="title-accent">OJ || studios</span></h2>
+          <div class="contact-divider"></div>
+          <p class="contact-subtitle">inquiries, collaborations, or just to say hello — we'd love to hear from you.</p>
+      </div>
+      
+      <div class="contact-wrapper">
+          <!-- Contact form -->
+          <form class="trey-contact-form" id="treyContactForm" onsubmit="event.preventDefault(); alert('📨 demo: your message has been sent. we\'ll respond within 24 hours.');">
+              <div class="form-row">
                   <div class="form-group">
-                      <label for="name" class="field-label">name</label>
-                      <input type="text" id="name" name="name" placeholder="your name" class="form-input" required>
+                      <label for="fullname">full name <span class="required">*</span></label>
+                      <input type="text" id="fullname" name="fullname" placeholder="James Wright" required>
+                      <span class="focus-border"></span>
                   </div>
                   <div class="form-group">
-                      <label for="email" class="field-label">email</label>
-                      <input type="email" id="email" name="email" placeholder="your@email.com" class="form-input" required>
+                      <label for="contact-email">email address <span class="required">*</span></label>
+                      <input type="email" id="contact-email" name="email" placeholder="hello@trey.studio" required>
+                      <span class="focus-border"></span>
+                  </div>
+              </div>
+              
+              <div class="form-row">
+                  <div class="form-group">
+                      <label for="phone">phone number</label>
+                      <input type="tel" id="phone" name="phone" placeholder="+233 XX XXX XXXX">
+                      <span class="focus-border"></span>
                   </div>
                   <div class="form-group">
-                      <label for="message" class="field-label">message</label>
-                      <textarea id="message" name="message" rows="4" placeholder="tell us anything..." class="form-input" required></textarea>
+                      <label for="subject">subject <span class="required">*</span></label>
+                      <select id="subject" name="subject" required>
+                          <option value="" disabled selected>select inquiry type</option>
+                          <option value="general">general inquiry</option>
+                          <option value="order">order support</option>
+                          <option value="returns">returns & exchanges</option>
+                          <option value="wholesale">wholesale / bulk</option>
+                          <option value="collab">collaboration</option>
+                          <option value="press">press & media</option>
+                      </select>
+                      <span class="focus-border"></span>
                   </div>
-                  <button type="submit" class="contact-submit-btn">send message</button>
-              </form>
-  
-              <!-- contact info + subtle studio visual -->
-              <div class="contact-info">
-                  <div class="info-card">
-                      <h3 class="info-heading">studio</h3>
-                      <p class="info-text">trey@studio.com</p>
-                      <p class="info-text">+1 (000) 000 0000</p>
-                      <p class="info-text address">77 unknown street<br>Unknown, ny 00000</p>
+              </div>
+              
+              <div class="form-group full-width">
+                  <label for="message">your message <span class="required">*</span></label>
+                  <textarea id="message" name="message" rows="5" placeholder="tell us about your inquiry, project, or feedback..." required></textarea>
+                  <span class="focus-border"></span>
+              </div>
+              
+              <div class="form-group full-width checkbox-group">
+                  <label class="checkbox-label">
+                      <input type="checkbox" name="newsletter" checked>
+                      <span class="checkmark"></span>
+                      <span class="checkbox-text">subscribe to studio updates & early access</span>
+                  </label>
+              </div>
+              
+              <button type="submit" class="contact-submit">
+                  <span>send message</span>
+                  <i class="fa-regular fa-arrow-right"></i>
+              </button>
+              
+              <p class="form-note">* required fields · we respond within 24-48 hours</p>
+          </form>
+          
+          <!-- Contact info sidebar -->
+          <div class="contact-info-sidebar">
+              <div class="info-card">
+                  <div class="info-icon">
+                      <i class="fa-regular fa-envelope"></i>
                   </div>
-                  <div class="info-card">
-                      <h3 class="info-heading">social</h3>
-                      <p class="info-text">instagram  <i style="font-size: xx-large;" class="fa-brands fa-instagram"></i></p> 
-                      <p class="info-text"> <a style="text-decoration: none; color: black;" href="https://www.snapchat.com/@trey3j04?invite_id=y9GcERf6&locale=en_US&share_id=xZ6QEZixSUev_m-YzpXaqQ&sid=8b11353606144f2fad81e30e0bf3ca6b&locale=en-GB"> Snapchat  <i  style="font-size: xx-large;" class="fa-brands fa-snapchat"></i></a></i>  </p>
-                      <p class="info-text">Any other media can be added here</p>
+                  <h4>email us</h4>
+                  <a href="mailto:hello@trey.studio">hello@trey.studio</a>
+                  <a href="mailto:support@trey.studio">support@trey.studio</a>
+              </div>
+              
+              <div class="info-card">
+                  <div class="info-icon">
+                      <i class="fa-regular fa-phone"></i>
                   </div>
-                  <div class="studio-note">
-                      <span class="dot-pattern"></span>
-                      <p>all collaborations are<br>crafted in small batches</p>
+                  <h4>call us</h4>
+                  <a href="tel:+233555123456">+233 (0) 55 512 3456</a>
+                  <p class="info-hours">247</p>
+              </div>
+              
+              <div class="info-card">
+                  <div class="info-icon">
+                      <i class="fa-regular fa-location-dot"></i>
+                  </div>
+                  <h4>visit studio</h4>
+                  <p>5th Lane, off Oxford Street<br>Osu, Accra · Ghana</p>
+                  <a href="#" class="map-link">view on map <i class="fa-regular fa-arrow-up-right-from-squares"></i></a>
+              </div>
+              
+              <div class="info-card social-card">
+                  <div class="info-icon">
+                      <i class="fa-regular fa-share-nodes"></i>
+                  </div>
+                  <h4>connect</h4>
+                  <div class="social-links">
+                      <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                      <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+                      <a href="#" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
+                      <a href="#" aria-label="Are.na"><i class="fa-regular fa-square"></i></a>
+                  </div>
+              </div>
+              
+              <div class="info-card response-badge">
+                  <div class="badge-content">
+                      <i class="fa-regular fa-clock"></i>
+                      <span>typically replies within<br><strong>2-4 hours</strong></span>
                   </div>
               </div>
           </div>
       </div>
-  </section>
+  </div>
+</div>
 
-    <!-- TRE footer -->
+</section>
+
+
+<!--=== SHIPPING =====-->
+
+<!-- === TREY shipping information section === -->
+<section id="shipping" class=" page trey-shipping-section">
+  <div class="shipping-container">
+      <div class="shipping-header">
+          <span class="shipping-badge">delivery info</span>
+          <h2 class="shipping-title">shipping <span class="title-accent">& delivery</span></h2>
+          <div class="shipping-divider"></div>
+          <p class="shipping-subtitle">worldwide shipping from our Accra studio — crafted with care, delivered with intention.</p>
+      </div>
+      
+      <div class="shipping-grid">
+          <!-- Shipping methods card -->
+          <div class="shipping-card">
+              <div class="card-icon">
+                <i class="fa-solid fa-truck"></i>
+              </div>
+              <h3 class="card-title">shipping methods</h3>
+              
+<div class="dhl-note">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/DHL_Logo.svg" alt="DHL" style="height: 24px;">
+  <div class="dhl-details">
+      <strong>DHL Express — 1-3 business days</strong>
+      <span>fully tracked door-to-door delivery to all European destinations</span>
+  </div>
+</div>
+              <div class="shipping-methods">
+                  <div class="method-item">
+                      <div class="method-name">
+                          <span class="method-badge">standard</span>
+                          <span class="method-time">5-8 business days</span>
+                      </div>
+                      <div class="method-price">$9.99</div>
+                  </div>
+                  <div class="method-item">
+                      <div class="method-name">
+                          <span class="method-badge">express</span>
+                          <span class="method-time">2-4 business days</span>
+                      </div>
+                      <div class="method-price">$19.99</div>
+                  </div>
+                  <div class="method-item">
+                      <div class="method-name">
+                          <span class="method-badge">priority</span>
+                          <span class="method-time">1-2 business days</span>
+                      </div>
+                      <div class="method-price">$29.99</div>
+                  </div>
+              </div>
+              <div class="free-shipping">
+                <i class="fa-solid fa-gift"></i>
+                  <span>free standard shipping on orders over $150</span>
+              </div>
+          </div>
+          
+          <!-- Delivery zones card -->
+          <div class="shipping-card">
+              <div class="card-icon">
+                <i class="fa-solid fa-globe"></i>
+              </div>
+              <h3 class="card-title">delivery zones</h3>
+              <div class="zones-list">
+                  <div class="zone-item">
+                      <span class="zone-name">West Africa</span>
+                      <span class="zone-time">3-5 business days</span>
+                  </div>
+                  <div class="zone-item">
+                      <span class="zone-name">North America</span>
+                      <span class="zone-time">5-7 business days</span>
+                  </div>
+                  <div class="zone-item">
+                      <span class="zone-name">Europe</span>
+                      <span class="zone-time">5-8 business days</span>
+                  </div>
+                  <div class="zone-item">
+                      <span class="zone-name">Asia & Pacific</span>
+                      <span class="zone-time">7-10 business days</span>
+                  </div>
+                  <div class="zone-item">
+                      <span class="zone-name">Rest of World</span>
+                      <span class="zone-time">10-14 business days</span>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Order processing card -->
+          <div class="shipping-card">
+              <div class="card-icon">
+                  <i class="fa-regular fa-clock"></i>
+              </div>
+              <h3 class="card-title">order processing</h3>
+              <div class="processing-info">
+                  <div class="info-item">
+                      <i class="fa-regular fa-check-circle"></i>
+                      <span>orders placed before 1pm GMT ship same day</span>
+                  </div>
+                  <div class="info-item">
+                      <i class="fa-regular fa-check-circle"></i>
+                      <span>24-48 hour handling time for made-to-order items</span>
+                  </div>
+                  <div class="info-item">
+                      <i class="fa-regular fa-check-circle"></i>
+                      <span>tracking number provided via email</span>
+                  </div>
+                  <div class="info-item">
+                      <i class="fa-regular fa-check-circle"></i>
+                      <span>signature required for orders over $300</span>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Additional info card -->
+          <div class="shipping-card">
+              <div class="card-icon">
+                  <i class="fa-regular fa-envelope"></i>
+              </div>
+              <h3 class="card-title">shipping notes</h3>
+              <ul class="shipping-notes">
+                  <li><i class="fa-regular fa-location-dot"></i> we ship to all countries worldwide</li>
+                  <li><i class="fa-regular fa-receipt"></i> customs duties calculated at checkout</li>
+                  <li><i class="fa-regular fa-box"></i> eco-friendly packaging — 100% recyclable</li>
+                  <li><i class="fa-regular fa-phone"></i> need help? <a href="#" data-page="contact">contact support</a> for tracking assistance</li>
+              </ul>
+              <div class="holiday-note">
+                  <i class="fa-regular fa-calendar"></i>
+                  <span>holiday shipping: order by dec 15 for guaranteed delivery</span>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Shipping policy footer -->
+      <div class="shipping-footer">
+          <div class="policy-badge">
+            <i class="fa-solid fa-shield"></i>
+              <span>fully insured shipping</span>
+          </div>
+          <div class="policy-badge">
+            <i class="fa-solid fa-truck-fast"></i>
+              <span>30-day returns</span>
+          </div>
+          <div class="policy-badge">
+            <i class="fa-solid fa-headset"></i>
+              <span>dedicated support</span>
+          </div>
+      </div>
+      
+      <div class="disclaimer">
+          <p>* shipping times are estimates and may vary due to customs clearance or carrier delays. tracking available for all orders.</p>
+      </div>
+  </div>
+</section>
+
+
+<!-- === TREY returns & exchanges section === -->
+<section id="returns" class="page trey-returns-section">
+  <div class="returns-container">
+      <div class="returns-header">
+          <span class="returns-badge">easy returns</span>
+          <h2 class="returns-title">returns & <span class="title-accent">exchanges</span></h2>
+          <div class="returns-divider"></div>
+          <p class="returns-subtitle">shop with confidence — we make returns simple, transparent, and hassle-free.</p>
+      </div>
+      
+      <div class="returns-grid">
+          <!-- Policy overview card -->
+          <div class="returns-card policy-card">
+              <div class="card-icon">
+                <i class="fa-solid fa-arrow-rotate-left"></i>
+              </div>
+              <h3 class="card-title">10-day return policy</h3>
+              <p class="card-description">not completely satisfied? we accept returns within 30 days of delivery for a full refund or exchange.</p>
+              <div class="policy-highlight">
+                  <i class="fa-regular fa-circle-check"></i>
+                  <span>items must be unused, unworn, with original tags attached</span>
+              </div>
+              <div class="policy-highlight">
+                  <i class="fa-regular fa-circle-check"></i>
+                  <span>original packaging required for all returns</span>
+              </div>
+              <div class="policy-highlight">
+                  <i class="fa-regular fa-circle-check"></i>
+                  <span>proof of purchase (order number or email) required</span>
+              </div>
+          </div>
+          
+          <!-- Non-returnable items card -->
+          <div class="returns-card">
+              <div class="card-icon">
+                <i class="fa-solid fa-ban"></i>
+              </div>
+              <h3 class="card-title">non-returnable items</h3>
+              <ul class="exclusions-list">
+                  <li><i class="fa-regular fa-tag"></i> final sale & clearance items</li>
+                  <li><i class="fa-regular fa-clock"></i> items marked "final sale" at checkout</li>
+                  <li><i class="fa-regular fa-gift"></i> gift cards & store credit</li>
+                  <li><i class="fa-regular fa-hand-sparkles"></i> personalized or custom-made pieces</li>
+                  <li><i class="fa-regular fa-soap"></i> intimate apparel & undergarments</li>
+              </ul>
+          </div>
+          
+          <!-- How to return card -->
+          <div class="returns-card steps-card">
+              <div class="card-icon">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+              <h3 class="card-title">how to return</h3>
+              <div class="steps-list">
+                  <div class="step-item">
+                      <span class="step-number">01</span>
+                      <div class="step-content">
+                          <h4>start your return</h4>
+                          <p>email us at <a href="mailto:returns@trey.studio">returns@trey.studio</a> with your order number</p>
+                      </div>
+                  </div>
+                  <div class="step-item">
+                      <span class="step-number">02</span>
+                      <div class="step-content">
+                          <h4>pack your items</h4>
+                          <p>securely pack items with original packaging and tags</p>
+                      </div>
+                  </div>
+                  <div class="step-item">
+                      <span class="step-number">03</span>
+                      <div class="step-content">
+                          <h4>ship to us</h4>
+                          <p>send to our Accra studio — we'll provide shipping instructions</p>
+                      </div>
+                  </div>
+                  <div class="step-item">
+                      <span class="step-number">04</span>
+                      <div class="step-content">
+                          <h4>receive refund</h4>
+                          <p>refund processed within 5-7 business days of receipt</p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Shipping costs & timing card -->
+          <div class="returns-card">
+              <div class="card-icon">
+                <i class="fa-solid fa-truck-arrow-right"></i>
+              </div>
+              <h3 class="card-title">return shipping costs</h3>
+              <div class="cost-details">
+                  <div class="cost-item">
+                      <span class="cost-label">defective or incorrect item</span>
+                      <span class="cost-value">free return shipping</span>
+                  </div>
+                  <div class="cost-item">
+                      <span class="cost-label">change of mind / size exchange</span>
+                      <span class="cost-value">customer responsible</span>
+                  </div>
+                  <div class="cost-divider"></div>
+                  <div class="timing-note">
+                      <i class="fa-regular fa-clock"></i>
+                      <span>refunds processed within 5-7 business days after return is received</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Exchange information -->
+      <div class="exchange-section">
+          <div class="exchange-header">
+            <i class="fa-solid fa-gauge-simple"></i>
+              <h3>exchanges made simple</h3>
+          </div>
+          <div class="exchange-content">
+              <p>want a different size or color? start an exchange and we'll reserve your new item while we process your return.</p>
+              <ul class="exchange-features">
+                  <li><i class="fa-solid fa-bolt"></i></i> express exchange option — we ship your new item within 24 hours</li>
+                  <li><i class="fa-solid fa-tags"></i> free size exchanges for domestic orders</li>
+                  <li><i class="fa-solid fa-envelopes-bulk"></i> email <a href="mailto:exchanges@trey.studio">exchanges@trey.studio</a> for priority assistance</li>
+              </ul>
+          </div>
+      </div>
+      
+      <!-- Returns footer with contact -->
+      <div class="returns-footer">
+          <div class="contact-support">
+            <i class="fa-solid fa-ticket-simple"></i>
+              <div class="support-details">
+                  <strong>need help with your return?</strong>
+                  <span>our support team is here for you</span>
+                  <a href="mailto:support@trey.studio">support@trey.studio</a>
+                  <span class="support-hours">mon-fri · 9am - 6pm GMT</span>
+              </div>
+          </div>
+          <div class="faq-link">
+              <i class="fa-regular fa-circle-question"></i>
+              <a href="#">view return policy FAQ</a>
+          </div>
+      </div>
+      
+      <div class="disclaimer">
+          <p>* original shipping fees are non-refundable unless the return is due to a defect or error on our part. customers are responsible for return shipping costs unless otherwise noted.</p>
+      </div>
+  </div>
+</section>
+
+
+
+<!-- === TREY order tracking section === -->
+<section id="tracking" class=" page trey-tracking-section">
+  <div class="tracking-container">
+      <div class="tracking-header">
+          <span class="tracking-badge">stay updated</span>
+          <h2 class="tracking-title">order <span class="title-accent">tracking</span></h2>
+          <div class="tracking-divider"></div>
+          <p class="tracking-subtitle">enter your order number and email to track your shipment in real-time.</p>
+      </div>
+      
+      <!-- Tracking form -->
+      <div class="tracking-form-wrapper">
+          <form class="trey-tracking-form" id="orderTrackingForm" onsubmit="event.preventDefault(); trackOrder();">
+              <div class="form-row">
+                  <div class="form-group">
+                      <label for="order-number">order number <span class="required">*</span></label>
+                      <input type="text" id="order-number" name="order-number" placeholder="e.g., TREY-12345" required>
+                      <span class="focus-border"></span>
+                  </div>
+                  <div class="form-group">
+                      <label for="tracking-email">email address <span class="required">*</span></label>
+                      <input type="email" id="tracking-email" name="email" placeholder="your@email.com" required>
+                      <span class="focus-border"></span>
+                  </div>
+                  <div class="form-group submit-group">
+                      <button type="submit" class="tracking-submit">
+                          <span>track order</span>
+                          <i class="fa-regular fa-arrow-right"></i>
+                      </button>
+                  </div>
+              </div>
+              <p class="form-note">don't have an order number? <a href="#" data-page="contact">contact support</a> for assistance</p>
+          </form>
+      </div>
+      
+      <!-- Tracking result container (hidden by default, shows after tracking) -->
+      <div id="tracking-result" class="tracking-result" style="display: none;">
+          <!-- Dynamic content will appear here -->
+      </div>
+      
+      <!-- Tracking information cards (static info) -->
+      <div class="tracking-info-grid">
+          <div class="info-card">
+              <div class="card-icon">
+                  <i class="fa-regular fa-truck-fast"></i>
+              </div>
+              <h3>shipping partners</h3>
+              <p>we partner with DHL Express, FedEx, and local carriers for reliable worldwide delivery.</p>
+              <div class="partner-logos">
+                  <span>DHL</span>
+                  <span>FedEx</span>
+                  <span>EMS</span>
+              </div>
+          </div>
+          
+          <div class="info-card">
+              <div class="card-icon">
+                  <i class="fa-regular fa-clock"></i>
+              </div>
+              <h3>delivery times</h3>
+              <ul class="times-list">
+                  <li><span>West Africa:</span> 3-5 days</li>
+                  <li><span>Europe:</span> 5-8 days</li>
+                  <li><span>North America:</span> 5-7 days</li>
+                  <li><span>Rest of World:</span> 7-14 days</li>
+              </ul>
+          </div>
+          
+          <div class="info-card">
+              <div class="card-icon">
+                  <i class="fa-regular fa-envelope"></i>
+              </div>
+              <h3>tracking updates</h3>
+              <p>once your order ships, you'll receive:</p>
+              <ul class="updates-list">
+                  <li><i class="fa-regular fa-envelope"></i> confirmation email with tracking link</li>
+                  <li><i class="fa-regular fa-mobile"></i> SMS updates (optional)</li>
+                  <li><i class="fa-regular fa-bell"></i> delivery day notifications</li>
+              </ul>
+          </div>
+          
+          <div class="info-card">
+              <div class="card-icon">
+                  <i class="fa-regular fa-circle-question"></i>
+              </div>
+              <h3>need help?</h3>
+              <p>tracking not updating? our support team is here to help.</p>
+              <a href="#" data-page="contact" class="help-link">contact support <i class="fa-regular fa-arrow-right"></i></a>
+          </div>
+      </div>
+      
+      <!-- FAQ section -->
+      <div class="tracking-faq">
+          <h3 class="faq-title">frequently asked questions</h3>
+          <div class="faq-grid">
+              <div class="faq-item">
+                  <button class="faq-question">
+                      <span>how long until my tracking number activates?</span>
+                      <i class="fa-regular fa-chevron-down"></i>
+                  </button>
+                  <div class="faq-answer">
+                      <p>tracking numbers typically activate within 24-48 hours after your order ships. if it's been longer than 3 days, please contact our support team.</p>
+                  </div>
+              </div>
+              <div class="faq-item">
+                  <button class="faq-question">
+                      <span>what if my package shows "delivered" but i haven't received it?</span>
+                      <i class="fa-regular fa-chevron-down"></i>
+                  </button>
+                  <div class="faq-answer">
+                      <p>please check with neighbors or building management first. if still missing, contact us within 48 hours and we'll initiate an investigation with the carrier.</p>
+                  </div>
+              </div>
+              <div class="faq-item">
+                  <button class="faq-question">
+                      <span>can i change my shipping address after ordering?</span>
+                      <i class="fa-regular fa-chevron-down"></i>
+                  </button>
+                  <div class="faq-answer">
+                      <p>address changes can be requested within 2 hours of placing your order. after that, the order may have already been processed for shipping.</p>
+                  </div>
+              </div>
+              <div class="faq-item">
+                  <button class="faq-question">
+                      <span>do you offer international tracking?</span>
+                      <i class="fa-regular fa-chevron-down"></i>
+                  </button>
+                  <div class="faq-answer">
+                      <p>yes! all international orders include full tracking from dispatch to delivery, with updates at every stage of the journey.</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+
+
+<!-- === TREY size guide section === -->
+<section id="size" class="page trey-sizeguide-section">
+  <div class="sizeguide-container">
+      <div class="sizeguide-header">
+          <span class="sizeguide-badge">find your fit</span>
+          <h2 class="sizeguide-title">size <span class="title-accent">guide</span></h2>
+          <div class="sizeguide-divider"></div>
+          <p class="sizeguide-subtitle">choose the perfect size with our detailed measurement guide — crafted for comfort and precision.</p>
+      </div>
+      
+      <!-- Category selector -->
+      <div class="category-tabs">
+          <button class="cat-btn active" data-category="apparel">apparel</button>
+          <button class="cat-btn" data-category="footwear">footwear</button>
+          <button class="cat-btn" data-category="accessories">accessories</button>
+      </div>
+      
+      <!-- Apparel size chart -->
+      <div class="size-chart" id="apparel-chart">
+          <div class="chart-header">
+              <h3>apparel measurements (cm)</h3>
+              <p class="chart-note">all measurements are in centimeters — for best fit, measure a similar item you own</p>
+          </div>
+          <div class="table-responsive">
+              <table class="size-table">
+                  <thead>
+                      <tr>
+                          <th>size</th>
+                          <th>chest</th>
+                          <th>waist</th>
+                          <th>hips</th>
+                          <th>length (back)</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr><td>XS</td><td>86-89</td><td>69-72</td><td>86-89</td><td>66</td></tr>
+                      <tr><td>S</td><td>90-93</td><td>73-76</td><td>90-93</td><td>68</td></tr>
+                      <tr><td>M</td><td>94-97</td><td>77-80</td><td>94-97</td><td>70</td></tr>
+                      <tr><td>L</td><td>98-101</td><td>81-84</td><td>98-101</td><td>72</td></tr>
+                      <tr><td>XL</td><td>102-105</td><td>85-88</td><td>102-105</td><td>74</td></tr>
+                      <tr><td>XXL</td><td>106-109</td><td>89-92</td><td>106-109</td><td>76</td></tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+      
+      <!-- Footwear size chart -->
+      <div class="size-chart" id="footwear-chart" style="display: none;">
+          <div class="chart-header">
+              <h3>footwear size conversion</h3>
+              <p class="chart-note">EU to US/UK conversion — if you're between sizes, we recommend sizing up for comfort</p>
+          </div>
+          <div class="table-responsive">
+              <table class="size-table">
+                  <thead>
+                      <tr>
+                          <th>EU</th>
+                          <th>US (men)</th>
+                          <th>US (women)</th>
+                          <th>UK</th>
+                          <th>foot length (cm)</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr><td>36</td><td>4</td><td>5</td><td>3.5</td><td>22.5</td></tr>
+                      <tr><td>37</td><td>4.5</td><td>6</td><td>4</td><td>23.0</td></tr>
+                      <tr><td>38</td><td>5.5</td><td>7</td><td>5</td><td>23.8</td></tr>
+                      <tr><td>39</td><td>6.5</td><td>8</td><td>6</td><td>24.5</td></tr>
+                      <tr><td>40</td><td>7</td><td>8.5</td><td>6.5</td><td>25.0</td></tr>
+                      <tr><td>41</td><td>8</td><td>9.5</td><td>7.5</td><td>25.8</td></tr>
+                      <tr><td>42</td><td>8.5</td><td>10</td><td>8</td><td>26.3</td></tr>
+                      <tr><td>43</td><td>9.5</td><td>11</td><td>9</td><td>27.0</td></tr>
+                      <tr><td>44</td><td>10.5</td><td>12</td><td>10</td><td>27.8</td></tr>
+                      <tr><td>45</td><td>11.5</td><td>13</td><td>11</td><td>28.5</td></tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+      
+      <!-- Accessories size chart -->
+      <div class="size-chart" id="accessories-chart" style="display: none;">
+          <div class="chart-header">
+              <h3>accessories sizing</h3>
+              <p class="chart-note">hats, belts, and bags — find your perfect accessory fit</p>
+          </div>
+          <div class="accessories-grid">
+              <div class="accessory-card">
+                <i class="fa-solid fa-hat-cowboy"></i>
+                  <h4>hats</h4>
+                  <div class="hat-sizes">
+                      <div class="size-row"><span>S/M</span><span>55-57 cm</span></div>
+                      <div class="size-row"><span>M/L</span><span>57-59 cm</span></div>
+                      <div class="size-row"><span>L/XL</span><span>59-61 cm</span></div>
+                  </div>
+              </div>
+              <div class="accessory-card">
+                <i class="fa-solid fa-ribbon"></i>
+                  <h4>belts</h4>
+                  <div class="belt-sizes">
+                      <div class="size-row"><span>S</span><span>70-80 cm</span><span>28-32"</span></div>
+                      <div class="size-row"><span>M</span><span>80-90 cm</span><span>32-36"</span></div>
+                      <div class="size-row"><span>L</span><span>90-100 cm</span><span>36-40"</span></div>
+                      <div class="size-row"><span>XL</span><span>100-110 cm</span><span>40-44"</span></div>
+                  </div>
+                  <p class="accessory-note">measure from the buckle tip to the middle hole</p>
+              </div>
+              <div class="accessory-card">
+                <i class="fa-solid fa-bag-shopping"></i>
+                  <h4>bags</h4>
+                  <div class="bag-sizes">
+                      <div class="size-row"><span>mini</span><span>18 x 12 x 6 cm</span></div>
+                      <div class="size-row"><span>small</span><span>25 x 18 x 8 cm</span></div>
+                      <div class="size-row"><span>medium</span><span>32 x 24 x 12 cm</span></div>
+                      <div class="size-row"><span>large</span><span>40 x 30 x 15 cm</span></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+      <!-- How to measure guide -->
+      <div class="measure-guide">
+          <h3 class="guide-title">how to measure</h3>
+          <div class="measure-grid">
+              <div class="measure-item">
+                  <div class="measure-icon"><i class="fa-solid fa-shirt"></i></div>
+                  <h4>chest</h4>
+                  <p>measure around the fullest part of your chest, keeping the tape horizontal</p>
+              </div>
+              <div class="measure-item">
+                  <div class="measure-icon"><i class="fa-solid fa-person-circle-check"></i></div>
+                  <h4>waist</h4>
+                  <p>measure around your natural waistline, keeping the tape slightly loose</p>
+              </div>
+              <div class="measure-item">
+                  <div class="measure-icon"><i class="fa-brands fa-google-wallet"></i></div>
+                  <h4>hips</h4>
+                  <p>measure around the fullest part of your hips, about 20cm below waist</p>
+              </div>
+              <div class="measure-item">
+                  <div class="measure-icon"><i class="fa-solid fa-shoe-prints"></i></div>
+                  <h4>foot length</h4>
+                  <p>place foot flat, measure from heel to longest toe in centimeters</p>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Size tips card -->
+      <div class="size-tips">
+          <div class="tips-content">
+            <i class="fa-solid fa-lightbulb"></i>
+              <div class="tips-text">
+                  <h4>size tips</h4>
+                  <ul>
+                      <li><strong>relaxed fit:</strong> size up for a looser silhouette</li>
+                      <li><strong>slim fit:</strong> your regular size gives a tailored look</li>
+                      <li><strong>between sizes?</strong> we recommend sizing up for comfort</li>
+                      <li><strong>100% cotton items</strong> may shrink slightly — wash cold and air dry</li>
+                  </ul>
+              </div>
+          </div>
+          <div class="help-contact">
+            <i class="fa-solid fa-headset"></i>
+              <div>
+                  <span>still unsure about your size?</span>
+                  <a href="#" data-page="contact">contact our fit specialists</a>
+              </div>
+          </div>
+      </div>
+      
+      <div class="disclaimer">
+          <p>* measurements are approximate and may vary slightly by style. for the most accurate fit, please refer to individual product measurements.</p>
+      </div>
+  </div>
+</section>
+
+<!-- === TREY privacy policy section === -->
+<section id="policy" class="page trey-privacy-section">
+  <div class="privacy-container">
+      <div class="privacy-header">
+          <span class="privacy-badge">legal</span>
+          <h2 class="privacy-title">privacy <span class="title-accent">policy</span></h2>
+          <div class="privacy-divider"></div>
+          <p class="privacy-subtitle">last updated: march 2026</p>
+      </div>
+      
+      <div class="privacy-content">
+          <div class="privacy-sidebar">
+              <div class="sidebar-nav">
+                  <a href="#introduction" class="nav-link active">introduction</a>
+                  <a href="#information" class="nav-link">information we collect</a>
+                  <a href="#usage" class="nav-link">how we use your data</a>
+                  <a href="#sharing" class="nav-link">sharing & disclosure</a>
+                  <a href="#cookies" class="nav-link">cookies & tracking</a>
+                  <a href="#rights" class="nav-link">your rights</a>
+                  <a href="#security" class="nav-link">data security</a>
+                  <a href="#contact" class="nav-link">contact us</a>
+              </div>
+          </div>
+          
+          <div class="privacy-main">
+              <!-- Introduction -->
+              <div id="introduction" class="policy-section">
+                  <h3>introduction</h3>
+                  <p>At TREY Studio ("we," "us," or "our"), we are committed to protecting your privacy and safeguarding your personal information. This Privacy Policy explains how we collect, use, disclose, and protect your information when you visit our website, make a purchase, or interact with our services.</p>
+                  <p>By using our website, you consent to the practices described in this policy. If you do not agree with any part of this policy, please do not use our services.</p>
+              </div>
+              
+              <!-- Information we collect -->
+              <div id="information" class="policy-section">
+                  <h3>information we collect</h3>
+                  <p>We collect several types of information to provide and improve our services:</p>
+                  <div class="info-grid">
+                      <div class="info-card">
+                          <i class="fa-regular fa-user"></i>
+                          <h4>personal information</h4>
+                          <ul>
+                              <li>full name & contact details</li>
+                              <li>email address & phone number</li>
+                              <li>billing & shipping address</li>
+                              <li>date of birth (for age verification)</li>
+                          </ul>
+                      </div>
+                      <div class="info-card">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                          <h4>order information</h4>
+                          <ul>
+                              <li>purchase history</li>
+                              <li>product preferences</li>
+                              <li>size & fit data</li>
+                              <li>returns & exchange records</li>
+                          </ul>
+                      </div>
+                      <div class="info-card">
+                        <i class="fa-solid fa-laptop"></i>
+                          <h4>technical data</h4>
+                          <ul>
+                              <li>IP address & device information</li>
+                              <li>browser type & version</li>
+                              <li>pages visited & time spent</li>
+                              <li>referring website</li>
+                          </ul>
+                      </div>
+                      <div class="info-card">
+                          <i class="fa-regular fa-comment"></i>
+                          <h4>communication data</h4>
+                          <ul>
+                              <li>customer support inquiries</li>
+                              <li>newsletter preferences</li>
+                              <li>survey responses</li>
+                              <li>feedback & reviews</li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- How we use your data -->
+              <div id="usage" class="policy-section">
+                  <h3>how we use your information</h3>
+                  <p>We use your personal information for the following purposes:</p>
+                  <ul class="usage-list">
+                      <li><i class="fa-regular fa-circle-check"></i> process and fulfill your orders, including shipping and returns</li>
+                      <li><i class="fa-regular fa-circle-check"></i> communicate with you about orders, updates, and customer support</li>
+                      <li><i class="fa-regular fa-circle-check"></i> personalize your shopping experience and recommend products</li>
+                      <li><i class="fa-regular fa-circle-check"></i> send marketing communications (with your consent)</li>
+                      <li><i class="fa-regular fa-circle-check"></i> improve our website, products, and services</li>
+                      <li><i class="fa-regular fa-circle-check"></i> detect and prevent fraud or security incidents</li>
+                      <li><i class="fa-regular fa-circle-check"></i> comply with legal obligations</li>
+                  </ul>
+              </div>
+              
+              <!-- Sharing & disclosure -->
+              <div id="sharing" class="policy-section">
+                  <h3>sharing & disclosure</h3>
+                  <p>We do not sell your personal information. We may share your information with:</p>
+                  <ul class="sharing-list">
+                      <li><strong>service providers:</strong> shipping carriers, payment processors, IT services</li>
+                      <li><strong>business partners:</strong> for collaborations and exclusive collections (with your consent)</li>
+                      <li><strong>legal authorities:</strong> when required by law or to protect our rights</li>
+                  </ul>
+                  <div class="highlight-box">
+                    <i class="fa-solid fa-shield"></i>
+                      <p>All third-party service providers are contractually obligated to protect your data and use it only for specified purposes.</p>
+                  </div>
+              </div>
+              
+              <!-- Cookies & tracking -->
+              <div id="cookies" class="policy-section">
+                  <h3>cookies & tracking technologies</h3>
+                  <p>We use cookies and similar technologies to enhance your browsing experience. Cookies help us:</p>
+                  <ul class="cookies-list">
+                      <li><i class="fa-regular fa-circle-check"></i> remember your cart and preferences</li>
+                      <li><i class="fa-regular fa-circle-check"></i> analyze website traffic and performance</li>
+                      <li><i class="fa-regular fa-circle-check"></i> personalize content and advertisements</li>
+                      <li><i class="fa-regular fa-circle-check"></i> improve site functionality</li>
+                  </ul>
+                  <p class="cookie-note">You can manage cookie preferences through your browser settings. Disabling cookies may affect site functionality.</p>
+              </div>
+              
+              <!-- Your rights -->
+              <div id="rights" class="policy-section">
+                  <h3>your privacy rights</h3>
+                  <p>Depending on your location, you may have the following rights:</p>
+                  <div class="rights-grid">
+                      <div class="right-item">
+                          <i class="fa-regular fa-eye"></i>
+                          <span>right to access your data</span>
+                      </div>
+                      <div class="right-item">
+                        <i class="fa-solid fa-pen"></i>
+                          <span>right to rectification</span>
+                      </div>
+                      <div class="right-item">
+                        <i class="fa-solid fa-trash-arrow-up"></i>
+                          <span>right to erasure (right to be forgotten)</span>
+                      </div>
+                      <div class="right-item">
+                        <i class="fa-solid fa-ban"></i>
+                          <span>right to restrict processing</span>
+                      </div>
+                      <div class="right-item">
+                        <i class="fa-solid fa-dice-six"></i>
+                          <span>right to data portability</span>
+                      </div>
+                      <div class="right-item">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                          <span>right to withdraw consent</span>
+                      </div>
+                  </div>
+                  <p class="rights-note">To exercise any of these rights, please contact us at <a href="mailto:privacy@trey.studio">privacy@trey.studio</a>. We will respond within 30 days.</p>
+              </div>
+              
+              <!-- Data security -->
+              <div id="security" class="policy-section">
+                  <h3>data security</h3>
+                  <p>We implement industry-standard security measures to protect your information:</p>
+                  <ul class="security-list">
+                      <li><i class="fa-solid fa-lock"></i> SSL encryption for all data transmission</li>
+                      <li><i class="fa-solid fa-server"></i> secure servers with access controls</li>
+                      <li><i class="fa-solid fa-clock"></i> regular security audits and updates</li>
+                      <li><i class="fa-solid fa-credit-card"></i> PCI-DSS compliance for payment processing</li>
+                  </ul>
+                  <div class="security-note">
+                    <i class="fa-solid fa-arrows-spin"></i>
+                      <p>While we strive to protect your data, no method of transmission over the internet is 100% secure. We encourage you to protect your account credentials.</p>
+                  </div>
+              </div>
+              
+              <!-- Children's privacy -->
+              <div id="children" class="policy-section">
+                  <h3>children's privacy</h3>
+                  <p>Our website is not intended for children under 16. We do not knowingly collect personal information from minors. If you believe a child has provided us with personal information, please contact us immediately.</p>
+              </div>
+              
+              <!-- International transfers -->
+              <div id="international" class="policy-section">
+                  <h3>international data transfers</h3>
+                  <p>We operate from Ghana and may transfer your data to service providers in other countries. We ensure appropriate safeguards are in place to protect your information in accordance with applicable privacy laws.</p>
+              </div>
+              
+              <!-- Updates to policy -->
+              <div id="updates" class="policy-section">
+                  <h3>updates to this policy</h3>
+                  <p>We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. We will notify you of material changes by posting the updated policy on this page with a revised "last updated" date.</p>
+              </div>
+              
+              <!-- Contact us -->
+              <div id="contact" class="policy-section contact-section">
+                  <h3>contact us</h3>
+                  <p>If you have questions, concerns, or requests regarding this Privacy Policy, please contact us:</p>
+                  <div class="contact-details">
+                      <div class="contact-item">
+                          <i class="fa-regular fa-envelope"></i>
+                          <a href="mailto:privacy@trey.studio">privacy@trey.studio</a>
+                      </div>
+                    
+                      <div class="contact-item">
+                          <i class="fa-regular fa-clock"></i>
+                          <span>Response time: 2-4 business days</span>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="policy-footer">
+                  <p>© 2026 TREY Studio — All rights reserved.</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+<!-- === TREY terms of service section === -->
+<section id="terms" class="page trey-terms-section">
+  <div class="terms-container">
+      <div class="terms-header">
+          <span class="terms-badge">legal agreement</span>
+          <h2 class="terms-title">terms of <span class="title-accent">service</span></h2>
+          <div class="terms-divider"></div>
+          <p class="terms-subtitle">last updated: march 2026</p>
+      </div>
+      
+      <div class="terms-content">
+          <div class="terms-sidebar">
+              <div class="sidebar-nav">
+                  <a href="#acceptance" class="nav-link active">acceptance of terms</a>
+                  <a href="#eligibility" class="nav-link">eligibility</a>
+                  <a href="#orders" class="nav-link">orders & payments</a>
+                  <a href="#pricing" class="nav-link">pricing & taxes</a>
+                  <a href="#shipping" class="nav-link">shipping & delivery</a>
+                  <a href="#returns" class="nav-link">returns & exchanges</a>
+                  <a href="#intellectual" class="nav-link">intellectual property</a>
+                  <a href="#user-content" class="nav-link">user content</a>
+                  <a href="#limitations" class="nav-link">limitations of liability</a>
+                  <a href="#governing" class="nav-link">governing law</a>
+                  <a href="#changes" class="nav-link">changes to terms</a>
+                  <a href="#contact" class="nav-link">contact us</a>
+              </div>
+          </div>
+          
+          <div class="terms-main">
+              <!-- Acceptance of terms -->
+              <div id="acceptance" class="policy-section">
+                  <h3>acceptance of terms</h3>
+                  <p>Welcome to TREY Studio ("TREY," "we," "us," or "our"). By accessing or using our website, making a purchase, or engaging with our services, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our website or services.</p>
+                  <p>These Terms constitute a legally binding agreement between you and TREY Studio. We reserve the right to update or modify these Terms at any time without prior notice. Your continued use of our website following any changes constitutes acceptance of those changes.</p>
+              </div>
+              
+              <!-- Eligibility -->
+              <div id="eligibility" class="policy-section">
+                  <h3>eligibility</h3>
+                  <p>By using our services, you represent and warrant that:</p>
+                  <ul class="standard-list">
+                      <li><i class="fa-regular fa-circle-check"></i> you are at least 16 years of age or the age of majority in your jurisdiction</li>
+                      <li><i class="fa-regular fa-circle-check"></i> you have the legal capacity to enter into a binding agreement</li>
+                      <li><i class="fa-regular fa-circle-check"></i> all information you provide is accurate, current, and complete</li>
+                      <li><i class="fa-regular fa-circle-check"></i> you will maintain the accuracy of such information</li>
+                  </ul>
+                  <div class="highlight-box">
+                    <i class="fa-solid fa-shield"></i>
+                      <p>We reserve the right to refuse service, terminate accounts, or cancel orders at our sole discretion, including if we believe you have violated these Terms.</p>
+                  </div>
+              </div>
+              
+              <!-- Orders & payments -->
+              <div id="orders" class="policy-section">
+                  <h3>orders & payments</h3>
+                  <p>When you place an order on our website, you are making an offer to purchase the selected products. We reserve the right to accept or decline your order for any reason.</p>
+                  <div class="info-card order-info">
+                      <i class="fa-regular fa-credit-card"></i>
+                      <div>
+                          <h4>order confirmation</h4>
+                          <p>Upon placing an order, you will receive an email confirmation. This confirmation does not constitute acceptance of your order; it merely confirms that we have received it. Order acceptance occurs when we ship the product(s).</p>
+                      </div>
+                  </div>
+                  <div class="info-card order-info">
+                    <i class="fa-solid fa-ban"></i>
+                      <div>
+                          <h4>order cancellation</h4>
+                          <p>We reserve the right to cancel any order for reasons including but not limited to: product unavailability, pricing errors, suspected fraud, or violation of these Terms. If we cancel your order, we will notify you and issue a full refund.</p>
+                      </div>
+                  </div>
+                  <div class="info-card order-info">
+                    <i class="fa-solid fa-lock"></i>
+                      <div>
+                          <h4>payment processing</h4>
+                          <p>All payments are processed securely through our payment partners. By placing an order, you authorize us to charge the provided payment method for the total amount, including taxes and shipping fees.</p>
+                      </div>
+                  </div>
+              </div>
+              
+              <!-- Pricing & taxes -->
+              <div id="pricing" class="policy-section">
+                  <h3>pricing & taxes</h3>
+                  <p>All prices are listed in US Dollars (USD) unless otherwise specified. We strive to ensure accurate pricing, but errors may occasionally occur.</p>
+                  <ul class="pricing-list">
+                      <li><strong>price changes:</strong> We reserve the right to modify prices at any time without prior notice. Changes will not affect orders already placed.</li>
+                      <li><strong>taxes:</strong> Applicable taxes will be calculated and displayed at checkout based on your shipping address and local regulations.</li>
+                      <li><strong>customs duties:</strong> For international orders, you may be subject to import duties and taxes levied by your country. These fees are your responsibility.</li>
+                  </ul>
+              </div>
+              
+              <!-- Shipping & delivery -->
+              <div id="shipping" class="policy-section">
+                  <h3>shipping & delivery</h3>
+                  <p>We ship worldwide from our studio in Accra, Ghana. Delivery times are estimates and not guaranteed unless otherwise specified.</p>
+                  <div class="shipping-info-grid">
+                      <div class="shipping-item">
+                        <i class="fa-solid fa-truck"></i>
+                          <div>
+                              <h4>processing time</h4>
+                              <p>Orders are processed within 24-48 hours (excluding weekends and holidays).</p>
+                          </div>
+                      </div>
+                      <div class="shipping-item">
+                        <i class="fa-solid fa-globe"></i>
+                          <div>
+                              <h4>delivery estimates</h4>
+                              <p>West Africa: 3-5 days<br>Europe: 5-8 days<br>North America: 5-7 days<br>Rest of World: 7–14 days</p>
+                          </div>
+                      </div>
+                      <div class="shipping-item">
+                        <i class="fa-solid fa-tag"></i>
+                          <div>
+                              <h4>shipping fees</h4>
+                              <p>Shipping costs are calculated at checkout. Free standard shipping on orders over $150.</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="highlight-box warning">
+                      <i class="fa-regular fa-clock"></i>
+                      <p>We are not responsible for delays caused by customs clearance, carrier delays, or events beyond our control. Tracking information will be provided once your order ships.</p>
+                  </div>
+              </div>
+              
+              <!-- Returns & exchanges -->
+              <div id="returns" class="policy-section">
+                  <h3>returns & exchanges</h3>
+                  <p>We want you to love your TREY pieces. If you're not completely satisfied, we offer a straightforward return policy.</p>
+                  <ul class="standard-list">
+                      <li><i class="fa-solid fa-arrow-rotate-left"></i> <strong>30-day return window:</strong> Items must be returned within 30 days of delivery</li>
+                      <li><i class="fa-solid fa-tag"></i> <strong>condition:</strong> Items must be unused, unworn, with original tags and packaging</li>
+                      <li><i class="fa-solid fa-receipt"></i> <strong>proof of purchase:</strong> Order number or receipt required</li>
+                      <li><i class="fa-solid fa-truck"></i> <strong>return shipping:</strong> Customer responsible for return shipping unless item is defective</li>
+                  </ul>
+                  <p>For detailed instructions, please refer to our <a href="#" data-page="returns" class="inline-link">Returns & Exchanges</a> page. Refunds are processed within 5–7 business days after we receive your return.</p>
+              </div>
+              
+              <!-- Intellectual property -->
+              <div id="intellectual" class="policy-section">
+                  <h3>intellectual property</h3>
+                  <p>All content on our website, including but not limited to text, graphics, logos, images, product designs, and software, is the exclusive property of TREY Studio or our licensors and is protected by copyright, trademark, and other intellectual property laws.</p>
+                  <p>You may not reproduce, distribute, modify, create derivative works of, publicly display, or commercially exploit any content without our prior written consent. Unauthorized use may violate copyright, trademark, and other laws.</p>
+                  <div class="highlight-box">
+                      <i class="fa-regular fa-copyright"></i>
+                      <p>TREY™, the TREY logo, and all product designs are registered trademarks of TREY Studio. All rights reserved.</p>
+                  </div>
+              </div>
+              
+              <!-- User content -->
+              <div id="user-content" class="policy-section">
+                  <h3>user content</h3>
+                  <p>By submitting reviews, photos, or other content to our website, you grant TREY Studio a non-exclusive, royalty-free, perpetual, irrevocable, and fully sublicensable right to use, reproduce, modify, adapt, publish, and display such content in any media.</p>
+                  <p>You represent that you own or have the necessary rights to any content you submit, and that such content does not violate any third-party rights or applicable laws. We reserve the right to remove or modify user content at our discretion.</p>
+              </div>
+              
+              <!-- Limitations of liability -->
+              <div id="limitations" class="policy-section">
+                  <h3>limitations of liability</h3>
+                  <p>To the fullest extent permitted by law, TREY Studio shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or goodwill, arising from your use of our website or products.</p>
+                  <div class="liability-note">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                      <p>Our total liability for any claim arising from these Terms or your use of our services shall not exceed the amount you paid for the product(s) giving rise to the claim.</p>
+                  </div>
+                  <p class="small-note">Some jurisdictions do not allow the exclusion or limitation of certain damages, so these limitations may not apply to you.</p>
+              </div>
+              
+              <!-- Governing law -->
+              <div id="governing" class="policy-section">
+                  <h3>governing law</h3>
+                  <p>These Terms shall be governed by and construed in accordance with the laws of the Republic of Ghana, without regard to its conflict of law principles. Any disputes arising under these Terms shall be resolved exclusively in the courts located in Accra, Ghana.</p>
+                  <p>If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions shall remain in full force and effect.</p>
+              </div>
+              
+              <!-- Changes to terms -->
+              <div id="changes" class="policy-section">
+                  <h3>changes to terms</h3>
+                  <p>We reserve the right to update, modify, or replace any part of these Terms at any time. Changes will be effective immediately upon posting on our website. It is your responsibility to review these Terms periodically for updates.</p>
+                  <p>Your continued use of our website following the posting of any changes constitutes acceptance of those changes. Material changes will be notified via email or prominent notice on our website.</p>
+              </div>
+              
+              <!-- Contact us -->
+              <div id="contact" class="policy-section contact-section">
+                  <h3>contact us</h3>
+                  <p>If you have any questions, concerns, or requests regarding these Terms of Service, please contact us:</p>
+                  <div class="contact-details">
+                      <div class="contact-item">
+                          <i class="fa-regular fa-envelope"></i>
+                          <a href="mailto:legal@trey.studio">legal@trey.studio</a>
+                      </div>
+                      <div class="contact-item">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                          <span> Accra, Ghana</span>
+                      </div>
+                      <div class="contact-item">
+                          <i class="fa-regular fa-clock"></i>
+                          <span>Response time: 2-4 business days</span>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="terms-footer">
+                  <p>© 2026 TREY Studio — All rights reserved. By using our services, you agree to these Terms of Service.</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+<!--Newsletter-->
+<section id="newsletter" class="newsletter-section">
+  <div class="newsletter-container">
+      <div class="newsletter-content">
+          <h2 class="newsletter-title">get the latest <span class="title-light">OJ || studios releases</span></h2>
+          <p class="newsletter-subtitle">worldwide shipping — direct to your inbox</p>
+          
+          <form class="newsletter-form" id="treyNewsletterForm" onsubmit="event.preventDefault(); alert('📬 demo: you would be subscribed. (thanks!)');">
+              <div class="form-row">
+                  <input type="email" name="email" id="newsletter-email" placeholder="your@email.com" class="newsletter-input" required>
+                  <button type="submit" class="newsletter-btn">subscribe</button>
+              </div>
+              <div class="form-footnote">
+                  <span class="dot-small"></span>
+                  <span class="footnote-text">no spam — just seasonal updates</span>
+              </div>
+          </form>
+      </div>
+  </div>
+</section>
+
+
+    <!-- TREY footer -->
 <footer class="trey-footer">
   <div class="footer-container">
       <!-- Main footer grid -->
@@ -341,10 +1478,8 @@
               <p class="footer-tagline">functional aesthetics · intentional living</p>
               <p class="footer-desc">curated objects made to last, crafted with care in Accra, Ghana.</p>
               <div class="footer-social">
-                  <a href="#" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                  <a href="#" class="social-link" aria-label="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-                  <a href="#" class="social-link" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a>
-                  <a href="#" class="social-link" aria-label="Are.na"><i class="fa-regular fa-square"></i></a>
+                  <a href="https://www.instagram.com/oj_trey?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" class="social-link" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                  <a href="https://www.snapchat.com/@trey3j04?invite_id=y9GcERf6&locale=en_US&share_id=xZ6QEZixSUev_m-YzpXaqQ&sid=8b11353606144f2fad81e30e0bf3ca6b&locale=en-GB" class="social-link" aria-label="Snapchat"><i class="fa-brands fa-snapchat"></i></a>
               </div>
           </div>
           
@@ -352,10 +1487,10 @@
           <div class="footer-column">
               <h4 class="footer-heading">shop</h4>
               <ul class="footer-links">
-                  <li><a href="#">all products</a></li>
-                  <li><a href="#">new arrivals</a></li>
-                  <li><a href="#">best sellers</a></li>
-                  <li><a href="#">limited edition</a></li>
+                  <li><a href="#" data-page="products">all products</a></li>
+                  <li><a href="#" data-page="products">new arrivals</a></li>
+                  <li><a href="#" data-page="products">best sellers</a></li>
+                  <li><a href="#" data-page="products">limited edition</a></li>
                   <li><a href="#">gift cards</a></li>
               </ul>
           </div>
@@ -364,11 +1499,11 @@
           <div class="footer-column">
               <h4 class="footer-heading">support</h4>
               <ul class="footer-links">
-                  <li><a href="#">help center</a></li>
-                  <li><a href="#">shipping info</a></li>
-                  <li><a href="#">returns & exchanges</a></li>
-                  <li><a href="#">order tracking</a></li>
-                  <li><a href="#">size guide</a></li>
+                  <li><a href="#" data-page="contact">help center</a></li>
+                  <li><a href="#" data-page="shipping">shipping info</a></li>
+                  <li><a href="#" data-page="returns">returns & exchanges</a></li>
+                  <li><a href="#" data-page="tracking">order tracking</a></li>
+                  <li><a href="#" data-page="size">size guide</a></li>
               </ul>
           </div>
           
@@ -376,10 +1511,10 @@
           <div class="footer-column">
               <h4 class="footer-heading">legal</h4>
               <ul class="footer-links">
-                  <li><a href="#">privacy policy</a></li>
-                  <li><a href="#">terms of service</a></li>
-                  <li><a href="#">shipping policy</a></li>
-                  <li><a href="#">return policy</a></li>
+                  <li><a href="#" data-page="policy">privacy policy</a></li>
+                  <li><a href="#" data-page="terms">terms of service</a></li>
+                  <li><a href="#" data-page="shipping">shipping policy</a></li>
+                  <li><a href="#" data-page="returns">return policy</a></li>
                   <li><a href="#">accessibility</a></li>
               </ul>
           </div>

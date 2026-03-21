@@ -26,6 +26,7 @@
   function showPage(pageId) {
     pages.forEach((p) => p.classList.remove("active-page"));
     const target = document.getElementById(pageId);
+    console.log(pageId);
     if (target) target.classList.add("active-page");
     else document.getElementById("home").classList.add("active-page");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -523,19 +524,37 @@
     });
   }
 
-  // navigation
+  // Navigation links
   navLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
-      const page = link.dataset.page;
-      if (page === "home") showPage("home");
-      else if (page === "products") {
+      const page = link.dataset.page; // This should be "contact" for your contact link
+
+      if (page === "home") {
+        showPage("home");
+      } else if (page === "products") {
         renderProducts();
         showPage("products");
-      } else if (page === "gallery") showPage("gallery");
-      else if (page === "cart") {
-        renderCart();
+      } else if (page === "gallery") {
+        showPage("gallery");
+      } else if (page === "cart") {
+        if (currentUser.id) fetchUserCart();
+        else renderCartWithMessage();
         showPage("cart");
+      } else if (page === "contact") {
+        showPage("contact");
+      } else if (page === "shipping") {
+        showPage("shipping");
+      } else if (page === "returns") {
+        showPage("returns");
+      } else if (page === "tracking") {
+        showPage("tracking");
+      } else if (page === "size") {
+        showPage("size");
+      } else if (page === "policy") {
+        showPage("policy");
+      } else if (page === "terms") {
+        showPage("terms");
       }
     });
   });
@@ -557,3 +576,159 @@
     showPage("cart");
   });
 })();
+
+// FAQ accordion functionality
+document.addEventListener("DOMContentLoaded", function () {
+  const faqItems = document.querySelectorAll(".faq-item");
+  faqItems.forEach((item) => {
+    const question = item.querySelector(".faq-question");
+    question.addEventListener("click", () => {
+      item.classList.toggle("active");
+    });
+  });
+});
+
+// Category switcher functionality
+document.addEventListener("DOMContentLoaded", function () {
+  const categoryBtns = document.querySelectorAll(".cat-btn");
+  const apparelChart = document.getElementById("apparel-chart");
+  const footwearChart = document.getElementById("footwear-chart");
+  const accessoriesChart = document.getElementById("accessories-chart");
+
+  function showCategory(category) {
+    // Hide all charts
+    if (apparelChart) apparelChart.style.display = "none";
+    if (footwearChart) footwearChart.style.display = "none";
+    if (accessoriesChart) accessoriesChart.style.display = "none";
+
+    // Show selected chart
+    if (category === "apparel" && apparelChart) {
+      apparelChart.style.display = "block";
+    } else if (category === "footwear" && footwearChart) {
+      footwearChart.style.display = "block";
+    } else if (category === "accessories" && accessoriesChart) {
+      accessoriesChart.style.display = "block";
+    }
+
+    // Update active button
+    categoryBtns.forEach((btn) => {
+      btn.classList.remove("active");
+      if (btn.dataset.category === category) {
+        btn.classList.add("active");
+      }
+    });
+  }
+
+  categoryBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      showCategory(btn.dataset.category);
+    });
+  });
+});
+
+// Sidebar navigation smooth scroll and active state
+document.addEventListener("DOMContentLoaded", function () {
+  const navLinks = document.querySelectorAll(".nav-link");
+  const sections = document.querySelectorAll(".policy-section");
+
+  function updateActiveLink() {
+    let current = "";
+    const scrollPosition = window.scrollY + 150;
+
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop;
+      const sectionBottom = sectionTop + section.offsetHeight;
+      const sectionId = section.getAttribute("id");
+
+      if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+        current = sectionId;
+      }
+    });
+
+    navLinks.forEach((link) => {
+      link.classList.remove("active");
+      const href = link.getAttribute("href");
+      if (href === `#${current}`) {
+        link.classList.add("active");
+      }
+    });
+  }
+
+  // Smooth scroll for anchor links
+  navLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      const targetId = this.getAttribute("href");
+      const targetSection = document.querySelector(targetId);
+
+      if (targetSection) {
+        targetSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
+  });
+
+  // Update active link on scroll
+  window.addEventListener("scroll", updateActiveLink);
+  updateActiveLink();
+});
+
+// Sidebar navigation smooth scroll and active state
+document.addEventListener("DOMContentLoaded", function () {
+  const navLinks = document.querySelectorAll(".nav-link");
+  const sections = document.querySelectorAll(".policy-section");
+
+  function updateActiveLink() {
+    let current = "";
+    const scrollPosition = window.scrollY + 150;
+
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop;
+      const sectionBottom = sectionTop + section.offsetHeight;
+      const sectionId = section.getAttribute("id");
+
+      if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+        current = sectionId;
+      }
+    });
+
+    navLinks.forEach((link) => {
+      link.classList.remove("active");
+      const href = link.getAttribute("href");
+      if (href === `#${current}`) {
+        link.classList.add("active");
+      }
+    });
+  }
+
+  // Smooth scroll for anchor links
+  navLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      const targetId = this.getAttribute("href");
+      const targetSection = document.querySelector(targetId);
+
+      if (targetSection) {
+        targetSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
+  });
+
+  // Update active link on scroll
+  window.addEventListener("scroll", updateActiveLink);
+  updateActiveLink();
+});
+
+// Add spinner animation
+//const style = document.createElement("style");
+//style.textContent = `
+//    @keyframes spin {
+//        to { transform: rotate(360deg); }
+//    }
+//  `;
+//document.head.appendChild(style);
