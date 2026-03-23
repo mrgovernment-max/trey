@@ -166,6 +166,10 @@
     // default values for fields not yet in DB (release date, warranty etc)
     const releaseDate = product.release || "Upcomming"; // placeholder
     let availability = product.availability || 0;
+    if (product.release === "Launching Soon") {
+      availability = "Not Available to Public";
+    }
+
     const material = product.material || "mixed materials";
     const weight = product.weight || "—";
     const warranty = product.warranty || "1 year warranty";
@@ -182,13 +186,6 @@
     // Check login status for button state
     const userId = sessionStorage.getItem("userId");
     const isLoggedIn = !!userId;
-    let displayPrice;
-    if (product.release === "Launching Soon") {
-      displayPrice = "Not Available to Public";
-      availability = "Not Available to Public";
-    } else {
-      displayPrice = parseFloat(product.price).toFixed(2);
-    }
 
     detailContainer.innerHTML = `
         <div class="detail-gallery">
@@ -204,9 +201,11 @@
                   .join("")}
             </div>
         </div>
-        <div class="detail-info">
+        <div class="detail-info" >
             <h2>${product.name}</h2>
-            <div id="detail-id" class="detail-id">$${displayPrice} USD 
+            <div id="detail-id" class="detail-id" style="${
+              product.release === "Launching Soon" ? "display:none" : ""
+            }">$${parseFloat(product.price).toFixed(2)} USD 
                 <span class="rating-stars">${"★".repeat(
                   Math.floor(product.rating || 0)
                 )}${product.rating % 1 >= 0.5 ? "½" : ""}</span>
@@ -220,7 +219,9 @@
                 <li><span class="meta-label">weight</span><span class="meta-value">${weight}</span></li>
                 <li><span class="meta-label">warranty</span><span class="meta-value">${warranty}</span></li>
                 <li><span class="meta-label">release</span><span class="meta-value">${releaseDate}</span></li>
-                <li><span class="meta-label">availability</span><span class="meta-value">${availability}</span></li>
+                <li><span class="meta-label">availability</span><span style="${
+                  product.release === "Launching Soon" ? "color:orange" : ""
+                }" class="meta-value">${availability}</span></li>
             </ul>
 
             <!-- === TREY size selector - minimal, professional === -->
@@ -272,11 +273,6 @@
 
     //For Private Merch
 
-    if ((displayPrice = "Not Available to Public")) {
-      const detail = document.getElementById("detail-id");
-      detail.textContent = displayPrice;
-      detail.style.color = "orange";
-    }
     // thumbnail switcher
     setTimeout(() => {
       const thumbs = document.querySelectorAll(".thumb");
