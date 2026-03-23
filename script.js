@@ -183,7 +183,7 @@
     const userId = sessionStorage.getItem("userId");
     const isLoggedIn = !!userId;
     let displayPrice;
-    if (product.release === "yet to come") {
+    if (product.release === "Launching Soon") {
       displayPrice = "Not Available to Public";
       availability = "Not Available to Public";
     } else {
@@ -225,7 +225,7 @@
 
             <!-- === TREY size selector - minimal, professional === -->
             <div class="trey-size-selector" style="${
-              product.release === "yet to come" ? "display:none" : ""
+              product.release === "Launching Soon" ? "display:none" : ""
             }">
                 <span class="size-label">select size</span>
                 <div class="size-options">
@@ -242,7 +242,7 @@
               !isLoggedIn
                 ? `
                 <div class="login-reminder-badge"  style="${
-                  product.release === "yet to come" ? "display:none" : ""
+                  product.release === "Launching Soon" ? "display:none" : ""
                 }">
                 <i class="fa-solid fa-lock"></i>
                     <span>please <a href="login.html">sign in</a> to add items to cart</span>
@@ -254,7 +254,7 @@
             <button class="add-to-cart-btn ${
               !isLoggedIn ? "disabled" : ""
             }"  style="${
-      product.release === "yet to come" ? "display:none" : ""
+      product.release === "Launching Soon" ? "display:none" : ""
     }"
                     data-product-id="${product.id}"
                     ${!isLoggedIn ? "disabled" : ""}>
