@@ -124,22 +124,26 @@
     productGrid.innerHTML = products
       .map(
         (p) => `
-                <div class="product-card" data-product-id="${p.id}">
-                    <img src="${p.img_url}" alt="${p.name}" loading="lazy">
-                    <h3>${p.name}</h3>
-                    <div class="product-price">$${parseFloat(p.price).toFixed(
-                      2
-                    )}</div>
-                    <div class="brand-mini">
-                        <img src="${
-                          p.brand_img_url || "https://placecats.com/30/30"
-                        }" alt="brand"> 
-                        <span style="font-size:0.85rem; color:#555;">${
-                          p.rating ? "★ " + p.rating : ""
-                        }</span>
-                    </div>
-                </div>
-            `
+        <div class="product-card ${
+          parseFloat(p.price) > 0 ? "" : "vip"
+        }" data-product-id="${p.id}">
+            <img src="${p.img_url}" alt="${p.name}" loading="lazy">
+            <h3>${p.name}</h3>
+            <div class="product-price">${
+              parseFloat(p.price) > 0
+                ? `$${parseFloat(p.price).toFixed(2)}`
+                : "Not Available to Public"
+            }</div>
+            <div class="brand-mini">
+                <img src="${
+                  p.brand_img_url || "https://placecats.com/30/30"
+                }" alt="brand"> 
+                <span style="font-size:0.85rem; color:#555;${
+                  parseFloat(p.price) > 0 ? "" : "display: none;"
+                }">${p.rating ? "★ " + p.rating : ""}</span>
+            </div>
+        </div>
+      `
       )
       .join("");
 
@@ -160,8 +164,8 @@
     if (!product) return;
 
     // default values for fields not yet in DB (release date, warranty etc)
-    const releaseDate = product.release || "autumn 2025"; // placeholder
-    const availability = product.availability || "in stock";
+    const releaseDate = product.release || "Upcomming"; // placeholder
+    let availability = product.availability || 0;
     const material = product.material || "mixed materials";
     const weight = product.weight || "—";
     const warranty = product.warranty || "1 year warranty";
@@ -178,6 +182,13 @@
     // Check login status for button state
     const userId = sessionStorage.getItem("userId");
     const isLoggedIn = !!userId;
+    let displayPrice;
+    if (product.release === "yet to come") {
+      displayPrice = "Not Available to Public";
+      availability = "Not Available to Public";
+    } else {
+      displayPrice = parseFloat(product.price).toFixed(2);
+    }
 
     detailContainer.innerHTML = `
         <div class="detail-gallery">
@@ -195,7 +206,7 @@
         </div>
         <div class="detail-info">
             <h2>${product.name}</h2>
-            <div class="detail-id">$${parseFloat(product.price).toFixed(2)} USD 
+            <div id="detail-id" class="detail-id">$${displayPrice} USD 
                 <span class="rating-stars">${"★".repeat(
                   Math.floor(product.rating || 0)
                 )}${product.rating % 1 >= 0.5 ? "½" : ""}</span>
@@ -213,7 +224,9 @@
             </ul>
 
             <!-- === TREY size selector - minimal, professional === -->
-            <div class="trey-size-selector">
+            <div class="trey-size-selector" style="${
+              product.release === "yet to come" ? "display:none" : ""
+            }">
                 <span class="size-label">select size</span>
                 <div class="size-options">
                     <button type="button" class="size-btn" data-size="XS">XS</button>
@@ -228,7 +241,9 @@
             ${
               !isLoggedIn
                 ? `
-                <div class="login-reminder-badge">
+                <div class="login-reminder-badge"  style="${
+                  product.release === "yet to come" ? "display:none" : ""
+                }">
                 <i class="fa-solid fa-lock"></i>
                     <span>please <a href="login.html">sign in</a> to add items to cart</span>
                 </div>
@@ -236,7 +251,11 @@
                 : ""
             }
             
-            <button class="add-to-cart-btn ${!isLoggedIn ? "disabled" : ""}" 
+            <button class="add-to-cart-btn ${
+              !isLoggedIn ? "disabled" : ""
+            }"  style="${
+      product.release === "yet to come" ? "display:none" : ""
+    }"
                     data-product-id="${product.id}"
                     ${!isLoggedIn ? "disabled" : ""}>
                 ${!isLoggedIn ? "login to add to cart" : "add to cart"}
@@ -251,6 +270,13 @@
         </div>
     `;
 
+    //For Private Merch
+
+    if ((displayPrice = "Not Available to Public")) {
+      const detail = document.getElementById("detail-id");
+      detail.textContent = displayPrice;
+      detail.style.color = "orange";
+    }
     // thumbnail switcher
     setTimeout(() => {
       const thumbs = document.querySelectorAll(".thumb");

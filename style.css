@@ -1103,6 +1103,228 @@ body {
   cursor: pointer;
   animation: fadeCard 0.6s;
 }
+
+/* ========================================
+   TREY VIP merchandise 
+   ======================================== */
+
+.vip {
+  position: relative;
+  isolation: isolate;
+}
+
+.vip::before {
+  content: "vip";
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #232321;
+  color: #e5e5e0;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  padding: 0.25rem 0.7rem;
+  text-transform: uppercase;
+  z-index: 10;
+  font-family: "Inter", monospace;
+  transition: all 0.2s ease;
+}
+
+.vip::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #c9a46c;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  z-index: 2;
+}
+
+.vip:hover::after {
+  transform: scaleX(1);
+}
+
+.vip:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+}
+
+.vip {
+  border: 1px solid #eaeae4;
+  transition: all 0.3s ease;
+}
+
+.vip:hover {
+  border-color: #d4d4ce;
+}
+
+.vip .product-price {
+  color: #c9a46c !important;
+  font-weight: 450;
+  position: relative;
+  display: inline-block;
+}
+
+.vip h3 {
+  position: relative;
+  display: inline-block;
+}
+
+.vip h3::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #c9a46c;
+  transition: width 0.3s ease;
+}
+
+.vip:hover h3::after {
+  width: 100%;
+}
+
+/* VIP badge alternative  */
+.vip .vip-marker {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  color: #c9a46c;
+  opacity: 0;
+  transform: translateX(5px);
+  transition: all 0.25s ease;
+  font-weight: 350;
+  letter-spacing: 0.3px;
+}
+
+.vip:hover .vip-marker {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.vip .vip-marker i {
+  font-size: 0.65rem;
+}
+
+.vip img {
+  filter: brightness(0.98) contrast(1.02);
+  transition: filter 0.4s ease;
+}
+
+.vip:hover img {
+  filter: brightness(1) contrast(1);
+}
+
+.product-card.vip {
+  background: #ffffff;
+}
+
+.featured-item.vip {
+  background: #fefcf8;
+}
+
+.featured-item.vip:hover {
+  background: #fffdf9;
+}
+
+.products-grid .vip {
+  position: relative;
+}
+
+@keyframes softGlow {
+  0% {
+    text-shadow: 0 0 0px rgba(201, 164, 108, 0);
+  }
+  50% {
+    text-shadow: 0 0 4px rgba(201, 164, 108, 0.2);
+  }
+  100% {
+    text-shadow: 0 0 0px rgba(201, 164, 108, 0);
+  }
+}
+
+.vip .product-price {
+  animation: softGlow 2s ease-in-out infinite;
+}
+
+/*  tooltip on hover */
+.vip .vip-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #232321;
+  color: #e5e5e0;
+  font-size: 0.7rem;
+  font-weight: 350;
+  padding: 0.35rem 0.9rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 100;
+  letter-spacing: 0.3px;
+  font-family: "Inter", monospace;
+}
+
+.vip .vip-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px;
+  border-style: solid;
+  border-color: #232321 transparent transparent transparent;
+}
+
+.vip:hover .vip-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .vip::before {
+    font-size: 0.55rem;
+    padding: 0.2rem 0.6rem;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .vip .vip-marker {
+    bottom: 0.75rem;
+    right: 0.75rem;
+  }
+}
+
+/* Animation for new VIP items */
+@keyframes subtleReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vip {
+  animation: subtleReveal 0.4s ease forwards;
+}
+
 @keyframes fadeCard {
   0% {
     opacity: 0;
