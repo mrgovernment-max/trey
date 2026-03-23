@@ -230,7 +230,7 @@
                 ? `
                 <div class="login-reminder-badge">
                 <i class="fa-solid fa-lock"></i>
-                    <span>please <a href="/login.html">sign in</a> to add items to cart</span>
+                    <span>please <a href="login.html">sign in</a> to add items to cart</span>
                 </div>
             `
                 : ""

@@ -372,13 +372,12 @@
 
           const result = await res.json();
 
-          sessionStorage.setItem("isLoggedIn", "yes");
-          sessionStorage.setItem("userId", result.userId);
-          sessionStorage.setItem("userName", result.userName);
-
           statusDiv.textContent = result.message;
 
           if (res.ok) {
+            sessionStorage.setItem("isLoggedIn", "yes");
+            sessionStorage.setItem("userId", result.userId);
+            sessionStorage.setItem("userName", result.userName);
             statusDiv.classList.add("success");
             statusDiv.innerHTML = `<i class="fa-regular fa-circle-check" style="color:#c9a46c;"></i> <span>${result.message}</span>`;
             setTimeout(() => {
