@@ -44,12 +44,7 @@
       products = products.map((p) => ({
         ...p,
         // create array of up to 4 images: img_url, img_url_1, img_url_2, img_url_3, with fallback
-        images: [
-          p.img_url,
-          p.img_url_1 || p.img_url,
-          p.img_url_2 || p.img_url,
-          p.img_url_3 || p.img_url,
-        ].filter(Boolean),
+        images: [p.img_url, p.img_url_1 || p.img_url].filter(Boolean),
       }));
 
       // after loading, render home and products
@@ -750,6 +745,177 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("scroll", updateActiveLink);
   updateActiveLink();
 });
+
+// TREY Newsletter Form - Professional Implementation
+
+(function () {
+  const newsletterForm = document.getElementById("treyNewsletterForm");
+  if (!newsletterForm) return;
+
+  // Create notification container if it doesn't exist
+  let notificationContainer = document.querySelector(
+    ".newsletter-notification"
+  );
+  if (!notificationContainer) {
+    notificationContainer = document.createElement("div");
+    notificationContainer.className = "newsletter-notification";
+    newsletterForm.appendChild(notificationContainer);
+  }
+
+  // Function to show message with animation
+  function showMessage(message, type = "success") {
+    // Remove existing message if any
+    const existingMsg = notificationContainer.querySelector(".message-reveal");
+    if (existingMsg) {
+      existingMsg.classList.add("fade-out");
+      setTimeout(() => existingMsg.remove(), 300);
+    }
+
+    // Create message element
+    const messageEl = document.createElement("div");
+    messageEl.className = `message-reveal ${type}`;
+
+    const icon = type === "success" ? "✓" : "✕";
+    messageEl.innerHTML = `
+          <div class="message-content">
+              <span class="message-icon">${icon}</span>
+              <span class="message-text">${message}</span>
+          </div>
+      `;
+
+    notificationContainer.appendChild(messageEl);
+
+    // Trigger animation
+    setTimeout(() => messageEl.classList.add("show"), 10);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      messageEl.classList.add("fade-out");
+      setTimeout(() => {
+        if (messageEl.parentNode) messageEl.remove();
+      }, 300);
+    }, 5000);
+  }
+
+  // Function to show loading state on button
+  function setLoading(button, isLoading) {
+    if (isLoading) {
+      button.disabled = true;
+      button.classList.add("loading");
+      const originalText = button.innerHTML;
+      button.setAttribute("data-original-text", originalText);
+      button.innerHTML = `
+              <span class="spinner-mini"></span>
+              <span>subscribing...</span>
+          `;
+    } else {
+      button.disabled = false;
+      button.classList.remove("loading");
+      const originalText = button.getAttribute("data-original-text");
+      if (originalText) button.innerHTML = originalText;
+    }
+  }
+
+  // Function to validate email
+  function validateEmail(email) {
+    const re = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+    return re.test(email);
+  }
+
+  // Function to send subscription to API
+  async function subscribeToNewsletter(email) {
+    const apiUrl = "https://backendroutes-lcpt.onrender.com/ojsub";
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        return {
+          success: true,
+          message:
+            data.message || "Thanks for subscribing! Check your inbox soon.",
+        };
+      } else {
+        return {
+          success: false,
+          message: data.message || "Something went wrong. Please try again.",
+        };
+      }
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      return {
+        success: false,
+        message: "Unable to connect. Please check your internet connection.",
+      };
+    }
+  }
+
+  // Form submission handler
+  newsletterForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const emailInput = document.getElementById("newsletter-email");
+    const submitBtn = newsletterForm.querySelector(".newsletter-btn");
+    const email = emailInput.value.trim();
+
+    // Validate email
+    if (!email) {
+      showMessage("Please enter your email address.", "error");
+      emailInput.focus();
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      showMessage("Please enter a valid email address.", "error");
+      emailInput.focus();
+      return;
+    }
+
+    // Show loading state
+    setLoading(submitBtn, true);
+
+    // Send to API
+    const result = await subscribeToNewsletter(email);
+
+    // Remove loading state
+    setLoading(submitBtn, false);
+
+    // Show result message
+    if (result.success) {
+      showMessage(result.message, "success");
+      emailInput.value = ""; // Clear input on success
+    } else {
+      showMessage(result.message, "error");
+    }
+  });
+
+  //  Real-time email validation styling
+  const emailInput = document.getElementById("newsletter-email");
+  if (emailInput) {
+    emailInput.addEventListener("input", function () {
+      const isValid = validateEmail(this.value);
+      if (this.value.length > 0) {
+        if (isValid) {
+          this.classList.add("valid");
+          this.classList.remove("invalid");
+        } else {
+          this.classList.add("invalid");
+          this.classList.remove("valid");
+        }
+      } else {
+        this.classList.remove("valid", "invalid");
+      }
+    });
+  }
+})();
 
 // Add spinner animation
 //const style = document.createElement("style");
