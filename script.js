@@ -917,6 +917,178 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 })();
 
+// CONTACT FORM WITH EMAILJS
+
+(function initEmailJS() {
+  if (typeof emailjs !== "undefined") {
+    emailjs.init("9njw5PNNC3JuIC3ot");
+    console.log("EmailJS initialized for contact form");
+  }
+})();
+
+// Get contact form elements
+const contactForm = document.getElementById("treyContactForm");
+const fullnameInput = document.getElementById("fullname");
+const contactEmailInput = document.getElementById("contact-email");
+const phoneInput = document.getElementById("phone");
+const subjectSelect = document.getElementById("subject");
+const messageTextarea = document.getElementById("message");
+
+// Create notification container for contact form
+let contactNotification = document.createElement("div");
+contactNotification.className = "contact-notification";
+contactForm.appendChild(contactNotification);
+
+// Function to show message
+function showContactMessage(message, type = "success") {
+  // Remove existing message
+  const existingMsg = contactNotification.querySelector(".message-reveal");
+  if (existingMsg) existingMsg.remove();
+
+  // Create message element
+  const messageEl = document.createElement("div");
+  messageEl.className = `message-reveal ${type}`;
+
+  const icon = type === "success" ? "✓" : "✕";
+  messageEl.innerHTML = `
+      <div class="message-content">
+          <span class="message-icon">${icon}</span>
+          <span class="message-text">${message}</span>
+      </div>
+  `;
+
+  contactNotification.appendChild(messageEl);
+
+  // Trigger animation
+  setTimeout(() => messageEl.classList.add("show"), 10);
+
+  // Auto remove after 5 seconds
+  setTimeout(() => {
+    messageEl.classList.add("fade-out");
+    setTimeout(() => {
+      if (messageEl.parentNode) messageEl.remove();
+    }, 300);
+  }, 5000);
+}
+
+// Function to show loading state
+function setContactLoading(isLoading, button) {
+  if (isLoading) {
+    button.disabled = true;
+    button.classList.add("loading");
+    const originalText = button.innerHTML;
+    button.setAttribute("data-original-text", originalText);
+    button.innerHTML = `<span class="spinner-mini"></span><span>sending...</span>`;
+  } else {
+    button.disabled = false;
+    button.classList.remove("loading");
+    const originalText = button.getAttribute("data-original-text");
+    if (originalText) button.innerHTML = originalText;
+  }
+}
+
+// Function to validate form
+function validateContactForm() {
+  if (!fullnameInput.value.trim()) {
+    showContactMessage("Please enter your full name.", "error");
+    fullnameInput.focus();
+    return false;
+  }
+
+  if (!contactEmailInput.value.trim()) {
+    showContactMessage("Please enter your email address.", "error");
+    contactEmailInput.focus();
+    return false;
+  }
+
+  const emailRegex = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
+  if (!emailRegex.test(contactEmailInput.value.trim())) {
+    showContactMessage("Please enter a valid email address.", "error");
+    contactEmailInput.focus();
+    return false;
+  }
+
+  if (!subjectSelect.value) {
+    showContactMessage("Please select a subject.", "error");
+    subjectSelect.focus();
+    return false;
+  }
+
+  if (!messageTextarea.value.trim()) {
+    showContactMessage("Please enter your message.", "error");
+    messageTextarea.focus();
+    return false;
+  }
+
+  return true;
+}
+
+// Function to send contact form via EmailJS (ONLY TO ADMIN)
+async function sendContactMessage(formData) {
+  const templateParams = {
+    fullname: formData.fullname,
+    email: formData.email,
+    phone: formData.phone || "Not provided",
+    subject: formData.subject,
+    message: formData.message,
+    submitted_date: new Date().toLocaleString(),
+  };
+
+  try {
+    await emailjs.send("service_upc9ola", "template_no8s1ws", templateParams);
+    console.log("✅ Contact form email sent to admin");
+    return {
+      success: true,
+      message:
+        "✅ Message sent successfully! We'll respond within 24-48 hours.",
+    };
+  } catch (error) {
+    console.error("❌ Contact form email failed:", error);
+    return {
+      success: false,
+      message: "❌ Unable to send message. Please try again later.",
+    };
+  }
+}
+
+// Form submission handler
+if (contactForm) {
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Validate form
+    if (!validateContactForm()) return;
+
+    const submitBtn = contactForm.querySelector(".contact-submit");
+
+    // Collect form data
+    const formData = {
+      fullname: fullnameInput.value.trim(),
+      email: contactEmailInput.value.trim(),
+      phone: phoneInput ? phoneInput.value.trim() : "",
+      subject: subjectSelect.value,
+      message: messageTextarea.value.trim(),
+    };
+
+    // Show loading state
+    setContactLoading(true, submitBtn);
+
+    // Send message via EmailJS
+    const result = await sendContactMessage(formData);
+
+    // Remove loading state
+    setContactLoading(false, submitBtn);
+
+    // Show result message
+    if (result.success) {
+      showContactMessage(result.message, "success");
+      contactForm.reset(); // Clear form on success
+    } else {
+      showContactMessage(result.message, "error");
+    }
+  });
+}
+
 // Add spinner animation
 //const style = document.createElement("style");
 //style.textContent = `
