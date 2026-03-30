@@ -2,14 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- EmailJS -->
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OJ || studios · Register Account</title>
-    <!-- Font Awesome for subtle icons (optional but adds polish) -->
+    <!-- Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <style>
+      /* Your existing styles remain exactly the same */
       * {
         margin: 0;
         padding: 0;
@@ -19,7 +25,7 @@
       body {
         font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
           "Segoe UI", Roboto, sans-serif;
-        background: #fafaf8; /* TREY off-white background */
+        background: #fafaf8;
         color: #1e1e1e;
         display: flex;
         justify-content: center;
@@ -50,11 +56,11 @@
         }
       }
 
-      /* main card — clean, minimal, with subtle depth */
       .register-card {
         background: #ffffff;
         border: 1px solid #eaeae4;
         width: 95%;
+        max-width: 500px;
         padding: 2.8rem 2.5rem;
         box-shadow: 0 25px 45px -20px rgba(0, 0, 0, 0.08);
         transition: box-shadow 0.4s ease, transform 0.3s ease;
@@ -76,7 +82,6 @@
         }
       }
 
-      /* logo / brand header */
       .brand-header {
         margin-bottom: 2.5rem;
         text-align: left;
@@ -105,7 +110,6 @@
         letter-spacing: 0.3px;
       }
 
-      /* form title */
       .form-title {
         font-size: 1.6rem;
         font-weight: 380;
@@ -123,7 +127,6 @@
         padding-left: 1rem;
       }
 
-      /* form styling — minimal, borders only */
       .trey-form {
         display: flex;
         flex-direction: column;
@@ -178,7 +181,6 @@
         font-size: 0.95rem;
       }
 
-      /* button — TREY signature style */
       .register-btn {
         background: #232321;
         border: 1px solid #232321;
@@ -209,7 +211,6 @@
         transform: scale(0.98);
       }
 
-      /* subtle button animation */
       .register-btn i {
         transition: transform 0.2s;
       }
@@ -218,7 +219,6 @@
         transform: translateX(4px);
       }
 
-      /* response message area — integrated */
       .response-area {
         margin-top: 1rem;
         padding: 0.9rem 1rem;
@@ -249,7 +249,6 @@
         background: #fdf8f8;
       }
 
-      /* footer note */
       .legal-note {
         margin-top: 2rem;
         font-size: 0.8rem;
@@ -271,7 +270,6 @@
         border-bottom: 1px solid #232321;
       }
 
-      /* subtle background animation */
       @keyframes softPulse {
         0% {
           opacity: 0.3;
@@ -284,7 +282,27 @@
         }
       }
 
-      /* responsive tweaks */
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-spinner {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .spinner-small {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #e2e2db;
+        border-top-color: #c9a46c;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+
       @media (max-width: 480px) {
         .register-card {
           padding: 2rem 1.5rem;
@@ -302,9 +320,7 @@
       <div class="form-title">create account</div>
       <div class="form-sub">join the OJ || studios community</div>
 
-      <!-- FORM - YOUR LOGIC IS COMPLETELY UNCHANGED (only IDs and structure preserved) -->
       <form id="registerForm" class="trey-form">
-        <!-- first name -->
         <div class="input-group">
           <label for="first_name" class="input-label"
             ><i class="fa-regular fa-user"></i> first name</label
@@ -318,7 +334,6 @@
           />
         </div>
 
-        <!-- surname -->
         <div class="input-group">
           <label for="surname" class="input-label"
             ><i class="fa-regular fa-user"></i> surname</label
@@ -332,7 +347,6 @@
           />
         </div>
 
-        <!-- email -->
         <div class="input-group">
           <label for="email" class="input-label"
             ><i class="fa-regular fa-envelope"></i> email</label
@@ -346,10 +360,9 @@
           />
         </div>
 
-        <!-- password -->
         <div class="input-group">
           <label for="password" class="input-label"
-            ><i class="fa-solid fa-lock"></i></i> password</label
+            ><i class="fa-solid fa-lock"></i> password</label
           >
           <input
             type="password"
@@ -360,70 +373,149 @@
           />
         </div>
 
-        <!-- button -->
         <button type="submit" class="register-btn">
           register <i class="fa-solid fa-arrow-right-to-bracket"></i>
         </button>
 
-        <!--  -->
         <div id="response" class="response-area">
-            <i class="fa-solid fa-circle" style="color: rgb(240, 240, 30);"></i>
+          <i class="fa-solid fa-circle" style="color: rgb(240, 240, 30)"></i>
           <span>ready to register</span>
         </div>
       </form>
 
       <div class="legal-note">
         by joining you agree to our <a href="#">terms</a> and
-        <a href="#">privacy</a>  <br> <a href="login.html">Login?</a>.
+        <a href="#">privacy</a><br /><a href="login.html">Login?</a>
       </div>
     </div>
 
-    <!-- YOUR EXACT SCRIPT - NOTHING CHANGED, KEPT 100% INTACT -->
     <script>
+      // ========================================
+      // INITIALIZE EMAILJS
+      // ========================================
+      (function initEmailJS() {
+        emailjs.init("9njw5PNNC3JuIC3ot");
+        console.log("EmailJS initialized");
+      })();
+
+      // ========================================
+      // EMAIL SENDING FUNCTIONS
+      // ========================================
+
+      // Send Welcome Email to User
+      async function sendWelcomeEmail(firstName, userEmail) {
+        const templateParams = {
+          first_name: firstName,
+          to_email: userEmail,
+        };
+
+        try {
+          await emailjs.send(
+            "service_upc9ola", // Your Service ID
+            "template_sejt2l8", // Your Welcome Email Template ID
+            templateParams
+          );
+          console.log("✅ Welcome email sent to:", userEmail);
+          return true;
+        } catch (error) {
+          console.error("❌ Welcome email failed:", error);
+          return false;
+        }
+      }
+
+      // Send Admin Notification Email
+      async function sendAdminNotification(firstName, surname, email, userId) {
+        const templateParams = {
+          first_name: firstName,
+          surname: surname,
+          email: email,
+          user_id: userId,
+          registered_date: new Date().toLocaleString(),
+          to_email: "supportblacksheep@gmail.com",
+        };
+
+        try {
+          await emailjs.send(
+            "service_upc9ola",
+            "template_2e4b8h9",
+            templateParams
+          );
+          console.log("✅ Admin notification sent");
+          return true;
+        } catch (error) {
+          console.error("❌ Admin notification failed:", error);
+          return false;
+        }
+      }
+
+      // ========================================
+      // FORM SUBMISSION HANDLER
+      // ========================================
+
       const form = document.getElementById("registerForm");
       const responseDiv = document.getElementById("response");
+
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const data = {
+        const userData = {
           first_name: document.getElementById("first_name").value,
           surname: document.getElementById("surname").value,
           email: document.getElementById("email").value,
           password: document.getElementById("password").value,
         };
 
-        // optional: reset some classes (won't interfere)
+        // Show loading state
         responseDiv.classList.remove("success", "error");
+        responseDiv.innerHTML = `
+          <div class="loading-spinner">
+            <div class="spinner-small"></div>
+            <span>creating your account...</span>
+          </div>
+        `;
 
         try {
+          // 1. Register user with backend
           const res = await fetch(
             "https://backendroutes-lcpt.onrender.com/register",
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(data),
+              body: JSON.stringify(userData),
             }
           );
 
           const result = await res.json();
+
           if (res.ok) {
-            responseDiv.style.color = "#c9a46c"; 
-            responseDiv.innerHTML = `<i class="fa-regular fa-circle-check" style="color:#c9a46c;"></i> <span> ${result.message})</span>`;
+            // 2. Send Welcome Email to User
+            await sendWelcomeEmail(userData.first_name, userData.email);
+
+            // 3. Send Admin Notification
+            await sendAdminNotification(
+              userData.first_name,
+              userData.surname,
+              userData.email,
+              result.userId
+            );
+
+            // Success message
+            responseDiv.style.color = "#c9a46c";
+            responseDiv.innerHTML = `<i class="fa-regular fa-circle-check" style="color:#c9a46c;"></i> <span>✅ ${result.message} (ID: ${result.userId})</span>`;
             responseDiv.classList.add("success");
             form.reset();
           } else {
-            responseDiv.style.color = "#ff5555"; 
-            responseDiv.innerHTML = `<i class="fa-regular fa-circle-exclamation" style="color:#ff5555;"></i> <span> ${result.message}</span>`;
+            responseDiv.style.color = "#ff5555";
+            responseDiv.innerHTML = `<i class="fa-regular fa-circle-exclamation" style="color:#ff5555;"></i> <span>❌ ${result.message}</span>`;
             responseDiv.classList.add("error");
           }
         } catch (err) {
-          responseDiv.style.color = "#ff5555"; 
-          responseDiv.innerHTML = `<i class="fa-regular fa-circle-exclamation" style="color:#ff5555;"></i> <span> Error connecting to server</span>`;
+          responseDiv.style.color = "#ff5555";
+          responseDiv.innerHTML = `<i class="fa-regular fa-circle-exclamation" style="color:#ff5555;"></i> <span>❌ Error connecting to server</span>`;
           responseDiv.classList.add("error");
-          console.error(err);
+          console.error("Registration error:", err);
         }
       });
     </script>
-   
   </body>
 </html>
