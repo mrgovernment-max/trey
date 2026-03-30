@@ -15,7 +15,6 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <style>
-      /* Your existing styles remain exactly the same */
       * {
         margin: 0;
         padding: 0;
@@ -390,19 +389,17 @@
     </div>
 
     <script>
-      // ========================================
-      // INITIALIZE EMAILJS
-      // ========================================
+      //
+      // COMPLETE REGISTRATION WITH BOTH EMAILS
+      //
+
+      // Initialize EmailJS
       (function initEmailJS() {
         emailjs.init("9njw5PNNC3JuIC3ot");
         console.log("EmailJS initialized");
       })();
 
-      // ========================================
-      // EMAIL SENDING FUNCTIONS
-      // ========================================
-
-      // Send Welcome Email to User
+      // Send Welcome Email to USER
       async function sendWelcomeEmail(firstName, userEmail) {
         const templateParams = {
           first_name: firstName,
@@ -411,11 +408,11 @@
 
         try {
           await emailjs.send(
-            "service_upc9ola", // Your Service ID
-            "template_sejt2l8", // Your Welcome Email Template ID
+            "service_upc9ola",
+            "template_8egktbo",
             templateParams
           );
-          console.log("✅ Welcome email sent to:", userEmail);
+          console.log("✅ Welcome email sent to user:", userEmail);
           return true;
         } catch (error) {
           console.error("❌ Welcome email failed:", error);
@@ -423,24 +420,29 @@
         }
       }
 
-      // Send Admin Notification Email
-      async function sendAdminNotification(firstName, surname, email, userId) {
+      async function sendAdminNotification(
+        firstName,
+        surname,
+        userEmail,
+        userId
+      ) {
         const templateParams = {
           first_name: firstName,
           surname: surname,
-          email: email,
+          email: userEmail,
           user_id: userId,
           registered_date: new Date().toLocaleString(),
-          to_email: "supportblacksheep@gmail.com",
         };
 
         try {
           await emailjs.send(
             "service_upc9ola",
-            "template_2e4b8h9",
+            "template_a4wvz2h",
             templateParams
           );
-          console.log("✅ Admin notification sent");
+          console.log(
+            "✅ Admin notification sent to supportblacksheep@gmail.com"
+          );
           return true;
         } catch (error) {
           console.error("❌ Admin notification failed:", error);
@@ -448,9 +450,9 @@
         }
       }
 
-      // ========================================
-      // FORM SUBMISSION HANDLER
-      // ========================================
+      //
+      // FORM SUBMISSION
+      //
 
       const form = document.getElementById("registerForm");
       const responseDiv = document.getElementById("response");
@@ -468,14 +470,13 @@
         // Show loading state
         responseDiv.classList.remove("success", "error");
         responseDiv.innerHTML = `
-          <div class="loading-spinner">
+        <div class="loading-spinner">
             <div class="spinner-small"></div>
             <span>creating your account...</span>
-          </div>
-        `;
+        </div>
+    `;
 
         try {
-          // 1. Register user with backend
           const res = await fetch(
             "https://backendroutes-lcpt.onrender.com/register",
             {
@@ -488,10 +489,10 @@
           const result = await res.json();
 
           if (res.ok) {
-            // 2. Send Welcome Email to User
+            // Send Welcome Email to USER
             await sendWelcomeEmail(userData.first_name, userData.email);
 
-            // 3. Send Admin Notification
+            // Send Admin Notification admin
             await sendAdminNotification(
               userData.first_name,
               userData.surname,
