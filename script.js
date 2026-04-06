@@ -697,57 +697,6 @@
     enableCheckoutButton();
   }
 
-  // Helper function to clear cart after payment
-  async function clearCartAfterPayment(userId, cartItems) {
-    try {
-      for (const item of cartItems) {
-        await removeFromCart(item.cartId, userId);
-      }
-      showPaymentMessage(
-        "🎉 Order confirmed! Your items will be shipped soon.",
-        "success"
-      );
-
-      // Refresh cart display
-      setTimeout(() => {
-        renderCart();
-        renderCartCount();
-      }, 2000);
-    } catch (err) {
-      console.error("Error clearing cart:", err);
-    }
-  }
-
-  // Process successful payment
-  async function processSuccessfulPayment(reference, paymentData) {
-    try {
-      // Here you would typically verify the transaction with your backend
-      // For now, we'll clear the cart and show success
-
-      // Clear cart from backend
-      for (const item of paymentData.cartItems) {
-        await removeFromCart(item.cartId, paymentData.userId);
-      }
-
-      showPaymentMessage(
-        "🎉 Order confirmed! Thank you for your purchase. You will receive a confirmation email shortly.",
-        "success"
-      );
-
-      // Refresh cart display
-      setTimeout(() => {
-        renderCart();
-        renderCartCount();
-      }, 2000);
-    } catch (err) {
-      console.error("Error processing payment:", err);
-      showPaymentMessage(
-        "Payment received but order processing failed. Please contact support.",
-        "error"
-      );
-    }
-  }
-
   // Show payment message in cart
   function showPaymentMessage(message, type) {
     const summaryDiv = document.querySelector(".cart-summary");
