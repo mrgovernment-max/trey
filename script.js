@@ -456,11 +456,13 @@
     let userName = sessionStorage.getItem("userName");
 
     const cartname = document.getElementById("cartname");
-    cartname.textContent = `${userName}'s Cart`;
+    if (cartname) {
+      cartname.textContent = `${userName}'s Cart`;
+    }
 
     if (!userName) {
       userName = "Guest";
-      cartname.textContent = `${userName}'s Cart`;
+      if (cartname) cartname.textContent = `${userName}'s Cart`;
     }
 
     const res = await fetch(
@@ -492,28 +494,28 @@
 
     cart.forEach((item) => {
       html += `
-      <div class="cart-item" data-cart-id="${item.cartId}">
-      <div class="cart-img">
-          <img src="${item.img_url}" alt="${item.name}">
-      </div>
-      <div class="cart-name">
-          <h4>${item.name}</h4>
-      </div>
-      <div class="cart-price">
-          <span>$${parseFloat(item.price).toFixed(2)}</span>
-      </div>
-      <div class="cart-quantity">
-      <span class="size-badge">${item.quantity}</span>
-      </div>
-      <div class="cart-size">
-          <span class="size-badge">${item.size || "M"}</span>
-      </div>
-      <div class="cart-remove">
-          <i class="fa-regular fa-trash-can remove-item" data-cart-id="${
-            item.cartId
-          }"></i>
-      </div>
-  </div>
+        <div class="cart-item" data-cart-id="${item.cartId}">
+            <div class="cart-img">
+                <img src="${item.img_url}" alt="${item.name}">
+            </div>
+            <div class="cart-name">
+                <h4>${item.name}</h4>
+            </div>
+            <div class="cart-price">
+                <span>$${parseFloat(item.price).toFixed(2)}</span>
+            </div>
+            <div class="cart-quantity">
+                <span class="size-badge">${item.quantity}</span>
+            </div>
+            <div class="cart-size">
+                <span class="size-badge">${item.size || "M"}</span>
+            </div>
+            <div class="cart-remove">
+                <i class="fa-regular fa-trash-can remove-item" data-cart-id="${
+                  item.cartId
+                }"></i>
+            </div>
+        </div>
         `;
     });
 
@@ -527,8 +529,8 @@
             <p style="margin: 1.5rem 0; font-size: 2rem;">$${total.toFixed(
               2
             )}</p>
-            <button class="checkout-btn" id="fake-checkout">proceed to checkout</button>
-            <p style="margin-top:1rem; font-size:0.8rem;">(demo — no payment)</p>
+            <button class="checkout-btn" id="paystack-checkout-btn">proceed to payment</button>
+            <p style="margin-top:1rem; font-size:0.8rem;">secure payment via Paystack</p>
         </div>
     `;
 
@@ -541,8 +543,279 @@
         removeFromCart(cartId, userId);
       });
     });
-    document.getElementById("fake-checkout")?.addEventListener("click", () => {
-      alert("checkout demo — items would be purchased. thank you.");
+
+    const checkoutBtn = document.getElementById("paystack-checkout-btn");
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener("click", async () => {
+        checkoutBtn.disabled = true;
+        checkoutBtn.textContent = "processing...";
+
+        try {
+          // Show delivery address modal
+          const deliveryData = await showDeliveryModal();
+          if (!deliveryData) {
+            enableCheckoutButton();
+            return;
+          }
+
+          // Get user email
+          let userEmail = sessionStorage.getItem("userEmail");
+          if (!userEmail) {
+            userEmail = prompt(
+              "Please enter your email address for order confirmation:",
+              ""
+            );
+            if (userEmail && userEmail.includes("@")) {
+              sessionStorage.setItem("userEmail", userEmail);
+            } else {
+              enableCheckoutButton();
+              return;
+            }
+          }
+
+          // Prepare payment data
+          const paymentData = {
+            total: total,
+            email: userEmail,
+            phone: deliveryData.phone || "Not provided",
+            first_name: deliveryData.fullname.split(" ")[0] || "Valued",
+            last_name:
+              deliveryData.fullname.split(" ").slice(1).join(" ") || "Customer",
+            userId: userId,
+            cartItems: cart,
+            delivery_address: deliveryData,
+          };
+
+          // Initialize Paystack payment
+          initializePaystackPayment(paymentData);
+        } catch (err) {
+          console.error("Checkout error:", err);
+          showPaymentMessage("An error occurred. Please try again.", "error");
+          enableCheckoutButton();
+        }
+      });
+    }
+  }
+
+  // PAYSTACK CHECKOUT INTEGRATION
+
+  // Paystack public Key
+  const PAYSTACK_PUBLIC_KEY =
+    "pk_live_72f7fb40a294df7d100a2f22611b2a96599a97f2";
+
+  // Initialize Paystack payment
+  function initializePaystackPayment(paymentData) {
+    const amountInPesewas = Math.round(paymentData.total * 100);
+    const reference = `TREY-${Date.now()}-${Math.floor(
+      Math.random() * 1000000
+    )}`;
+
+    // Define callback function separately
+    const paymentCallback = function (response) {
+      console.log("Payment successful:", response);
+      showPaymentMessage(
+        "✅ Payment successful! Your order is confirmed.",
+        "success"
+      );
+
+      // Clear cart after successful payment
+      clearCartAfterPayment(paymentData.userId, paymentData.cartItems);
+    };
+
+    // Define onClose function separately
+    const paymentOnClose = function () {
+      console.log("Payment modal closed");
+      showPaymentMessage("Payment cancelled. You can try again.", "error");
+      enableCheckoutButton();
+    };
+
+    const handler = PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email: paymentData.email,
+      amount: amountInPesewas,
+      currency: "GHS",
+      ref: reference,
+      first_name: paymentData.first_name,
+      last_name: paymentData.last_name,
+      phone: paymentData.phone,
+      metadata: {
+        cart_items: paymentData.cartItems,
+        total_amount: paymentData.total,
+        user_id: paymentData.userId,
+        delivery_address: paymentData.delivery_address,
+        timestamp: new Date().toISOString(),
+      },
+      callback: paymentCallback,
+      onClose: paymentOnClose,
+    });
+
+    handler.openIframe();
+  }
+
+  // Helper function to clear cart after payment
+  async function clearCartAfterPayment(userId, cartItems) {
+    try {
+      for (const item of cartItems) {
+        await removeFromCart(item.cartId, userId);
+      }
+      showPaymentMessage(
+        "🎉 Order confirmed! Your items will be shipped soon.",
+        "success"
+      );
+
+      // Refresh cart display
+      setTimeout(() => {
+        renderCart();
+        renderCartCount();
+      }, 2000);
+    } catch (err) {
+      console.error("Error clearing cart:", err);
+    }
+  }
+
+  // Process successful payment
+  async function processSuccessfulPayment(reference, paymentData) {
+    try {
+      // Here you would typically verify the transaction with your backend
+      // For now, we'll clear the cart and show success
+
+      // Clear cart from backend
+      for (const item of paymentData.cartItems) {
+        await removeFromCart(item.cartId, paymentData.userId);
+      }
+
+      showPaymentMessage(
+        "🎉 Order confirmed! Thank you for your purchase. You will receive a confirmation email shortly.",
+        "success"
+      );
+
+      // Refresh cart display
+      setTimeout(() => {
+        renderCart();
+        renderCartCount();
+      }, 2000);
+    } catch (err) {
+      console.error("Error processing payment:", err);
+      showPaymentMessage(
+        "Payment received but order processing failed. Please contact support.",
+        "error"
+      );
+    }
+  }
+
+  // Show payment message in cart
+  function showPaymentMessage(message, type) {
+    const summaryDiv = document.querySelector(".cart-summary");
+    if (!summaryDiv) return;
+
+    const existingMsg = document.querySelector(".payment-message");
+    if (existingMsg) existingMsg.remove();
+
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `payment-message ${type}`;
+    msgDiv.style.cssText = `
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      background: ${
+        type === "success"
+          ? "#e8f5e9"
+          : type === "error"
+          ? "#ffebee"
+          : "#e3f2fd"
+      };
+      border-left: 4px solid ${
+        type === "success"
+          ? "#2e7d32"
+          : type === "error"
+          ? "#c62828"
+          : "#1565c0"
+      };
+      font-size: 0.85rem;
+      animation: slideDown 0.3s ease;
+  `;
+    msgDiv.innerHTML = message;
+
+    summaryDiv.insertBefore(msgDiv, summaryDiv.firstChild);
+
+    if (type !== "success") {
+      setTimeout(() => msgDiv.remove(), 5000);
+    }
+  }
+
+  // Enable checkout button
+  function enableCheckoutButton() {
+    const checkoutBtn = document.getElementById("paystack-checkout-btn");
+    if (checkoutBtn) {
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = "proceed to payment";
+    }
+  }
+
+  // Show delivery address modal
+  function showDeliveryModal() {
+    return new Promise((resolve) => {
+      const modal = document.getElementById("delivery-modal");
+      if (!modal) {
+        console.error("Delivery modal not found");
+        resolve(null);
+        return;
+      }
+      const form = document.getElementById("delivery-form");
+
+      modal.style.display = "flex";
+
+      const submitHandler = (e) => {
+        e.preventDefault();
+
+        const deliveryData = {
+          fullname: document.getElementById("delivery-fullname").value.trim(),
+          street_address: document
+            .getElementById("street-address")
+            .value.trim(),
+          apartment: document.getElementById("apartment").value.trim(),
+          city: document.getElementById("city").value.trim(),
+          region: document.getElementById("region").value,
+          postal_code: document.getElementById("postal-code").value.trim(),
+          country: document.getElementById("country").value,
+          instructions: document
+            .getElementById("delivery-instructions")
+            .value.trim(),
+          phone: sessionStorage.getItem("userPhone") || "",
+        };
+
+        if (!deliveryData.fullname) {
+          alert("Please enter your full name.");
+          return;
+        }
+        if (!deliveryData.street_address) {
+          alert("Please enter your street address.");
+          return;
+        }
+        if (!deliveryData.city) {
+          alert("Please enter your city.");
+          return;
+        }
+        if (!deliveryData.region) {
+          alert("Please select your region.");
+          return;
+        }
+        if (!deliveryData.country) {
+          alert("Please select your country.");
+          return;
+        }
+
+        form.removeEventListener("submit", submitHandler);
+        modal.style.display = "none";
+        resolve(deliveryData);
+      };
+
+      form.addEventListener("submit", submitHandler);
+
+      window.closeDeliveryModal = () => {
+        form.removeEventListener("submit", submitHandler);
+        modal.style.display = "none";
+        resolve(null);
+      };
     });
   }
 

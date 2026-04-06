@@ -11,6 +11,8 @@
         type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
       ></script>
+      <!--paystack-->
+      <script src="https://js.paystack.co/v1/inline.js"></script>
       <meta property="og:image" content="https://res.cloudinary.com/dazhskqcc/image/upload/v1774111948/ojlogo_mfmfqv.png">
       <meta property="og:site_name" content="OJ || studios a clothing brand originated in Ghana">
       <meta property="twitter:card" content="https://res.cloudinary.com/dazhskqcc/image/upload/v1774111948/ojlogo_mfmfqv.png">
@@ -256,6 +258,99 @@
       <h2 id="cartname" class="section-title">your cart</h2>
       <div class="cart-container" id="cart-container"></div>
     </section>
+
+    
+    <!--DElivery options -->
+
+
+    <!-- Delivery Address Modal -->
+<div id="delivery-modal" class="delivery-modal" style="display: none;">
+    <div class="delivery-modal-content">
+        <div class="delivery-modal-header">
+            <h3>delivery information</h3>
+            <button class="close-modal" onclick="closeDeliveryModal()">×</button>
+        </div>
+        
+        <form id="delivery-form">
+            <div class="form-group">
+                <label for="full-name">full name <span class="required">*</span></label>
+                <input type="text" id="delivery-fullname" name="fullname" placeholder="James Wright" required>
+            </div>
+            
+            <div class="form-row-group">
+                <div class="form-group">
+                    <label for="street-address">street address <span class="required">*</span></label>
+                    <input type="text" id="street-address" name="street_address" placeholder="123 Oxford Street" required>
+                </div>
+                <div class="form-group">
+                    <label for="apartment">apartment / suite (optional)</label>
+                    <input type="text" id="apartment" name="apartment" placeholder="Apt 4B">
+                </div>
+            </div>
+            
+            <div class="form-row-group">
+                <div class="form-group">
+                    <label for="city">city <span class="required">*</span></label>
+                    <input type="text" id="city" name="city" placeholder="Accra" required>
+                </div>
+                <div class="form-group">
+                    <label for="region">region / state <span class="required">*</span></label>
+                    <select id="region" name="region" required>
+                        <option value="">select region</option>
+                        <option value="Greater Accra">Greater Accra</option>
+                        <option value="Ashanti">Ashanti</option>
+                        <option value="Western">Western</option>
+                        <option value="Eastern">Eastern</option>
+                        <option value="Central">Central</option>
+                        <option value="Volta">Volta</option>
+                        <option value="Northern">Northern</option>
+                        <option value="Upper East">Upper East</option>
+                        <option value="Upper West">Upper West</option>
+                        <option value="Bono">Bono</option>
+                        <option value="Ahafo">Ahafo</option>
+                        <option value="Savannah">Savannah</option>
+                        <option value="North East">North East</option>
+                        <option value="Oti">Oti</option>
+                        <option value="Western North">Western North</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row-group">
+                <div class="form-group">
+                    <label for="postal-code">postal code</label>
+                    <input type="text" id="postal-code" name="postal_code" placeholder="GA-123-4567">
+                </div>
+                <div class="form-group">
+                    <label for="country">country <span class="required">*</span></label>
+                    <select id="country" name="country" required>
+                        <option value="Ghana">Ghana</option>
+                        <option value="Nigeria">Nigeria</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="South Africa">South Africa</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="United States">United States</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="delivery-instructions">delivery instructions (optional)</label>
+                <textarea id="delivery-instructions" rows="2" placeholder="e.g., gate code, landmark, best time to deliver..."></textarea>
+            </div>
+            
+            <div class="delivery-modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeDeliveryModal()">cancel</button>
+                <button type="submit" class="btn-primary">continue to payment</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
 
     <section id="gallery" class="page">
       <h2 class="section-title">OJ || studios Lens</h2>
