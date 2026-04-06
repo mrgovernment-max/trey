@@ -602,7 +602,6 @@
   // Paystack public Key
   const PAYSTACK_PUBLIC_KEY =
     "pk_live_72f7fb40a294df7d100a2f22611b2a96599a97f2";
-
   // Initialize Paystack payment
   function initializePaystackPayment(paymentData) {
     const amountInPesewas = Math.round(paymentData.total * 100);
@@ -610,26 +609,20 @@
       Math.random() * 1000000
     )}`;
 
-    // Define callback function separately
+    // Define callback as a regular function
     const paymentCallback = function (response) {
       console.log("Payment successful:", response);
-      showPaymentMessage(
-        "✅ Payment successful! Your order is confirmed.",
-        "success"
-      );
+      showPaymentMessage("Verifying payment...", "info");
 
-      // Clear cart after successful payment
-      clearCartAfterPayment(paymentData.userId, paymentData.cartItems);
+      // Handle verification
+      handleVerification(response, paymentData);
     };
 
-    // Define onClose function separately
     const paymentOnClose = function () {
       console.log("Payment modal closed");
       showPaymentMessage("Payment cancelled. You can try again.", "error");
       enableCheckoutButton();
     };
-
-    //Paystack Setup
 
     const handler = PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
@@ -647,63 +640,61 @@
         delivery_address: paymentData.delivery_address,
         timestamp: new Date().toISOString(),
       },
-      callback: async function (response) {
-        console.log("Payment successful:", response);
-        showPaymentMessage("Verifying payment...", "info");
-
-        try {
-          // Prepare order data for verification
-          const verificationData = {
-            reference: response.reference,
-            userId: paymentData.userId,
-            paymentData: {
-              total: paymentData.total,
-              email: paymentData.email,
-              phone: paymentData.phone,
-              cartItems: paymentData.cartItems,
-              delivery_address: paymentData.delivery_address,
-            },
-          };
-
-          // Call verification endpoint
-          const verifyRes = await fetch(
-            "https://backendroutes-lcpt.onrender.com/verify-payment",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(verificationData),
-            }
-          );
-
-          const result = await verifyRes.json();
-
-          if (result.success) {
-            showPaymentMessage(
-              "✅ Order confirmed! Your items will be shipped soon.",
-              "success"
-            );
-
-            // Refresh cart display
-            setTimeout(() => {
-              renderCart();
-              renderCartCount();
-            }, 2000);
-          } else {
-            showPaymentMessage("❌ " + result.message, "error");
-          }
-        } catch (err) {
-          console.error("Verification error:", err);
-          showPaymentMessage(
-            "❌ Could not verify payment. Please contact support.",
-            "error"
-          );
-        }
-
-        enableCheckoutButton();
-      },
+      callback: paymentCallback,
+      onClose: paymentOnClose,
     });
 
     handler.openIframe();
+  }
+
+  // Separate async function for verification
+  async function handleVerification(response, paymentData) {
+    try {
+      const verificationData = {
+        reference: response.reference,
+        userId: paymentData.userId,
+        paymentData: {
+          total: paymentData.total,
+          email: paymentData.email,
+          phone: paymentData.phone,
+          cartItems: paymentData.cartItems,
+          delivery_address: paymentData.delivery_address,
+        },
+      };
+
+      const verifyRes = await fetch(
+        "https://backendroutes-lcpt.onrender.com/verify-payment",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(verificationData),
+        }
+      );
+
+      const result = await verifyRes.json();
+
+      if (result.success) {
+        showPaymentMessage(
+          "✅ Order confirmed! Your items will be shipped soon.",
+          "success"
+        );
+
+        setTimeout(() => {
+          renderCart();
+          renderCartCount();
+        }, 2000);
+      } else {
+        showPaymentMessage("❌ " + result.message, "error");
+      }
+    } catch (err) {
+      console.error("Verification error:", err);
+      showPaymentMessage(
+        "❌ Could not verify payment. Please contact support.",
+        "error"
+      );
+    }
+
+    enableCheckoutButton();
   }
 
   // Helper function to clear cart after payment
