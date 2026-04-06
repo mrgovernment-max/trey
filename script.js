@@ -629,6 +629,8 @@
       enableCheckoutButton();
     };
 
+    //Paystack Setup
+
     const handler = PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
       email: paymentData.email,
@@ -645,8 +647,60 @@
         delivery_address: paymentData.delivery_address,
         timestamp: new Date().toISOString(),
       },
-      callback: paymentCallback,
-      onClose: paymentOnClose,
+      callback: async function (response) {
+        console.log("Payment successful:", response);
+        showPaymentMessage("Verifying payment...", "info");
+
+        try {
+          // Prepare order data for verification
+          const verificationData = {
+            reference: response.reference,
+            userId: paymentData.userId,
+            paymentData: {
+              total: paymentData.total,
+              email: paymentData.email,
+              phone: paymentData.phone,
+              cartItems: paymentData.cartItems,
+              delivery_address: paymentData.delivery_address,
+            },
+          };
+
+          // Call verification endpoint
+          const verifyRes = await fetch(
+            "https://backendroutes-lcpt.onrender.com/verify-payment",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(verificationData),
+            }
+          );
+
+          const result = await verifyRes.json();
+
+          if (result.success) {
+            showPaymentMessage(
+              "✅ Order confirmed! Your items will be shipped soon.",
+              "success"
+            );
+
+            // Refresh cart display
+            setTimeout(() => {
+              renderCart();
+              renderCartCount();
+            }, 2000);
+          } else {
+            showPaymentMessage("❌ " + result.message, "error");
+          }
+        } catch (err) {
+          console.error("Verification error:", err);
+          showPaymentMessage(
+            "❌ Could not verify payment. Please contact support.",
+            "error"
+          );
+        }
+
+        enableCheckoutButton();
+      },
     });
 
     handler.openIframe();
@@ -823,7 +877,7 @@
   navLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
-      const page = link.dataset.page; // This should be "contact" for your contact link
+      const page = link.dataset.page;
 
       if (page === "home") {
         showPage("home");
@@ -1019,8 +1073,7 @@ document.addEventListener("DOMContentLoaded", function () {
   updateActiveLink();
 });
 
-// TREY Newsletter Form - Professional Implementation
-
+// TREY Newsletter Form
 (function () {
   const newsletterForm = document.getElementById("treyNewsletterForm");
   if (!newsletterForm) return;
@@ -1361,12 +1414,3 @@ if (contactForm) {
     }
   });
 }
-
-// Add spinner animation
-//const style = document.createElement("style");
-//style.textContent = `
-//    @keyframes spin {
-//        to { transform: rotate(360deg); }
-//    }
-//  `;
-//document.head.appendChild(style);
