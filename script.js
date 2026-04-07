@@ -20,6 +20,7 @@
   const detailContainer = document.getElementById("detail-container");
   const cartContainer = document.getElementById("cart-container");
   const cartCountSpan = document.getElementById("cart-count");
+  const acc = document.getElementById("account");
 
   // helper: show page
   function showPage(pageId) {
@@ -30,6 +31,12 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (pageId === "cart") renderCart();
   }
+
+  ///dont show user acc logo if nt logged in
+  const userId = sessionStorage.getItem("userId");
+  const isLoggedIn = !!userId;
+
+  !isLoggedIn ? (acc.style.display = "none") : "block";
 
   // fetch products from API
   async function fetchProducts() {
@@ -180,8 +187,6 @@
         : [product.img_url];
 
     // Check login status for button state
-    const userId = sessionStorage.getItem("userId");
-    const isLoggedIn = !!userId;
 
     detailContainer.innerHTML = `
         <div class="detail-gallery">

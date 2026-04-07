@@ -9,474 +9,11 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
-          "Segoe UI", Roboto, sans-serif;
-        background: #fafaf8;
-        color: #1e1e1e;
-        line-height: 1.5;
-      }
-
-      /* Navbar */
-      .navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.5rem 5%;
-        background: #ffffffd9;
-        backdrop-filter: blur(8px);
-        border-bottom: 1px solid #eaeae7;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-
-      .logo {
-        font-size: 1.8rem;
-        font-weight: 500;
-        letter-spacing: -0.02em;
-        color: #252523;
-        text-decoration: none;
-      }
-
-      .logo span {
-        font-weight: 280;
-        color: #7c7c7a;
-      }
-
-      .logout-btn {
-        background: transparent;
-        border: 1px solid #e2e2db;
-        padding: 0.6rem 1.5rem;
-        cursor: pointer;
-        font-family: inherit;
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: all 0.2s;
-        color: #4f4f4b;
-      }
-
-      .logout-btn:hover {
-        background: #232321;
-        color: white;
-        border-color: #232321;
-      }
-
-      /* Main Container */
-      .account-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 3rem 5%;
-      }
-
-      /* Welcome Header */
-      .welcome-header {
-        margin-bottom: 2.5rem;
-      }
-
-      .welcome-header h1 {
-        font-size: 2rem;
-        font-weight: 380;
-        letter-spacing: -0.02em;
-        color: #252523;
-      }
-
-      .welcome-header p {
-        color: #6f6f69;
-        margin-top: 0.3rem;
-      }
-
-      /* Account Grid */
-      .account-grid {
-        display: grid;
-        grid-template-columns: 280px 1fr;
-        gap: 2.5rem;
-      }
-
-      /* Sidebar */
-      .account-sidebar {
-        background: #ffffff;
-        border: 1px solid #eaeae4;
-        padding: 1.5rem;
-        height: fit-content;
-        position: sticky;
-        top: 100px;
-      }
-
-      .sidebar-nav {
-        display: flex;
-        flex-direction: column;
-        gap: 0.3rem;
-      }
-
-      .sidebar-item {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 0.9rem 1rem;
-        background: transparent;
-        border: none;
-        width: 100%;
-        text-align: left;
-        font-size: 0.95rem;
-        font-weight: 400;
-        color: #4f4f4b;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-family: inherit;
-      }
-
-      .sidebar-item i {
-        width: 22px;
-        color: #b5b5ad;
-        font-size: 1.1rem;
-      }
-
-      .sidebar-item:hover {
-        background: #f9f9f6;
-        color: #252523;
-      }
-
-      .sidebar-item.active {
-        background: #f9f9f6;
-        color: #c9a46c;
-        border-left: 3px solid #c9a46c;
-      }
-
-      .sidebar-item.active i {
-        color: #c9a46c;
-      }
-
-      /* Main Content */
-      .account-main {
-        background: #ffffff;
-        border: 1px solid #eaeae4;
-        padding: 2rem;
-      }
-
-      .section-title {
-        font-size: 1.4rem;
-        font-weight: 400;
-        letter-spacing: -0.01em;
-        color: #252523;
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.8rem;
-        border-bottom: 1px solid #efefe9;
-      }
-
-      /* Profile Form */
-      .profile-form {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        max-width: 500px;
-      }
-
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-      }
-
-      .form-group label {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: #4a4a46;
-      }
-
-      .form-group input {
-        padding: 0.8rem;
-        background: #f9f9f6;
-        border: 1px solid #e2e2db;
-        font-size: 1rem;
-        font-family: inherit;
-        transition: all 0.2s;
-      }
-
-      .form-group input:focus {
-        outline: none;
-        border-color: #c9a46c;
-        background: #ffffff;
-      }
-
-      .form-group input:disabled {
-        background: #efefe9;
-        color: #8a8a84;
-      }
-
-      .btn-primary {
-        background: #232321;
-        border: 1px solid #232321;
-        color: white;
-        padding: 0.9rem 1.8rem;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-family: inherit;
-        width: fit-content;
-      }
-
-      .btn-primary:hover {
-        background: #3b3b38;
-      }
-
-      .btn-secondary {
-        background: transparent;
-        border: 1px solid #e2e2db;
-        color: #4f4f4b;
-        padding: 0.9rem 1.8rem;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-family: inherit;
-      }
-
-      .btn-secondary:hover {
-        border-color: #232321;
-        color: #232321;
-      }
-
-      /* Orders Table */
-      .orders-table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      .orders-table th,
-      .orders-table td {
-        padding: 1rem 0.8rem;
-        text-align: left;
-        border-bottom: 1px solid #efefe9;
-      }
-
-      .orders-table th {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: #6f6f69;
-        font-weight: 400;
-      }
-
-      .order-img {
-        width: 50px;
-        height: 60px;
-        object-fit: cover;
-      }
-
-      .status-badge {
-        display: inline-block;
-        padding: 0.25rem 0.7rem;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        border-radius: 20px;
-      }
-
-      .status-pending {
-        background: #fff3e0;
-        color: #e6a017;
-      }
-
-      .status-confirmed {
-        background: #e3f2fd;
-        color: #1565c0;
-      }
-
-      .status-shipped {
-        background: #fff8e1;
-        color: #f57c00;
-      }
-
-      .status-delivered {
-        background: #e8f5e9;
-        color: #2e7d32;
-      }
-
-      .order-action {
-        background: none;
-        border: none;
-        color: #c9a46c;
-        cursor: pointer;
-        font-size: 0.85rem;
-        font-family: inherit;
-      }
-
-      .order-action:hover {
-        text-decoration: underline;
-      }
-
-      /* Empty State */
-      .empty-state {
-        text-align: center;
-        padding: 3rem;
-        color: #8a8a84;
-      }
-
-      /* Address Card */
-      .address-card {
-        background: #f9f9f6;
-        padding: 1.5rem;
-        border: 1px solid #eaeae4;
-        margin-bottom: 1.5rem;
-      }
-
-      .address-card p {
-        margin-bottom: 0.5rem;
-        color: #4f4f4b;
-      }
-
-      /* Danger Zone */
-      .danger-zone {
-        margin-top: 2rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid #ffebee;
-      }
-
-      .danger-zone h4 {
-        color: #c62828;
-        margin-bottom: 1rem;
-      }
-
-      .btn-danger {
-        background: transparent;
-        border: 1px solid #c62828;
-        color: #c62828;
-        padding: 0.8rem 1.5rem;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-
-      .btn-danger:hover {
-        background: #c62828;
-        color: white;
-      }
-
-      /* Modal */
-      .modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-      }
-
-      .modal-content {
-        background: #ffffff;
-        max-width: 500px;
-        width: 90%;
-        padding: 2rem;
-        border: 1px solid #eaeae4;
-      }
-
-      .modal-content h3 {
-        margin-bottom: 1rem;
-      }
-
-      .modal-buttons {
-        display: flex;
-        justify-content: flex-end;
-        gap: 1rem;
-        margin-top: 1.5rem;
-      }
-
-      /* Order Details */
-      .order-details {
-        margin-top: 1rem;
-      }
-
-      .order-items-list {
-        margin-top: 1rem;
-      }
-
-      .order-item-row {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 0.8rem 0;
-        border-bottom: 1px solid #efefe9;
-      }
-
-      .order-item-img {
-        width: 50px;
-        height: 60px;
-        object-fit: cover;
-      }
-
-      /* Tracking */
-      .tracking-section {
-        margin-top: 1rem;
-      }
-
-      .tracking-input-group {
-        display: flex;
-        gap: 1rem;
-        margin-top: 1rem;
-      }
-
-      .tracking-input {
-        flex: 1;
-        padding: 0.8rem;
-        border: 1px solid #e2e2db;
-        font-family: inherit;
-      }
-
-      .tracking-result {
-        margin-top: 1rem;
-        padding: 1rem;
-        background: #f9f9f6;
-      }
-
-      /* Responsive */
-      @media (max-width: 768px) {
-        .account-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .account-sidebar {
-          position: static;
-        }
-
-        .sidebar-nav {
-          flex-direction: row;
-          flex-wrap: wrap;
-        }
-
-        .sidebar-item {
-          width: auto;
-        }
-
-        .orders-table {
-          display: block;
-          overflow-x: auto;
-        }
-
-        .tracking-input-group {
-          flex-direction: column;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="acc.css" />
   </head>
   <body>
     <nav class="navbar">
-      <a href="index.html" class="logo">TREY <span>studio</span></a>
+      <a href="index.html" class="logo">OJ || studios</a>
       <button class="logout-btn" id="logoutBtn">logout</button>
     </nav>
 
@@ -494,16 +31,16 @@
               <i class="fa-regular fa-user"></i> profile
             </button>
             <button class="sidebar-item" data-tab="orders">
-              <i class="fa-regular fa-box"></i> orders
+              <i class="fa-solid fa-gift"></i> orders
             </button>
             <button class="sidebar-item" data-tab="tracking">
-              <i class="fa-regular fa-truck"></i> track order
+              <i class="fa-solid fa-truck"></i> track order
             </button>
             <button class="sidebar-item" data-tab="addresses">
-              <i class="fa-regular fa-location-dot"></i> addresses
+              <i class="fa-solid fa-location-dot"></i> addresses
             </button>
             <button class="sidebar-item" data-tab="security">
-              <i class="fa-regular fa-lock"></i> security
+              <i class="fa-solid fa-lock"></i> security
             </button>
           </div>
         </aside>
@@ -772,7 +309,7 @@
             const items = await itemsResponse.json();
             const firstItem = items[0];
 
-            const statusClass = `status-${order.payment_status || "pending"}`;
+            const statusClass = `status-${order.status || "pending"}`;
 
             html += `
                         <tr>
@@ -788,7 +325,7 @@
                               2
                             )}</td>
                             <td><span class="status-badge ${statusClass}">${
-              order.payment_status || "pending"
+              order.status || "pending"
             }</span></td>
                             <td><button class="order-action" onclick="viewOrder(${
                               order.id
@@ -880,16 +417,14 @@
             const result = await response.json();
 
             if (result.order) {
-              const statusClass = `status-${
-                result.order.payment_status || "pending"
-              }`;
+              const statusClass = `status-${result.order.status || "pending"}`;
               resultDiv.innerHTML = `
                         <div class="tracking-result">
                             <p><strong>order reference:</strong> ${
                               result.order.payment_reference
                             }</p>
                             <p><strong>status:</strong> <span class="status-badge ${statusClass}">${
-                result.order.payment_status || "pending"
+                result.order.status || "pending"
               }</span></p>
                             <p><strong>order date:</strong> ${new Date(
                               result.order.created_at

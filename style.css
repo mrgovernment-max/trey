@@ -197,11 +197,6 @@ body {
   animation: scrollHorizontal 20s linear infinite;
 }
 
-/* Pause animation on hover */
-.scroll-container:hover .scroll-track {
-  animation-play-state: paused;
-}
-
 /* Individual scroll items */
 .scroll-item {
   position: relative;
