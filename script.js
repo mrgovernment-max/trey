@@ -77,7 +77,7 @@
   // render first 3 as featured (or any logic)
   function renderHomeFeatured() {
     if (!homeFeatured || products.length === 0) return;
-    const featured = products.slice(0, 3);
+    const featured = products.slice(3, 6);
     homeFeatured.innerHTML = featured
       .map(
         (p) => `

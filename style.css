@@ -166,6 +166,162 @@ body {
   color: white;
 }
 
+/* TREY Infinite Scroll Section */
+
+.infinite-scroll-section {
+  width: 100%;
+  background: #fafaf8;
+  padding: 4rem 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Gradient fade on edges  */
+.infinite-scroll-section::before,
+.infinite-scroll-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.infinite-scroll-section::before {
+  left: 0;
+  background: linear-gradient(to right, #fafaf8, transparent);
+}
+
+.infinite-scroll-section::after {
+  right: 0;
+  background: linear-gradient(to left, #fafaf8, transparent);
+}
+
+/* Scroll container - hides overflow */
+.scroll-container {
+  width: 100%;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.scroll-container:active {
+  cursor: grabbing;
+}
+
+/* Scroll track - holds the items */
+.scroll-track {
+  display: flex;
+  width: fit-content;
+  animation: scrollHorizontal 30s linear infinite;
+}
+
+/* Pause animation on hover */
+.scroll-container:hover .scroll-track {
+  animation-play-state: paused;
+}
+
+/* Individual scroll items */
+.scroll-item {
+  position: relative;
+  width: 320px;
+  height: 400px;
+  margin: 0 10px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid #eaeae4;
+  transition: all 0.3s ease;
+  cursor: crosshair;
+}
+
+.scroll-item:hover {
+  transform: scale(1.02);
+  border-color: #d4d4ce;
+  box-shadow: 0 20px 35px -15px rgba(0, 0, 0, 0.15);
+}
+
+/* Images and videos */
+.scroll-item img,
+.scroll-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.scroll-item:hover img,
+.scroll-item:hover video {
+  transform: scale(1.05);
+}
+
+/* Overlay text */
+.scroll-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  padding: 1.5rem 1rem 1rem;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.scroll-item:hover .scroll-overlay {
+  transform: translateY(0);
+}
+
+.scroll-overlay span {
+  color: #ffffff;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 350;
+}
+
+/* Animation keyframes */
+@keyframes scrollHorizontal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .infinite-scroll-section {
+    padding: 2rem 0;
+  }
+
+  .scroll-item {
+    width: 260px;
+    height: 330px;
+    margin: 0 8px;
+  }
+
+  .scroll-overlay span {
+    font-size: 0.75rem;
+  }
+
+  .infinite-scroll-section::before,
+  .infinite-scroll-section::after {
+    width: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-item {
+    width: 220px;
+    height: 280px;
+    margin: 0 6px;
+  }
+
+  .scroll-overlay {
+    padding: 1rem 0.8rem 0.8rem;
+  }
+}
+
 /*TREY location section  */
 
 /* Map container - takes 50% on desktop, full width on mobile */
