@@ -536,7 +536,7 @@
               2
             )}</p>
             <button class="checkout-btn" id="paystack-checkout-btn">proceed to payment</button>
-            <p style="margin-top:1rem; font-size:0.8rem;">secure payment via Paystack</p>
+            <p style="margin-top:1rem; font-size:0.8rem;"> <i class="fa-solid fa-shield"></i>  secure payment via Paystack</p>
         </div>
     `;
 
