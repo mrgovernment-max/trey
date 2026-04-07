@@ -127,7 +127,7 @@
             <h3>${p.name}</h3>
             <div class="product-price">${
               parseFloat(p.price) > 0
-                ? `$${parseFloat(p.price).toFixed(2)}`
+                ? `${parseFloat(p.price).toFixed(2)} GH₵`
                 : "Not Available to Public"
             }</div>
             <div class="brand-mini">
@@ -201,7 +201,7 @@
             <h2>${product.name}</h2>
             <div id="detail-id" class="detail-id" style="${
               product.release === "Launching Soon" ? "display:none" : ""
-            }">$${parseFloat(product.price).toFixed(2)} USD 
+            }">${parseFloat(product.price).toFixed(2)} GH₵
                 <span class="rating-stars">${"★".repeat(
                   Math.floor(product.rating || 0)
                 )}${product.rating % 1 >= 0.5 ? "½" : ""}</span>

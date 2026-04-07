@@ -194,7 +194,7 @@ body {
 .scroll-track {
   display: flex;
   width: fit-content;
-  animation: scrollHorizontal 10s linear infinite;
+  animation: scrollHorizontal 20s linear infinite;
 }
 
 /* Pause animation on hover */
