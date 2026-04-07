@@ -93,6 +93,7 @@
           `
       )
       .join("");
+
     // attach click listeners
     document.querySelectorAll(".featured-item").forEach((el) => {
       el.addEventListener("click", () => {
