@@ -617,70 +617,75 @@
 
     const address = paymentData.delivery_address || {};
 
-    // Build items summary as a readable string
-    let itemsSummary = "";
-    paymentData.cartItems.forEach((item, i) => {
-      itemsSummary += `${i + 1}. ${item.name} (${item.size || "N/A"}) x${
-        item.quantity
-      } = $${(item.price * item.quantity).toFixed(2)}\n`;
-    });
-
+    // Build custom fields array
     const customFields = [
       {
         display_name: "Customer Name",
-        variable_name: "name",
+        variable_name: "customer_name",
         value: `${paymentData.first_name} ${paymentData.last_name}`,
       },
       {
         display_name: "Email",
-        variable_name: "email",
+        variable_name: "customer_email",
         value: paymentData.email,
       },
       {
         display_name: "Phone",
-        variable_name: "phone",
+        variable_name: "customer_phone",
         value: paymentData.phone,
       },
       {
         display_name: "Delivery Address",
-        variable_name: "address",
+        variable_name: "delivery_address",
         value: `${address.street_address || ""} ${
           address.apartment || ""
         }`.trim(),
       },
       {
-        display_name: "City/Region",
-        variable_name: "city",
+        display_name: "City / Region / Country",
+        variable_name: "location",
         value: `${address.city || ""}, ${address.region || ""}, ${
           address.country || ""
         }`,
       },
       {
+        display_name: "Postal Code",
+        variable_name: "postal_code",
+        value: address.postal_code || "N/A",
+      },
+      {
         display_name: "Order Reference",
-        variable_name: "ref",
+        variable_name: "order_ref",
         value: reference,
       },
       {
-        display_name: "Total",
-        variable_name: "total",
+        display_name: "Total Amount",
+        variable_name: "total_amount",
         value: `GHS ${paymentData.total.toFixed(2)}`,
       },
       {
-        display_name: "ITEMS ORDERED",
-        variable_name: "items_header",
-        value: "─────────────────",
+        display_name: "━━━━━━━━━━━━━━━━━━━━━",
+        variable_name: "separator",
+        value: "🛒 ORDER ITEMS 🛒",
       },
     ];
 
-    // Add each item
+    // Add each product as a separate custom field
     paymentData.cartItems.forEach((item, idx) => {
       customFields.push({
         display_name: `Item ${idx + 1}`,
-        variable_name: `item_${idx + 1}`,
+        variable_name: `product_${idx + 1}`,
         value: `${item.name} | Size: ${item.size || "N/A"} | Qty: ${
           item.quantity
-        } | Price: $${item.price}`,
+        } | Price: $${parseFloat(item.price).toFixed(2)}`,
       });
+    });
+
+    // Add footer
+    customFields.push({
+      display_name: "━━━━━━━━━━━━━━━━━━━━━",
+      variable_name: "footer",
+      value: "✅ Order confirmed",
     });
 
     const handler = PaystackPop.setup({
@@ -692,11 +697,17 @@
       first_name: paymentData.first_name,
       last_name: paymentData.last_name,
       phone: paymentData.phone,
-      metadata: { custom_fields: customFields },
+      metadata: {
+        custom_fields: customFields,
+      },
       callback: function (response) {
+        console.log("Payment successful:", response);
+        showPaymentMessage("Verifying payment...", "info");
         handleVerification(response, paymentData);
       },
       onClose: function () {
+        console.log("Payment modal closed");
+        showPaymentMessage("Payment cancelled. You can try again.", "error");
         enableCheckoutButton();
       },
     });
