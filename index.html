@@ -417,9 +417,17 @@
             
             <div class="form-row-group">
                 <div class="form-group">
-                    <label for="postal-code">postal code</label>
+                     
+                    <label for="postal-code">postal code <span class="required">*</span></label>
                     <input type="text" id="postal-code" name="postal_code" placeholder="GA-123-4567">
                 </div>
+
+            
+                    <div class="form-group">   
+                        <label for="phone">phone  <span class="required">*</span></label>
+                        <input type="number" id="phone" name="phone" placeholder="000 0000 000">
+                    </div>
+                    <div class="form-row-group">
                 <div class="form-group">
                     <label for="country">country <span class="required">*</span></label>
                     <select id="country" name="country" required>
@@ -433,6 +441,7 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
+                    </div>
             </div>
             
             <div class="form-group">

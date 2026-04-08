@@ -615,20 +615,73 @@
       Math.random() * 1000000
     )}`;
 
-    // Define callback as a regular function
-    const paymentCallback = function (response) {
-      console.log("Payment successful:", response);
-      showPaymentMessage("Verifying payment...", "info");
+    const address = paymentData.delivery_address || {};
 
-      // Handle verification
-      handleVerification(response, paymentData);
-    };
+    // Build items summary as a readable string
+    let itemsSummary = "";
+    paymentData.cartItems.forEach((item, i) => {
+      itemsSummary += `${i + 1}. ${item.name} (${item.size || "N/A"}) x${
+        item.quantity
+      } = $${(item.price * item.quantity).toFixed(2)}\n`;
+    });
 
-    const paymentOnClose = function () {
-      console.log("Payment modal closed");
-      showPaymentMessage("Payment cancelled. You can try again.", "error");
-      enableCheckoutButton();
-    };
+    const customFields = [
+      {
+        display_name: "Customer Name",
+        variable_name: "name",
+        value: `${paymentData.first_name} ${paymentData.last_name}`,
+      },
+      {
+        display_name: "Email",
+        variable_name: "email",
+        value: paymentData.email,
+      },
+      {
+        display_name: "Phone",
+        variable_name: "phone",
+        value: paymentData.phone,
+      },
+      {
+        display_name: "Delivery Address",
+        variable_name: "address",
+        value: `${address.street_address || ""} ${
+          address.apartment || ""
+        }`.trim(),
+      },
+      {
+        display_name: "City/Region",
+        variable_name: "city",
+        value: `${address.city || ""}, ${address.region || ""}, ${
+          address.country || ""
+        }`,
+      },
+      {
+        display_name: "Order Reference",
+        variable_name: "ref",
+        value: reference,
+      },
+      {
+        display_name: "Total",
+        variable_name: "total",
+        value: `GHS ${paymentData.total.toFixed(2)}`,
+      },
+      {
+        display_name: "ITEMS ORDERED",
+        variable_name: "items_header",
+        value: "─────────────────",
+      },
+    ];
+
+    // Add each item
+    paymentData.cartItems.forEach((item, idx) => {
+      customFields.push({
+        display_name: `Item ${idx + 1}`,
+        variable_name: `item_${idx + 1}`,
+        value: `${item.name} | Size: ${item.size || "N/A"} | Qty: ${
+          item.quantity
+        } | Price: $${item.price}`,
+      });
+    });
 
     const handler = PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
@@ -639,20 +692,17 @@
       first_name: paymentData.first_name,
       last_name: paymentData.last_name,
       phone: paymentData.phone,
-      metadata: {
-        cart_items: paymentData.cartItems,
-        total_amount: paymentData.total,
-        user_id: paymentData.userId,
-        delivery_address: paymentData.delivery_address,
-        timestamp: new Date().toISOString(),
+      metadata: { custom_fields: customFields },
+      callback: function (response) {
+        handleVerification(response, paymentData);
       },
-      callback: paymentCallback,
-      onClose: paymentOnClose,
+      onClose: function () {
+        enableCheckoutButton();
+      },
     });
 
     handler.openIframe();
   }
-
   // Separate async function for verification
   async function handleVerification(response, paymentData) {
     try {
@@ -780,7 +830,7 @@
           instructions: document
             .getElementById("delivery-instructions")
             .value.trim(),
-          phone: sessionStorage.getItem("userPhone") || "",
+          phone: document.getElementById("phone").value.trim(),
         };
 
         if (!deliveryData.fullname) {
@@ -800,6 +850,16 @@
           return;
         }
         if (!deliveryData.country) {
+          alert("Please select your country.");
+          return;
+        }
+
+        if (!deliveryData.phone) {
+          alert("Please select your country.");
+          return;
+        }
+
+        if (!deliveryData.postal_code) {
           alert("Please select your country.");
           return;
         }
