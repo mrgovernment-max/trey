@@ -355,6 +355,10 @@
 
     <section id="cart" class="page">
       <h2 id="cartname" class="section-title">your cart</h2>
+      <div class="tracking-info-note" style="background: #eeee93be; padding: 1rem; margin: 1rem 0; border-left: 3px solid #c9a46c;">
+        <i class="fa-solid fa-circle"></i>
+        <span style="margin-left: 0.5rem;">📧 Upon successful payment, Paystack sends a receipt to your email with your order reference. Use that reference  to track your order on the track order section on your account page.</span>
+    </div>
       <div class="cart-container" id="cart-container"></div>
     </section>
 
@@ -427,7 +431,17 @@
                         <label for="phone">phone  <span class="required">*</span></label>
                         <input type="number" id="phone" name="phone" placeholder="000 0000 000">
                     </div>
+
                     <div class="form-row-group">
+
+                        <div class="form-group">   
+                          <label for="paymentmail">Mail  <span class="required">*</span></label>
+                                   <input type="email" id="paymentmail" name="paymentmail" placeholder="exapmple@gmail.com">
+                               </div>
+                    </div>
+                    
+                    <div class="form-row-group">
+                 
                 <div class="form-group">
                     <label for="country">country <span class="required">*</span></label>
                     <select id="country" name="country" required>

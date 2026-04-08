@@ -565,7 +565,7 @@
           }
 
           // Get user email
-          let userEmail = sessionStorage.getItem("userEmail");
+          let userEmail = document.getElementById("paymentmail").value.trim();
           if (!userEmail) {
             userEmail = prompt(
               "Please enter your email address for order confirmation:",
