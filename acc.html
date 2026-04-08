@@ -309,7 +309,7 @@
             const items = await itemsResponse.json();
             const firstItem = items[0];
 
-            const statusClass = `status-${order.status || "pending"}`;
+            const statusClass = `status-${status || "pending"}`;
 
             html += `
                         <tr>
@@ -419,17 +419,18 @@
 
             if (result.order) {
               const order = result.order;
-              const statusClass = `status-${order.payment_status || "pending"}`;
-              const statusText = order.payment_status || "pending";
+              const statusClass = `status-${order.status || "pending"}`;
+              const statusText = order.status || "pending";
 
               // Format status display
               let statusDisplay = "";
               switch (statusText) {
                 case "pending":
-                  statusDisplay = "🟡 Pending - Awaiting confirmation";
+                  statusDisplay = "🟡 Pending - Preparing Order";
                   break;
                 case "confirmed":
-                  statusDisplay = "🔵 Confirmed - Order confirmed";
+                  statusDisplay =
+                    "🔵 Confirmed - Order Prepared , Getting ready to ship";
                   break;
                 case "shipped":
                   statusDisplay = "🟠 Shipped - On its way!";
