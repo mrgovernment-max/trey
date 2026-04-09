@@ -3,6 +3,10 @@
   let products = []; // will be filled from API
   let msize = null;
 
+  ///dont show user acc logo if nt logged in
+  const userId = sessionStorage.getItem("userId");
+  const isLoggedIn = !!userId;
+
   //AOS animation
   AOS.init({
     duration: 1000, // animation duration (ms)
@@ -17,7 +21,8 @@
   const navLinks = document.querySelectorAll("[data-page]");
   const productGrid = document.getElementById("products-grid");
   const homeFeatured = document.getElementById("home-featured");
-  const detailContainer = document.getElementById("detail-container");
+  const showProductDetailcontainer =
+    document.getElementById("detail-container");
   const cartContainer = document.getElementById("cart-container");
   const cartCountSpan = document.getElementById("cart-count");
   const acc = document.getElementById("account");
@@ -31,10 +36,6 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (pageId === "cart") renderCart();
   }
-
-  ///dont show user acc logo if nt logged in
-  const userId = sessionStorage.getItem("userId");
-  const isLoggedIn = !!userId;
 
   !isLoggedIn ? (acc.style.display = "none") : "block";
 
@@ -188,7 +189,7 @@
 
     // Check login status for button state
 
-    detailContainer.innerHTML = `
+    showProductDetailcontainer.innerHTML = `
         <div class="detail-gallery">
             <img src="${images[0]}" class="main-img" id="detail-main-img">
             <div class="thumbnails" id="detail-thumbs">
@@ -502,7 +503,9 @@
       html += `
         <div class="cart-item" data-cart-id="${item.cartId}">
             <div class="cart-img">
-                <img src="${item.img_url}" alt="${item.name}">
+                <img src="${item.img_url}"  data-item-id="${
+        item.product_id
+      }" alt="${item.name}">
             </div>
             <div class="cart-name">
                 <h4>${item.name}</h4>
@@ -547,6 +550,13 @@
       btn.addEventListener("click", (e) => {
         const cartId = parseInt(e.target.dataset.cartId);
         removeFromCart(cartId, userId);
+      });
+    });
+
+    document.querySelectorAll(".cart-img").forEach((item) => {
+      item.addEventListener("click", (e) => {
+        const cartId = parseInt(e.target.dataset.itemId);
+        showProductDetail(cartId);
       });
     });
 

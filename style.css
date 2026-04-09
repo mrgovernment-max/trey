@@ -1609,6 +1609,7 @@ body {
   background: #f9f9f6;
   border: 1px solid #ecece5;
   overflow-x: auto;
+  cursor: pointer;
 }
 .cart-item {
   display: grid;
@@ -1629,6 +1630,12 @@ body {
   width: 100%;
   aspect-ratio: 1/1.2;
   object-fit: cover;
+}
+
+.cart-item img:hover {
+  transform: scale(1.2);
+  border-radius: 20px;
+  transition: 0.5s ease-in-out;
 }
 .cart-item h4 {
   font-weight: 450;
