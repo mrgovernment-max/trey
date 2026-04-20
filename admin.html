@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Portal - OJ Studios</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", system-ui, -apple-system, sans-serif;
+        background: #fafaf8;
+        color: #1e1e1e;
+      }
+
+      /* Admin Login Page */
+      .admin-login {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #fafaf8;
+      }
+
+      .login-card {
+        background: #ffffff;
+        border: 1px solid #eaeae4;
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .login-card h2 {
+        font-size: 1.8rem;
+        font-weight: 380;
+        margin-bottom: 0.5rem;
+      }
+
+      .login-card p {
+        color: #6f6f69;
+        margin-bottom: 2rem;
+      }
+
+      .login-card input {
+        width: 100%;
+        padding: 0.8rem;
+        background: #f9f9f6;
+        border: 1px solid #e2e2db;
+        margin-bottom: 1rem;
+        font-family: inherit;
+      }
+
+      .login-card input:focus {
+        outline: none;
+        border-color: #c9a46c;
+      }
+
+      .login-card button {
+        width: 100%;
+        background: #232321;
+        color: white;
+        border: none;
+        padding: 0.9rem;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .login-card button:hover {
+        background: #3b3b38;
+      }
+
+      .error-msg {
+        color: #c62828;
+        margin-top: 1rem;
+        text-align: center;
+      }
+
+      /* Admin Dashboard */
+      .admin-container {
+        display: none;
+      }
+
+      .admin-header {
+        background: #ffffff;
+        border-bottom: 1px solid #eaeae4;
+        padding: 1rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .admin-header h1 {
+        font-size: 1.5rem;
+        font-weight: 450;
+      }
+
+      .admin-header h1 span {
+        font-weight: 280;
+        color: #c9a46c;
+      }
+
+      .logout-btn {
+        background: transparent;
+        border: 1px solid #e2e2db;
+        padding: 0.5rem 1.2rem;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .logout-btn:hover {
+        background: #232321;
+        color: white;
+      }
+
+      .admin-layout {
+        display: flex;
+        min-height: calc(100vh - 60px);
+      }
+
+      /* Sidebar */
+      .admin-sidebar {
+        width: 260px;
+        background: #ffffff;
+        border-right: 1px solid #eaeae4;
+        padding: 1.5rem;
+      }
+
+      .sidebar-menu {
+        list-style: none;
+      }
+
+      .sidebar-menu li {
+        margin-bottom: 0.5rem;
+      }
+
+      .sidebar-menu button {
+        width: 100%;
+        text-align: left;
+        padding: 0.8rem 1rem;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.95rem;
+        color: #4f4f4b;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .sidebar-menu button i {
+        width: 22px;
+        color: #b5b5ad;
+      }
+
+      .sidebar-menu button:hover {
+        background: #f9f9f6;
+        color: #252523;
+      }
+
+      .sidebar-menu button.active {
+        background: #f9f9f6;
+        color: #c9a46c;
+        border-left: 3px solid #c9a46c;
+      }
+
+      .sidebar-menu button.active i {
+        color: #c9a46c;
+      }
+
+      /* Main Content */
+      .admin-main {
+        flex: 1;
+        padding: 2rem;
+        overflow-x: auto;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: #ffffff;
+        border: 1px solid #eaeae4;
+        padding: 1.5rem;
+        text-align: center;
+      }
+
+      .stat-card h3 {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        color: #6f6f69;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-card .stat-number {
+        font-size: 2.5rem;
+        font-weight: 450;
+        color: #c9a46c;
+      }
+
+      .section-title {
+        font-size: 1.3rem;
+        font-weight: 400;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eaeae4;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #ffffff;
+        border: 1px solid #eaeae4;
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #efefe9;
+      }
+
+      .data-table th {
+        background: #f9f9f6;
+        font-weight: 500;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        color: #6f6f69;
+      }
+
+      .data-table tr:hover {
+        background: #fafaf8;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 0.25rem 0.7rem;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        border-radius: 20px;
+      }
+
+      .status-pending {
+        background: #fff3e0;
+        color: #e6a017;
+      }
+      .status-confirmed {
+        background: #e3f2fd;
+        color: #1565c0;
+      }
+      .status-shipped {
+        background: #fff8e1;
+        color: #f57c00;
+      }
+      .status-delivered {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      .status-cancelled {
+        background: #ffebee;
+        color: #c62828;
+      }
+
+      .status-select {
+        padding: 0.3rem;
+        font-family: inherit;
+        border: 1px solid #e2e2db;
+      }
+
+      .export-btn {
+        background: #232321;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        font-family: inherit;
+      }
+
+      .export-btn:hover {
+        background: #3b3b38;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 2rem;
+        color: #8a8a84;
+      }
+
+      @media (max-width: 768px) {
+        .admin-layout {
+          flex-direction: column;
+        }
+        .admin-sidebar {
+          width: 100%;
+          border-right: none;
+          border-bottom: 1px solid #eaeae4;
+        }
+        .sidebar-menu {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+        .sidebar-menu li {
+          margin-bottom: 0;
+        }
+        .sidebar-menu button {
+          width: auto;
+        }
+        .data-table {
+          display: block;
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Login Page -->
+    <div id="admin-login" class="admin-login">
+      <div class="login-card">
+        <h2>admin portal</h2>
+        <p>enter credentials to continue</p>
+        <input
+          type="email"
+          id="admin-email"
+          placeholder="Email"
+          autocomplete="off"
+        />
+        <input type="password" id="admin-password" placeholder="Password" />
+        <button id="admin-login-btn">login</button>
+        <div id="login-error" class="error-msg"></div>
+      </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="admin-container">
+      <div class="admin-header">
+        <h1>OJ <span>|| studios</span> · Admin</h1>
+        <button class="logout-btn" id="admin-logout">logout</button>
+      </div>
+      <div class="admin-layout">
+        <div class="admin-sidebar">
+          <ul class="sidebar-menu">
+            <li>
+              <button data-tab="dashboard" class="active">
+                <i class="fa-solid fa-gauge"></i> Dashboard
+              </button>
+            </li>
+            <li>
+              <button data-tab="orders">
+                <i class="fa-solid fa-box"></i> Orders
+              </button>
+            </li>
+            <li>
+              <button data-tab="products">
+                <i class="fa-solid fa-shirt"></i> Products
+              </button>
+            </li>
+            <li>
+              <button data-tab="customers">
+                <i class="fa-solid fa-user"></i> Customers
+              </button>
+            </li>
+          </ul>
+        </div>
+        <div class="admin-main">
+          <div id="dashboard-tab">
+            <div class="stats-grid" id="stats-container">
+              <div class="stat-card">
+                <h3>loading...</h3>
+                <div class="stat-number">-</div>
+              </div>
+            </div>
+          </div>
+          <div id="orders-tab" style="display: none">
+            <button class="export-btn" id="export-orders">
+              <i class="fa-solid fa-arrow-turn-up"></i> Export to CSV
+            </button>
+            <div id="orders-container">
+              <div class="loading">loading orders...</div>
+            </div>
+          </div>
+          <div id="products-tab" style="display: none">
+            <div id="products-container">
+              <div class="loading">loading products...</div>
+            </div>
+          </div>
+          <div id="customers-tab" style="display: none">
+            <div id="customers-container">
+              <div class="loading">loading customers...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "https://backendroutes-lcpt.onrender.com";
+
+      // Check if already logged in
+      if (
+        sessionStorage.getItem("isAdmin") === "true" &&
+        sessionStorage.getItem("adminId")
+      ) {
+        document.getElementById("admin-login").style.display = "none";
+        document.getElementById("admin-dashboard").style.display = "block";
+        loadDashboard();
+        loadOrders();
+        loadProducts();
+        loadCustomers();
+      }
+
+      // Admin Login
+      document
+        .getElementById("admin-login-btn")
+        .addEventListener("click", async () => {
+          const email = document.getElementById("admin-email").value.trim();
+          const password = document.getElementById("admin-password").value;
+          const errorDiv = document.getElementById("login-error");
+
+          if (!email || !password) {
+            errorDiv.textContent = "Please enter email and password";
+            return;
+          }
+
+          errorDiv.textContent = "Logging in...";
+
+          try {
+            const res = await fetch(`${API_BASE}/admin/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+              sessionStorage.setItem("isAdmin", "true");
+              sessionStorage.setItem("adminId", data.userId);
+              sessionStorage.setItem("adminName", data.userName);
+
+              document.getElementById("admin-login").style.display = "none";
+              document.getElementById("admin-dashboard").style.display =
+                "block";
+
+              loadDashboard();
+              loadOrders();
+              loadProducts();
+              loadCustomers();
+            } else {
+              errorDiv.textContent = data.message || "Login failed";
+            }
+          } catch (err) {
+            errorDiv.textContent = "Connection error";
+            console.error(err);
+          }
+        });
+
+      // Logout
+      document.getElementById("admin-logout").addEventListener("click", () => {
+        sessionStorage.removeItem("isAdmin");
+        sessionStorage.removeItem("adminId");
+        sessionStorage.removeItem("adminName");
+        document.getElementById("admin-dashboard").style.display = "none";
+        document.getElementById("admin-login").style.display = "flex";
+        document.getElementById("admin-email").value = "";
+        document.getElementById("admin-password").value = "";
+      });
+
+      // Tab navigation
+      document.querySelectorAll(".sidebar-menu button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".sidebar-menu button")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          const tab = btn.dataset.tab;
+          document.getElementById("dashboard-tab").style.display =
+            tab === "dashboard" ? "block" : "none";
+          document.getElementById("orders-tab").style.display =
+            tab === "orders" ? "block" : "none";
+          document.getElementById("products-tab").style.display =
+            tab === "products" ? "block" : "none";
+          document.getElementById("customers-tab").style.display =
+            tab === "customers" ? "block" : "none";
+
+          if (tab === "orders") loadOrders();
+          if (tab === "products") loadProducts();
+          if (tab === "customers") loadCustomers();
+        });
+      });
+
+      // Load Dashboard Stats
+      async function loadDashboard() {
+        try {
+          const res = await fetch(`${API_BASE}/admin/stats`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: sessionStorage.getItem("adminId"),
+              isAdmin: true,
+            }),
+          });
+          const stats = await res.json();
+
+          document.getElementById("stats-container").innerHTML = `
+                    <div class="stat-card"><h3>Total Orders</h3><div class="stat-number">${
+                      stats.totalOrders || 0
+                    }</div></div>
+                    <div class="stat-card"><h3>Total Customers</h3><div class="stat-number">${
+                      stats.totalCustomers || 0
+                    }</div></div>
+                    <div class="stat-card"><h3>Total Products</h3><div class="stat-number">${
+                      stats.totalProducts || 0
+                    }</div></div>
+                    <div class="stat-card"><h3>Revenue</h3><div class="stat-number">${`${
+                      stats.totalRevenue || 0
+                    } GH₵`} </div></div>
+                    <div class="stat-card"><h3>Pending Orders</h3><div class="stat-number">${
+                      stats.pendingOrders || 0
+                    }</div></div>
+                    <div class="stat-card"><h3>Last 7 Days</h3><div class="stat-number">${
+                      stats.recentOrders || 0
+                    }</div></div>
+                `;
+        } catch (err) {
+          console.error("Load stats error:", err);
+        }
+      }
+
+      // Load Orders
+      async function loadOrders() {
+        const container = document.getElementById("orders-container");
+        container.innerHTML = '<div class="loading">loading orders...</div>';
+
+        try {
+          const res = await fetch(`${API_BASE}/admin/orders`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: sessionStorage.getItem("adminId"),
+              isAdmin: true,
+            }),
+          });
+          const orders = await res.json();
+
+          if (!orders.length) {
+            container.innerHTML = '<div class="loading">No orders found</div>';
+            return;
+          }
+
+          let html = `<table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order Ref</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+          orders.forEach((order) => {
+            const statusClass = `status-${order.status || "pending"}`;
+            html += `
+                        <tr>
+                            <td>${order.payment_reference || "-"}</td>
+                            <td>${
+                              order.full_name ||
+                              `${order.first_name} ${order.surname}`
+                            }</td>
+                            <td>${order.email || "-"}</td>
+                            <td>$${parseFloat(order.total_amount).toFixed(
+                              2
+                            )}</td>
+                            <td><span class="status-badge ${statusClass}">${
+              order.status || "pending"
+            }</span></td>
+                            <td>${new Date(
+                              order.created_at
+                            ).toLocaleDateString()}</td>
+                            <td>
+                                <select class="status-select" data-order-id="${
+                                  order.id
+                                }">
+                                    <option value="pending" ${
+                                      order.status === "pending"
+                                        ? "selected"
+                                        : ""
+                                    }>Pending</option>
+                                    <option value="confirmed" ${
+                                      order.status === "confirmed"
+                                        ? "selected"
+                                        : ""
+                                    }>Confirmed</option>
+                                    <option value="shipped" ${
+                                      order.payment_status === "shipped"
+                                        ? "selected"
+                                        : ""
+                                    }>Shipped</option>
+                                    <option value="delivered" ${
+                                      order.status === "delivered"
+                                        ? "selected"
+                                        : ""
+                                    }>Delivered</option>
+                                    <option value="cancelled" ${
+                                      order.status === "cancelled"
+                                        ? "selected"
+                                        : ""
+                                    }>Cancelled</option>
+                                </select>
+                            </td>
+                        </tr>
+                    `;
+          });
+
+          html += `</tbody></table>`;
+          container.innerHTML = html;
+
+          // Add status change listeners
+          document.querySelectorAll(".status-select").forEach((select) => {
+            select.addEventListener("change", async (e) => {
+              const orderId = e.target.dataset.orderId;
+              const newStatus = e.target.value;
+
+              try {
+                const res = await fetch(
+                  `${API_BASE}/admin/order/${orderId}/status`,
+                  {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      status: newStatus,
+                      userId: sessionStorage.getItem("adminId"),
+                      isAdmin: true,
+                    }),
+                  }
+                );
+
+                if (res.ok) {
+                  alert("Order status updated!");
+                  loadOrders();
+                  loadDashboard();
+                } else {
+                  alert("Failed to update status");
+                }
+              } catch (err) {
+                console.error(err);
+                alert("Error updating status");
+              }
+            });
+          });
+        } catch (err) {
+          console.error("Load orders error:", err);
+          container.innerHTML =
+            '<div class="loading">Error loading orders</div>';
+        }
+      }
+
+      // Load Products
+      async function loadProducts() {
+        const container = document.getElementById("products-container");
+        container.innerHTML = '<div class="loading">loading products...</div>';
+
+        try {
+          const res = await fetch(`${API_BASE}/admin/products`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: sessionStorage.getItem("adminId"),
+              isAdmin: true,
+            }),
+          });
+          const products = await res.json();
+
+          if (!products.length) {
+            container.innerHTML =
+              '<div class="loading">No products found</div>';
+            return;
+          }
+
+          let html = `<table class="data-table">
+                    <thead>
+                        <tr><th>ID</th><th>Image</th><th>Name</th><th>Price</th><th>Color</th><th>Rating</th></tr>
+                    </thead>
+                    <tbody>`;
+
+          products.forEach((p) => {
+            html += `
+                        <tr>
+                            <td>${p.id}</td>
+                            <td><img src="${
+                              p.img_url
+                            }" style="width: 50px; height: 60px; object-fit: cover;"></td>
+                            <td>${p.name}</td>
+                            <td>${parseFloat(p.price).toFixed(2)} GH₵</td>
+                            <td>${p.color || "-"}</td>
+                            <td>${p.rating || "-"}</td>
+                        </tr>
+                    `;
+          });
+
+          html += `</tbody></table>`;
+          container.innerHTML = html;
+        } catch (err) {
+          console.error("Load products error:", err);
+          container.innerHTML =
+            '<div class="loading">Error loading products</div>';
+        }
+      }
+
+      // Load Customers
+      async function loadCustomers() {
+        const container = document.getElementById("customers-container");
+        container.innerHTML = '<div class="loading">loading customers...</div>';
+
+        try {
+          const res = await fetch(`${API_BASE}/admin/customers`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: sessionStorage.getItem("adminId"),
+              isAdmin: true,
+            }),
+          });
+          const customers = await res.json();
+
+          if (!customers.length) {
+            container.innerHTML =
+              '<div class="loading">No customers found</div>';
+            return;
+          }
+
+          let html = `<table class="data-table">
+                    <thead><tr><th>ID</th><th>First Name</th><th>Surname</th><th>Email</th><th>Joined Date</th></tr></thead>
+                    <tbody>`;
+
+          customers.forEach((c) => {
+            html += `
+                        <tr>
+                            <td>${c.id}</td>
+                            <td>${c.first_name}</td>
+                            <td>${c.surname}</td>
+                            <td>${c.email}</td>
+                            <td>${new Date(
+                              c.created_at
+                            ).toLocaleDateString()}</td>
+                        </tr>
+                    `;
+          });
+
+          html += `</tbody></table>`;
+          container.innerHTML = html;
+        } catch (err) {
+          console.error("Load customers error:", err);
+          container.innerHTML =
+            '<div class="loading">Error loading customers</div>';
+        }
+      }
+
+      // Export Orders
+      document
+        .getElementById("export-orders")
+        ?.addEventListener("click", async () => {
+          try {
+            const res = await fetch(`${API_BASE}/admin/export/orders`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                userId: sessionStorage.getItem("adminId"),
+                isAdmin: true,
+              }),
+            });
+
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `orders_${Date.now()}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+          } catch (err) {
+            console.error("Export error:", err);
+            alert("Failed to export orders");
+          }
+        });
+    </script>
+  </body>
+</html>

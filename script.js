@@ -447,6 +447,10 @@
       console.error("Cart count error:", err);
     }
   }
+
+  /////////
+  ///////RENDERCART
+  ///////
   async function renderCart() {
     if (!cartContainer) return;
 
@@ -528,19 +532,146 @@
         `;
     });
 
-    const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    let total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+    const subtotal = total;
+    let shippingCost = 0;
+    let selectedRegion = "accra";
+
+    // Function to update total based on shipping
+    function updateTotal() {
+      const subtotalElem = document.getElementById("subtotal-amount");
+      const shippingElem = document.getElementById("shipping-amount");
+      const totalElem = document.getElementById("total-amount");
+
+      if (subtotalElem) subtotalElem.textContent = `GH₵ ${subtotal.toFixed(2)}`;
+      if (shippingElem)
+        shippingElem.textContent = `GH₵ ${shippingCost.toFixed(2)}`;
+      if (totalElem)
+        totalElem.textContent = `GH₵ ${(subtotal + shippingCost).toFixed(2)}`;
+
+      //  store the total in GH₵ for Paystack
+      total = subtotal + shippingCost;
+    }
+
+    // Shipping option listeners
+    function attachShippingListeners() {
+      const shippingRadios = document.querySelectorAll(
+        'input[name="shipping"]'
+      );
+
+      shippingRadios.forEach((radio) => {
+        radio.removeEventListener("change", handleShippingChange);
+        radio.addEventListener("change", handleShippingChange);
+      });
+    }
+
+    function handleShippingChange(e) {
+      const selectedRadio = e.target;
+      const price = parseFloat(selectedRadio.value);
+
+      if (!isNaN(price)) {
+        shippingCost = price;
+        selectedRegion = selectedRadio.dataset.region;
+        updateTotal();
+
+        // Store selected shipping info
+        sessionStorage.setItem(
+          "selectedShipping",
+          JSON.stringify({
+            region: selectedRegion,
+            cost: shippingCost,
+          })
+        );
+      }
+    }
+
+    // Check for stored shipping preference
+    const storedShipping = sessionStorage.getItem("selectedShipping");
+    if (storedShipping) {
+      const shipping = JSON.parse(storedShipping);
+      shippingCost = shipping.cost;
+      selectedRegion = shipping.region;
+    }
+
+    // Initial update
+    updateTotal();
+
+    // Attach listeners after rendering
+    setTimeout(attachShippingListeners, 100);
 
     html += `</div>`;
 
     html += `
-        <div class="cart-summary">
-            <h3>summary</h3>
-            <p style="margin: 1.5rem 0; font-size: 2rem;">$${total.toFixed(
-              2
-            )}</p>
-            <button class="checkout-btn" id="paystack-checkout-btn">proceed to payment</button>
-            <p style="margin-top:1rem; font-size:0.8rem;"> <i class="fa-solid fa-shield"></i>  secure payment via Paystack</p>
+    <div class="cart-summary">
+    <span style="color: #bf9a2c;">Please make sure you choose the right type of delivery to prevent delay in delivery or improper order processing</span> 
+    <!-- Subtotal -->
+    <div class="summary-row">
+        <span>subtotal</span>
+        <span id="subtotal-amount">$0.00</span>
+    </div>
+    
+    <!-- Shipping Section -->
+    <div class="shipping-section">
+        <div class="summary-row shipping-header">
+            <span>shipping</span>
+            <span id="shipping-amount">$0.00</span>
         </div>
+        
+        <div class="shipping-options">
+            <label class="shipping-option">
+                <input type="radio" name="shipping" value="25" data-region="accra" data-price="25">
+                <span class="shipping-details">
+                    <strong>Accra</strong>
+                    <small>Delivery within 1-3 days</small>
+                </span>
+                <span class="shipping-price">GH₵25.00</span>
+            </label>
+            
+            <label class="shipping-option">
+                <input type="radio" name="shipping" value="50" data-region="ghana-other" data-price="50">
+                <span class="shipping-details">
+                    <strong>Other Regions (Ghana)</strong>
+                    <small>Delivery within 3-5 days</small>
+                </span>
+                <span class="shipping-price">GH₵50.00</span>
+            </label>
+            
+            <label class="shipping-option">
+                <input type="radio" name="shipping" value="220" data-region="africa" data-price="200">
+                <span class="shipping-details">
+                    <strong>Africa</strong>
+                    <small>Delivery within 5-10 days</small>
+                </span>
+                <span class="shipping-price">GH₵220</span>
+            </label>
+            
+            <label class="shipping-option">
+                <input type="radio" name="shipping" value="330" data-region="international" data-price="300">
+                <span class="shipping-details">
+                    <strong>International</strong>
+                    <small>Delivery within 10-14 days</small>
+                </span>
+                <span class="shipping-price">GH₵330</span>
+            </label>
+        </div>
+    </div>
+    
+    <!-- Divider -->
+    <div class="summary-divider"></div>
+    
+    <!-- Total -->
+    <div class="summary-row total-row">
+        <span>total</span>
+        <span id="total-amount" class="total-price">$0.00</span>
+    </div>
+    
+    <!-- Currency Note -->
+    <p class="currency-note">* All prices in Ghana Cedis (GH₵) / USD conversion at checkout</p>
+    
+    <button class="checkout-btn" id="paystack-checkout-btn">proceed to payment</button>
+    <p class="secure-note"><i class="fa-solid fa-shield"></i> secure payment via Paystack</p>
+</div>
     `;
 
     cartContainer.innerHTML = html;
@@ -866,10 +997,7 @@
           alert("Please enter your city.");
           return;
         }
-        if (!deliveryData.region) {
-          alert("Please select your region.");
-          return;
-        }
+
         if (!deliveryData.country) {
           alert("Please select your country.");
           return;
