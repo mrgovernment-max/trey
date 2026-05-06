@@ -3,6 +3,10 @@
   let products = []; // will be filled from API
   let msize = null;
 
+  ///dont show user acc logo if nt logged in
+  const userId = sessionStorage.getItem("userId");
+  const isLoggedIn = !!userId;
+
   //AOS animation
   AOS.init({
     duration: 1000, // animation duration (ms)
@@ -17,9 +21,11 @@
   const navLinks = document.querySelectorAll("[data-page]");
   const productGrid = document.getElementById("products-grid");
   const homeFeatured = document.getElementById("home-featured");
-  const detailContainer = document.getElementById("detail-container");
+  const showProductDetailcontainer =
+    document.getElementById("detail-container");
   const cartContainer = document.getElementById("cart-container");
   const cartCountSpan = document.getElementById("cart-count");
+  const acc = document.getElementById("account");
 
   // helper: show page
   function showPage(pageId) {
@@ -30,6 +36,8 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (pageId === "cart") renderCart();
   }
+
+  !isLoggedIn ? (acc.style.display = "none") : "block";
 
   // fetch products from API
   async function fetchProducts() {
@@ -77,7 +85,7 @@
   // render first 3 as featured (or any logic)
   function renderHomeFeatured() {
     if (!homeFeatured || products.length === 0) return;
-    const featured = products.slice(0, 3);
+    const featured = products.slice(3, 6);
     homeFeatured.innerHTML = featured
       .map(
         (p) => `
@@ -93,6 +101,7 @@
           `
       )
       .join("");
+
     // attach click listeners
     document.querySelectorAll(".featured-item").forEach((el) => {
       el.addEventListener("click", () => {
@@ -126,7 +135,7 @@
             <h3>${p.name}</h3>
             <div class="product-price">${
               parseFloat(p.price) > 0
-                ? `$${parseFloat(p.price).toFixed(2)}`
+                ? `${parseFloat(p.price).toFixed(2)} GH₵`
                 : "Not Available to Public"
             }</div>
             <div class="brand-mini">
@@ -179,10 +188,8 @@
         : [product.img_url];
 
     // Check login status for button state
-    const userId = sessionStorage.getItem("userId");
-    const isLoggedIn = !!userId;
 
-    detailContainer.innerHTML = `
+    showProductDetailcontainer.innerHTML = `
         <div class="detail-gallery">
             <img src="${images[0]}" class="main-img" id="detail-main-img">
             <div class="thumbnails" id="detail-thumbs">
@@ -200,7 +207,7 @@
             <h2>${product.name}</h2>
             <div id="detail-id" class="detail-id" style="${
               product.release === "Launching Soon" ? "display:none" : ""
-            }">$${parseFloat(product.price).toFixed(2)} USD 
+            }">${parseFloat(product.price).toFixed(2)} GH₵
                 <span class="rating-stars">${"★".repeat(
                   Math.floor(product.rating || 0)
                 )}${product.rating % 1 >= 0.5 ? "½" : ""}</span>
@@ -440,6 +447,10 @@
       console.error("Cart count error:", err);
     }
   }
+
+  /////////
+  ///////RENDERCART
+  ///////
   async function renderCart() {
     if (!cartContainer) return;
 
@@ -456,11 +467,13 @@
     let userName = sessionStorage.getItem("userName");
 
     const cartname = document.getElementById("cartname");
-    cartname.textContent = `${userName}'s Cart`;
+    if (cartname) {
+      cartname.textContent = `${userName}'s Cart`;
+    }
 
     if (!userName) {
       userName = "Guest";
-      cartname.textContent = `${userName}'s Cart`;
+      if (cartname) cartname.textContent = `${userName}'s Cart`;
     }
 
     const res = await fetch(
@@ -492,44 +505,173 @@
 
     cart.forEach((item) => {
       html += `
-      <div class="cart-item" data-cart-id="${item.cartId}">
-      <div class="cart-img">
-          <img src="${item.img_url}" alt="${item.name}">
-      </div>
-      <div class="cart-name">
-          <h4>${item.name}</h4>
-      </div>
-      <div class="cart-price">
-          <span>$${parseFloat(item.price).toFixed(2)}</span>
-      </div>
-      <div class="cart-quantity">
-      <span class="size-badge">${item.quantity}</span>
-      </div>
-      <div class="cart-size">
-          <span class="size-badge">${item.size || "M"}</span>
-      </div>
-      <div class="cart-remove">
-          <i class="fa-regular fa-trash-can remove-item" data-cart-id="${
-            item.cartId
-          }"></i>
-      </div>
-  </div>
+        <div class="cart-item" data-cart-id="${item.cartId}">
+            <div class="cart-img">
+                <img src="${item.img_url}"  data-item-id="${
+        item.product_id
+      }" alt="${item.name}">
+            </div>
+            <div class="cart-name">
+                <h4>${item.name}</h4>
+            </div>
+            <div class="cart-price">
+                <span>$${parseFloat(item.price).toFixed(2)}</span>
+            </div>
+            <div class="cart-quantity">
+                <span class="size-badge">${item.quantity}</span>
+            </div>
+            <div class="cart-size">
+                <span class="size-badge">${item.size || "M"}</span>
+            </div>
+            <div class="cart-remove">
+                <i class="fa-regular fa-trash-can remove-item" data-cart-id="${
+                  item.cartId
+                }"></i>
+            </div>
+        </div>
         `;
     });
 
-    const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    let total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+    const subtotal = total;
+    let shippingCost = 0;
+    let selectedRegion = "accra";
+
+    // Function to update total based on shipping
+    function updateTotal() {
+      const subtotalElem = document.getElementById("subtotal-amount");
+      const shippingElem = document.getElementById("shipping-amount");
+      const totalElem = document.getElementById("total-amount");
+
+      if (subtotalElem) subtotalElem.textContent = `GH₵ ${subtotal.toFixed(2)}`;
+      if (shippingElem)
+        shippingElem.textContent = `GH₵ ${shippingCost.toFixed(2)}`;
+      if (totalElem)
+        totalElem.textContent = `GH₵ ${(subtotal + shippingCost).toFixed(2)}`;
+
+      //  store the total in GH₵ for Paystack
+      total = subtotal + shippingCost;
+    }
+
+    // Shipping option listeners
+    function attachShippingListeners() {
+      const shippingRadios = document.querySelectorAll(
+        'input[name="shipping"]'
+      );
+
+      shippingRadios.forEach((radio) => {
+        radio.removeEventListener("change", handleShippingChange);
+        radio.addEventListener("change", handleShippingChange);
+      });
+    }
+
+    function handleShippingChange(e) {
+      const selectedRadio = e.target;
+      const price = parseFloat(selectedRadio.value);
+
+      if (!isNaN(price)) {
+        shippingCost = price;
+        selectedRegion = selectedRadio.dataset.region;
+        updateTotal();
+
+        // Store selected shipping info
+        sessionStorage.setItem(
+          "selectedShipping",
+          JSON.stringify({
+            region: selectedRegion,
+            cost: shippingCost,
+          })
+        );
+      }
+    }
+
+    // Check for stored shipping preference
+    const storedShipping = sessionStorage.getItem("selectedShipping");
+    if (storedShipping) {
+      const shipping = JSON.parse(storedShipping);
+      shippingCost = shipping.cost;
+      selectedRegion = shipping.region;
+    }
+
+    // Initial update
+    updateTotal();
+
+    // Attach listeners after rendering
+    setTimeout(attachShippingListeners, 100);
 
     html += `</div>`;
 
     html += `
-        <div class="cart-summary">
-            <h3>summary</h3>
-            <p style="margin: 1.5rem 0; font-size: 2rem;">$${total.toFixed(
-              2
-            )}</p>
-            <button class="checkout-btn" id="fake-checkout">proceed to checkout</button>
-            <p style="margin-top:1rem; font-size:0.8rem;">(demo — no payment)</p>
+    <div class="cart-summary">
+    <span style="color: #bf9a2c;">Please make sure you choose the right type of delivery to prevent delay in delivery or improper order processing</span> 
+    <!-- Subtotal -->
+    <div class="summary-row">
+        <span>subtotal</span>
+        <span id="subtotal-amount">$0.00</span>
+    </div>
+    
+    <!-- Shipping Section -->
+    <div class="shipping-section">
+        <div class="summary-row shipping-header">
+            <span>shipping</span>
+            <span id="shipping-amount">$0.00</span>
         </div>
+        
+        <div class="shipping-options">
+            <label class="shipping-option">
+                <input type="radio" name="shipping" value="25" data-region="accra" data-price="25">
+                <span class="shipping-details">
+                    <strong>Accra</strong>
+                    <small>Delivery within 1-3 days</small>
+                </span>
+                <span class="shipping-price">GH₵25.00</span>
+            </label>
+            
+            <label class="shipping-option">
+                <input type="radio" name="shipping" value="50" data-region="ghana-other" data-price="50">
+                <span class="shipping-details">
+                    <strong>Other Regions (Ghana)</strong>
+                    <small>Delivery within 3-5 days</small>
+                </span>
+                <span class="shipping-price">GH₵50.00</span>
+            </label>
+            
+            <label class="shipping-option">
+                <input type="radio" name="shipping" value="220" data-region="africa" data-price="200">
+                <span class="shipping-details">
+                    <strong>Africa</strong>
+                    <small>Delivery within 5-10 days</small>
+                </span>
+                <span class="shipping-price">GH₵220</span>
+            </label>
+            
+            <label class="shipping-option">
+                <input type="radio" name="shipping" value="330" data-region="international" data-price="300">
+                <span class="shipping-details">
+                    <strong>International</strong>
+                    <small>Delivery within 10-14 days</small>
+                </span>
+                <span class="shipping-price">GH₵330</span>
+            </label>
+        </div>
+    </div>
+    
+    <!-- Divider -->
+    <div class="summary-divider"></div>
+    
+    <!-- Total -->
+    <div class="summary-row total-row">
+        <span>total</span>
+        <span id="total-amount" class="total-price">$0.00</span>
+    </div>
+    
+    <!-- Currency Note -->
+    <p class="currency-note">* All prices in Ghana Cedis (GH₵) / USD conversion at checkout</p>
+    
+    <button class="checkout-btn" id="paystack-checkout-btn">proceed to payment</button>
+    <p class="secure-note"><i class="fa-solid fa-shield"></i> secure payment via Paystack</p>
+</div>
     `;
 
     cartContainer.innerHTML = html;
@@ -541,8 +683,348 @@
         removeFromCart(cartId, userId);
       });
     });
-    document.getElementById("fake-checkout")?.addEventListener("click", () => {
-      alert("checkout demo — items would be purchased. thank you.");
+
+    document.querySelectorAll(".cart-img").forEach((item) => {
+      item.addEventListener("click", (e) => {
+        const cartId = parseInt(e.target.dataset.itemId);
+        showProductDetail(cartId);
+      });
+    });
+
+    const checkoutBtn = document.getElementById("paystack-checkout-btn");
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener("click", async () => {
+        checkoutBtn.disabled = true;
+        checkoutBtn.textContent = "processing...";
+
+        try {
+          // Show delivery address modal
+          const deliveryData = await showDeliveryModal();
+          if (!deliveryData) {
+            enableCheckoutButton();
+            return;
+          }
+
+          // Get user email
+          let userEmail = document.getElementById("paymentmail").value.trim();
+          if (!userEmail) {
+            userEmail = prompt(
+              "Please enter your email address for order confirmation:",
+              ""
+            );
+            if (userEmail && userEmail.includes("@")) {
+              sessionStorage.setItem("userEmail", userEmail);
+            } else {
+              enableCheckoutButton();
+              return;
+            }
+          }
+
+          // Prepare payment data
+          const paymentData = {
+            total: total,
+            email: userEmail,
+            phone: deliveryData.phone || "Not provided",
+            first_name: deliveryData.fullname.split(" ")[0] || "Valued",
+            last_name:
+              deliveryData.fullname.split(" ").slice(1).join(" ") || "Customer",
+            userId: userId,
+            cartItems: cart,
+            delivery_address: deliveryData,
+          };
+
+          // Initialize Paystack payment
+          initializePaystackPayment(paymentData);
+        } catch (err) {
+          console.error("Checkout error:", err);
+          showPaymentMessage("An error occurred. Please try again.", "error");
+          enableCheckoutButton();
+        }
+      });
+    }
+  }
+
+  // PAYSTACK CHECKOUT INTEGRATION
+
+  // Paystack public Key
+  const PAYSTACK_PUBLIC_KEY =
+    "pk_live_72f7fb40a294df7d100a2f22611b2a96599a97f2";
+  // Initialize Paystack payment
+  function initializePaystackPayment(paymentData) {
+    const amountInPesewas = Math.round(paymentData.total * 100);
+    const reference = `TREY-${Date.now()}-${Math.floor(
+      Math.random() * 1000000
+    )}`;
+
+    const address = paymentData.delivery_address || {};
+
+    // Build custom fields array
+    const customFields = [
+      {
+        display_name: "Customer Name",
+        variable_name: "customer_name",
+        value: `${paymentData.first_name} ${paymentData.last_name}`,
+      },
+      {
+        display_name: "Email",
+        variable_name: "customer_email",
+        value: paymentData.email,
+      },
+      {
+        display_name: "Phone",
+        variable_name: "customer_phone",
+        value: paymentData.phone,
+      },
+      {
+        display_name: "Delivery Address",
+        variable_name: "delivery_address",
+        value: `${address.street_address || ""} ${
+          address.apartment || ""
+        }`.trim(),
+      },
+      {
+        display_name: "City / Region / Country",
+        variable_name: "location",
+        value: `${address.city || ""}, ${address.region || ""}, ${
+          address.country || ""
+        }`,
+      },
+      {
+        display_name: "Postal Code",
+        variable_name: "postal_code",
+        value: address.postal_code || "N/A",
+      },
+      {
+        display_name: "Order Reference",
+        variable_name: "order_ref",
+        value: reference,
+      },
+      {
+        display_name: "Total Amount",
+        variable_name: "total_amount",
+        value: `GHS ${paymentData.total.toFixed(2)}`,
+      },
+      {
+        display_name: "━━━━━━━━━━━━━━━━━━━━━",
+        variable_name: "separator",
+        value: "🛒 ORDER ITEMS 🛒",
+      },
+    ];
+
+    // Add each product as a separate custom field
+    paymentData.cartItems.forEach((item, idx) => {
+      customFields.push({
+        display_name: `Item ${idx + 1}`,
+        variable_name: `product_${idx + 1}`,
+        value: `${item.name} | Size: ${item.size || "N/A"} | Qty: ${
+          item.quantity
+        } | Price: $${parseFloat(item.price).toFixed(2)}`,
+      });
+    });
+
+    // Add footer
+    customFields.push({
+      display_name: "━━━━━━━━━━━━━━━━━━━━━",
+      variable_name: "footer",
+      value: "✅ Order confirmed",
+    });
+
+    const handler = PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email: paymentData.email,
+      amount: amountInPesewas,
+      currency: "GHS",
+      ref: reference,
+      first_name: paymentData.first_name,
+      last_name: paymentData.last_name,
+      phone: paymentData.phone,
+      metadata: {
+        custom_fields: customFields,
+      },
+      callback: function (response) {
+        console.log("Payment successful:", response);
+        showPaymentMessage("Verifying payment...", "info");
+        handleVerification(response, paymentData);
+      },
+      onClose: function () {
+        console.log("Payment modal closed");
+        showPaymentMessage("Payment cancelled. You can try again.", "error");
+        enableCheckoutButton();
+      },
+    });
+
+    handler.openIframe();
+  }
+  // Separate async function for verification
+  async function handleVerification(response, paymentData) {
+    try {
+      const verificationData = {
+        reference: response.reference,
+        userId: paymentData.userId,
+        paymentData: {
+          total: paymentData.total,
+          email: paymentData.email,
+          phone: paymentData.phone,
+          cartItems: paymentData.cartItems,
+          delivery_address: paymentData.delivery_address,
+        },
+      };
+
+      const verifyRes = await fetch(
+        "https://backendroutes-lcpt.onrender.com/verify-payment",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(verificationData),
+        }
+      );
+
+      const result = await verifyRes.json();
+
+      if (result.success) {
+        showPaymentMessage(
+          "✅ Order confirmed! Your items will be shipped soon.",
+          "success"
+        );
+
+        setTimeout(() => {
+          renderCart();
+          renderCartCount();
+        }, 2000);
+      } else {
+        showPaymentMessage("❌ " + result.message, "error");
+      }
+    } catch (err) {
+      console.error("Verification error:", err);
+      showPaymentMessage(
+        "❌ Could not verify payment. Please contact support.",
+        "error"
+      );
+    }
+
+    enableCheckoutButton();
+  }
+
+  // Show payment message in cart
+  function showPaymentMessage(message, type) {
+    const summaryDiv = document.querySelector(".cart-summary");
+    if (!summaryDiv) return;
+
+    const existingMsg = document.querySelector(".payment-message");
+    if (existingMsg) existingMsg.remove();
+
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `payment-message ${type}`;
+    msgDiv.style.cssText = `
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      background: ${
+        type === "success"
+          ? "#e8f5e9"
+          : type === "error"
+          ? "#ffebee"
+          : "#e3f2fd"
+      };
+      border-left: 4px solid ${
+        type === "success"
+          ? "#2e7d32"
+          : type === "error"
+          ? "#c62828"
+          : "#1565c0"
+      };
+      font-size: 0.85rem;
+      animation: slideDown 0.3s ease;
+  `;
+    msgDiv.innerHTML = message;
+
+    summaryDiv.insertBefore(msgDiv, summaryDiv.firstChild);
+
+    if (type !== "success") {
+      setTimeout(() => msgDiv.remove(), 5000);
+    }
+  }
+
+  // Enable checkout button
+  function enableCheckoutButton() {
+    const checkoutBtn = document.getElementById("paystack-checkout-btn");
+    if (checkoutBtn) {
+      checkoutBtn.disabled = false;
+      checkoutBtn.textContent = "proceed to payment";
+    }
+  }
+
+  // Show delivery address modal
+  function showDeliveryModal() {
+    return new Promise((resolve) => {
+      const modal = document.getElementById("delivery-modal");
+      if (!modal) {
+        console.error("Delivery modal not found");
+        resolve(null);
+        return;
+      }
+      const form = document.getElementById("delivery-form");
+
+      modal.style.display = "flex";
+
+      const submitHandler = (e) => {
+        e.preventDefault();
+
+        const deliveryData = {
+          fullname: document.getElementById("delivery-fullname").value.trim(),
+          street_address: document
+            .getElementById("street-address")
+            .value.trim(),
+          apartment: document.getElementById("apartment").value.trim(),
+          city: document.getElementById("city").value.trim(),
+          region: document.getElementById("region").value,
+          postal_code: document.getElementById("postal-code").value.trim(),
+          country: document.getElementById("country").value,
+          instructions: document
+            .getElementById("delivery-instructions")
+            .value.trim(),
+          phone: document.getElementById("phone").value.trim(),
+        };
+
+        if (!deliveryData.fullname) {
+          alert("Please enter your full name.");
+          return;
+        }
+        if (!deliveryData.street_address) {
+          alert("Please enter your street address.");
+          return;
+        }
+        if (!deliveryData.city) {
+          alert("Please enter your city.");
+          return;
+        }
+
+        if (!deliveryData.country) {
+          alert("Please select your country.");
+          return;
+        }
+
+        if (!deliveryData.phone) {
+          alert("Please select your country.");
+          return;
+        }
+
+        if (!deliveryData.postal_code) {
+          alert("Please select your country.");
+          return;
+        }
+
+        form.removeEventListener("submit", submitHandler);
+        modal.style.display = "none";
+        resolve(deliveryData);
+      };
+
+      form.addEventListener("submit", submitHandler);
+
+      window.closeDeliveryModal = () => {
+        form.removeEventListener("submit", submitHandler);
+        modal.style.display = "none";
+        resolve(null);
+      };
     });
   }
 
@@ -550,7 +1032,7 @@
   navLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
       e.preventDefault();
-      const page = link.dataset.page; // This should be "contact" for your contact link
+      const page = link.dataset.page;
 
       if (page === "home") {
         showPage("home");
@@ -746,8 +1228,7 @@ document.addEventListener("DOMContentLoaded", function () {
   updateActiveLink();
 });
 
-// TREY Newsletter Form - Professional Implementation
-
+// TREY Newsletter Form
 (function () {
   const newsletterForm = document.getElementById("treyNewsletterForm");
   if (!newsletterForm) return;
@@ -1088,12 +1569,3 @@ if (contactForm) {
     }
   });
 }
-
-// Add spinner animation
-//const style = document.createElement("style");
-//style.textContent = `
-//    @keyframes spin {
-//        to { transform: rotate(360deg); }
-//    }
-//  `;
-//document.head.appendChild(style);
