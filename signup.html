@@ -392,6 +392,7 @@
             id="first_name"
             placeholder="e.g. James"
             class="input-field"
+            autocomplete="given-name"
             required
           />
         </div>
@@ -405,6 +406,7 @@
             id="surname"
             placeholder="e.g. Wright"
             class="input-field"
+            autocomplete="family-name"
             required
           />
         </div>
@@ -418,6 +420,7 @@
             id="email"
             placeholder="hello@trey.studio"
             class="input-field"
+            autocomplete="email"
             required
           />
         </div>
@@ -432,6 +435,9 @@
               id="password"
               placeholder="··········"
               class="input-field"
+              minlength="8"
+              autocomplete="new-password"
+              aria-describedby="password-hint"
               required
             />
             <button
@@ -444,6 +450,7 @@
               <i class="fa-regular fa-eye" aria-hidden="true"></i>
             </button>
           </div>
+          <p id="password-hint" class="input-hint">at least 8 characters</p>
         </div>
 
         <button type="submit" class="register-btn">
@@ -536,11 +543,26 @@
         e.preventDefault();
 
         const userData = {
-          first_name: document.getElementById("first_name").value,
-          surname: document.getElementById("surname").value,
-          email: document.getElementById("email").value,
+          first_name: document.getElementById("first_name").value.trim(),
+          surname: document.getElementById("surname").value.trim(),
+          email: document.getElementById("email").value.trim(),
           password: document.getElementById("password").value,
         };
+
+        // validate before spending a round trip on it
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)) {
+          responseDiv.className = "error";
+          responseDiv.innerHTML =
+            '<i class="fa-regular fa-circle-exclamation" style="color:#ff5555;"></i> <span>please enter a valid email address</span>';
+          return;
+        }
+        if (userData.password.length < 8) {
+          responseDiv.className = "error";
+          responseDiv.innerHTML =
+            '<i class="fa-regular fa-circle-exclamation" style="color:#ff5555;"></i> <span>password must be at least 8 characters</span>';
+          document.getElementById("password").focus();
+          return;
+        }
 
         // Show loading state
         responseDiv.classList.remove("success", "error");
@@ -577,12 +599,12 @@
 
             // Success message
             responseDiv.style.color = "#c9a46c";
-            responseDiv.innerHTML = `<i class="fa-regular fa-circle-check" style="color:#c9a46c;"></i> <span>✅ ${result.message} (ID: ${result.userId})</span>`;
+            responseDiv.innerHTML = `<i class="fa-regular fa-circle-check" style="color:#c9a46c;"></i> <span>✅ ${OJ.escapeHtml(result.message)}</span>`;
             responseDiv.classList.add("success");
             form.reset();
           } else {
             responseDiv.style.color = "#ff5555";
-            responseDiv.innerHTML = `<i class="fa-regular fa-circle-exclamation" style="color:#ff5555;"></i> <span>❌ ${result.message}</span>`;
+            responseDiv.innerHTML = `<i class="fa-regular fa-circle-exclamation" style="color:#ff5555;"></i> <span>❌ ${OJ.escapeHtml(result.message)}</span>`;
             responseDiv.classList.add("error");
           }
         } catch (err) {
