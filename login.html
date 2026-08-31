@@ -450,14 +450,35 @@
           statusDiv.textContent = result.message;
 
           if (res.ok) {
-            sessionStorage.setItem("isLoggedIn", "yes");
-            sessionStorage.setItem("userId", result.userId);
-            sessionStorage.setItem("userName", result.userName);
+            // stores userId/userName, and a bearer token if the API sends one
+            OJ.Auth.setSession(result);
+
             statusDiv.classList.add("success");
-            statusDiv.innerHTML = `<i class="fa-regular fa-circle-check" style="color:#c9a46c;"></i> <span>${result.message}</span>`;
-            setTimeout(() => {
-              window.location.href = "index.html";
-            }, 2000);
+            statusDiv.innerHTML = `<i class="fa-regular fa-circle-check" style="color:#c9a46c;"></i> <span>${OJ.escapeHtml(
+              result.message
+            )}</span>`;
+
+            // fold any guest cart into the account before leaving this page
+            let merged = 0;
+            try {
+              merged = await OJ.GuestCart.merge();
+            } catch (e) {
+              console.error("Cart merge failed:", e);
+            }
+            if (merged) {
+              statusDiv.innerHTML += `<br><span style="font-size:0.85rem;">${merged} saved item${
+                merged === 1 ? "" : "s"
+              } moved to your cart</span>`;
+            }
+
+            const returnTo = sessionStorage.getItem("returnTo");
+            sessionStorage.removeItem("returnTo");
+            setTimeout(
+              () => {
+                window.location.href = returnTo || "index.html";
+              },
+              merged ? 1600 : 1200
+            );
           } else {
             statusDiv.classList.add("error");
             statusDiv.innerHTML = `<i class="fa-regular fa-circle-exclamation" style="color:#d86767;"></i> <span>${result.message}</span>`;

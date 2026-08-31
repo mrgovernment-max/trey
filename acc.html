@@ -213,14 +213,7 @@
       // ========================================
       async function loadProfile() {
         try {
-          const response = await fetch(
-            "https://backendroutes-lcpt.onrender.com/ojuser",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ userId }),
-            }
-          );
+          const response = await OJ.api("/ojuser", { method: "POST", body: { userId } });
           const user = await response.json();
 
           document.getElementById("profileFirstName").value =
@@ -254,27 +247,20 @@
           };
 
           try {
-            const response = await fetch(
-              "https://backendroutes-lcpt.onrender.com/ojuser/update",
-              {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedData),
-              }
-            );
+            const response = await OJ.api("/ojuser/update", { method: "PUT", body: updatedData });
 
             if (response.ok) {
-              alert("Profile updated successfully");
+              OJ.toast("Profile updated.", "success");
               const inputs = document.querySelectorAll("#profileForm input");
               inputs.forEach((input) => (input.disabled = true));
               document.getElementById("editProfileBtn").style.display = "block";
               document.getElementById("saveProfileBtn").style.display = "none";
             } else {
-              alert("Failed to update profile");
+              OJ.toast("Failed to update profile.", "error");
             }
           } catch (err) {
             console.error("Update profile error:", err);
-            alert("Error updating profile");
+            OJ.toast("Error updating profile.", "error");
           }
         });
 
@@ -287,14 +273,7 @@
           '<div class="empty-state">loading orders...</div>';
 
         try {
-          const response = await fetch(
-            "https://backendroutes-lcpt.onrender.com/ojorders",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ userId }),
-            }
-          );
+          const response = await OJ.api("/ojorders", { method: "POST", body: { userId } });
 
           const orders = await response.json();
 
@@ -320,32 +299,23 @@
 
           for (const order of orders) {
             // Fetch order items
-            const itemsResponse = await fetch(
-              "https://backendroutes-lcpt.onrender.com/ojorderitems",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ orderId: order.id }),
-              }
-            );
+            const itemsResponse = await OJ.api("/ojorderitems", { method: "POST", body: { orderId: order.id } });
             const items = await itemsResponse.json();
             const firstItem = items[0];
 
-            const statusClass = `status-${order.status || "pending"}`;
+            const statusClass = `status-${OJ.escapeHtml(order.status || "pending")}`;
 
             html += `
                         <tr>
                             <td>
                                 ${
                                   firstItem
-                                    ? `<img src="${firstItem.img_url}" class="order-img" alt="${firstItem.product_name}">`
+                                    ? `<img src="${OJ.safeUrl(firstItem.img_url, OJ.BRAND_FALLBACK)}" class="order-img" alt="${OJ.escapeHtml(firstItem.product_name)}">`
                                     : "-"
                                 }
                             </td>
-                            <td>${order.payment_reference || "-"}</td>
-                            <td>$${parseFloat(order.total_amount).toFixed(
-                              2
-                            )}</td>
+                            <td>${OJ.escapeHtml(order.payment_reference || "-")}</td>
+                            <td>${OJ.money(order.total_amount)}</td>
                             <td><span class="status-badge ${statusClass}">${
               order.status || "pending"
             }</span></td>
@@ -367,14 +337,7 @@
 
       window.viewOrder = async (orderId) => {
         try {
-          const itemsResponse = await fetch(
-            "https://backendroutes-lcpt.onrender.com/ojorderitems",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ orderId }),
-            }
-          );
+          const itemsResponse = await OJ.api("/ojorderitems", { method: "POST", body: { orderId } });
           const items = await itemsResponse.json();
 
           let itemsHtml = '<div class="order-items-list">';
@@ -388,12 +351,10 @@
             }">
                             <div><strong>${
                               item.product_name
-                            }</strong><br>Qty: ${item.quantity} | Size: ${
+                            }</strong><br>Qty: ${OJ.escapeHtml(item.quantity)} | Size: ${
               item.size || "N/A"
             }</div>
-                            <div>$${parseFloat(item.product_price).toFixed(
-                              2
-                            )}</div>
+                            <div>${OJ.money(item.product_price)}</div>
                         </div>
                     `;
           });
@@ -402,7 +363,7 @@
           showModal("Order Details", itemsHtml);
         } catch (err) {
           console.error("View order error:", err);
-          alert("Failed to load order details");
+          OJ.toast("Failed to load order details.", "error");
         }
       };
 
@@ -428,20 +389,13 @@
             '<div class="tracking-result">🔍 searching for order...</div>';
 
           try {
-            const response = await fetch(
-              "https://backendroutes-lcpt.onrender.com/ojtrack",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ reference, userId }),
-              }
-            );
+            const response = await OJ.api("/ojtrack", { method: "POST", body: { reference, userId } });
 
             const result = await response.json();
 
             if (result.order) {
               const order = result.order;
-              const statusClass = `status-${order.status || "pending"}`;
+              const statusClass = `status-${OJ.escapeHtml(order.status || "pending")}`;
               const statusText = order.status || "pending";
 
               // Format status display
@@ -476,7 +430,7 @@
                         <div style="display: flex; align-items: center; gap: 15px; padding: 15px; border-bottom: 1px solid #efefe9;">
                             ${
                               item.img_url
-                                ? `<img src="${item.img_url}" style="width: 60px; height: 70px; object-fit: cover;" alt="${item.product_name}">`
+                                ? `<img src="${OJ.safeUrl(item.img_url, OJ.BRAND_FALLBACK)}" style="width: 60px; height: 70px; object-fit: cover;" alt="${OJ.escapeHtml(item.product_name)}">`
                                 : '<div style="width: 60px; height: 70px; background: #f9f9f6; display: flex; align-items: center; justify-content: center;">📦</div>'
                             }
                             <div style="flex: 1;">
@@ -485,11 +439,9 @@
                                 }</strong><br>
                                 <span style="color: #6f6f69; font-size: 0.85rem;">Size: ${
                                   item.size || "N/A"
-                                } | Quantity: ${item.quantity}</span>
+                                } | Quantity: ${OJ.escapeHtml(item.quantity)}</span>
                             </div>
-                            <div style="font-weight: 500; color: #c9a46c;">$${parseFloat(
-                              item.product_price
-                            ).toFixed(2)}</div>
+                            <div style="font-weight: 500; color: #c9a46c;">${OJ.money(item.product_price)}</div>
                         </div>
                     `;
                 });
@@ -501,9 +453,7 @@
                 );
                 itemsHtml += `
                     <div style="display: flex; justify-content: flex-end; padding: 15px; background: #f9f9f6;">
-                        <div><strong>Total:</strong> <span style="color: #c9a46c;">$${subtotal.toFixed(
-                          2
-                        )}</span></div>
+                        <div><strong>Total:</strong> <span style="color: #c9a46c;">${OJ.money(subtotal)}</span></div>
                     </div>
                 `;
                 itemsHtml += "</div></div>";
@@ -516,10 +466,10 @@
               let fullAddress = "";
               if (order.delivery_address) {
                 fullAddress = order.delivery_address;
-                if (order.city) fullAddress += `, ${order.city}`;
-                if (order.region) fullAddress += `, ${order.region}`;
-                if (order.country) fullAddress += `, ${order.country}`;
-                if (order.postal_code) fullAddress += ` (${order.postal_code})`;
+                if (order.city) fullAddress += `, ${OJ.escapeHtml(order.city)}`;
+                if (order.region) fullAddress += `, ${OJ.escapeHtml(order.region)}`;
+                if (order.country) fullAddress += `, ${OJ.escapeHtml(order.country)}`;
+                if (order.postal_code) fullAddress += ` (${OJ.escapeHtml(order.postal_code)})`;
               }
 
               resultDiv.innerHTML = `
@@ -573,7 +523,7 @@
                             }</p>
                             ${
                               order.delivery_instructions
-                                ? `<p><strong>Instructions:</strong> ${order.delivery_instructions}</p>`
+                                ? `<p><strong>Instructions:</strong> ${OJ.escapeHtml(order.delivery_instructions)}</p>`
                                 : ""
                             }
                         </div>
@@ -604,14 +554,7 @@
           '<div class="empty-state">loading addresses...</div>';
 
         try {
-          const response = await fetch(
-            "https://backendroutes-lcpt.onrender.com/ojuser/address",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ userId }),
-            }
-          );
+          const response = await OJ.api("/ojuser/address", { method: "POST", body: { userId } });
 
           const addresses = await response.json();
 
@@ -625,15 +568,15 @@
           addresses.forEach((addr) => {
             html += `
                         <div class="address-card">
-                            <p><strong>${addr.full_name || "N/A"}</strong></p>
-                            <p>${addr.street_address || ""} ${
+                            <p><strong>${OJ.escapeHtml(addr.full_name || "N/A")}</strong></p>
+                            <p>${OJ.escapeHtml(addr.street_address || "")} ${
               addr.apartment || ""
             }</p>
-                            <p>${addr.city || ""}, ${addr.region || ""} ${
+                            <p>${OJ.escapeHtml(addr.city || "")}, ${OJ.escapeHtml(addr.region || "")} ${
               addr.postal_code || ""
             }</p>
-                            <p>${addr.country || "Ghana"}</p>
-                            <p>phone: ${addr.phone || "N/A"}</p>
+                            <p>${OJ.escapeHtml(addr.country || "Ghana")}</p>
+                            <p>phone: ${OJ.escapeHtml(addr.phone || "N/A")}</p>
                         </div>
                     `;
           });
@@ -660,36 +603,29 @@
             document.getElementById("confirmPassword").value;
 
           if (newPassword !== confirmPassword) {
-            alert("New passwords do not match");
+            OJ.toast("New passwords do not match.", "error");
             return;
           }
 
-          if (newPassword.length < 6) {
-            alert("Password must be at least 6 characters");
+          if (newPassword.length < 8) {
+            OJ.toast("Password must be at least 8 characters.", "error");
             return;
           }
 
           try {
-            const response = await fetch(
-              "https://backendroutes-lcpt.onrender.com/ojuser/password",
-              {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId, currentPassword, newPassword }),
-              }
-            );
+            const response = await OJ.api("/ojuser/password", { method: "PUT", body: { userId, currentPassword, newPassword } });
 
             const result = await response.json();
 
             if (response.ok) {
-              alert("Password updated successfully");
+              OJ.toast("Password updated.", "success");
               document.getElementById("passwordForm").reset();
             } else {
-              alert(result.message || "Failed to update password");
+              OJ.toast(result.message || "Failed to update password.", "error");
             }
           } catch (err) {
             console.error("Password change error:", err);
-            alert("Error changing password");
+            OJ.toast("Error changing password.", "error");
           }
         });
 
@@ -715,27 +651,20 @@
 
       async function deleteAccount(password) {
         try {
-          const response = await fetch(
-            "https://backendroutes-lcpt.onrender.com/ojuser/delete",
-            {
-              method: "DELETE",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ userId, password }),
-            }
-          );
+          const response = await OJ.api("/ojuser/delete", { method: "DELETE", body: { userId, password } });
 
           const result = await response.json();
 
           if (response.ok) {
-            alert("Account deleted successfully");
+            OJ.toast("Account deleted.", "success");
             sessionStorage.clear();
             window.location.href = "index.html";
           } else {
-            alert(result.message || "Failed to delete account");
+            OJ.toast(result.message || "Failed to delete account.", "error");
           }
         } catch (err) {
           console.error("Delete account error:", err);
-          alert("Error deleting account");
+          OJ.toast("Error deleting account.", "error");
         }
       }
 
