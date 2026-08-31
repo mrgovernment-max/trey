@@ -6299,3 +6299,222 @@ textarea.form-input {
     padding: 1.5rem;
   }
 }
+
+/* ==========================================================================
+   Mobile navigation
+   The navbar previously had no responsive rules at all — on a phone the
+   links wrapped and collided with the cart/account icons.
+   ========================================================================== */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.nav-toggle-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--color-ink-700);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem 4%;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* the logo takes the row it needs and truncates rather than pushing
+     the cart/account icons off the right edge */
+  .logo {
+    font-size: 1.15rem;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-toggle {
+    display: flex;
+    order: 4;
+  }
+
+  .nav-links {
+    display: none;
+    order: 5;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.5rem 0 0.25rem;
+    border-top: 1px solid #eaeae7;
+    margin-top: 0.75rem;
+  }
+
+  .nav-links.is-open {
+    display: flex;
+  }
+
+  .nav-links a {
+    padding: 0.9rem 0.25rem;
+    border-bottom: 1px solid #f0f0ec;
+  }
+
+  /* the underline effect is noise in a stacked menu */
+  .nav-links a::after {
+    display: none;
+  }
+
+  .cart-icon {
+    font-size: 1.05rem;
+    flex: 0 0 auto;
+  }
+
+  .cart-icon #cart-count {
+    padding: 1px 6px;
+    font-size: 0.7rem;
+  }
+
+  body.nav-open {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 380px) {
+  .logo {
+    font-size: 1rem;
+  }
+  .navbar {
+    gap: 0.35rem;
+  }
+}
+
+/* ==========================================================================
+   Catalogue controls (search / filter / sort)
+   ========================================================================== */
+.catalogue-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  padding: 0 5%;
+}
+
+.catalogue-search {
+  position: relative;
+  flex: 1 1 260px;
+  display: flex;
+  align-items: center;
+}
+
+.catalogue-search i {
+  position: absolute;
+  left: 0.9rem;
+  font-size: 0.85rem;
+  color: var(--color-gray-400);
+  pointer-events: none;
+}
+
+.catalogue-search input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.4rem;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--color-ink-800);
+  background: #fff;
+  border: 1px solid var(--color-gray-150);
+  border-radius: 999px;
+  transition: border-color 0.2s ease;
+}
+
+.catalogue-search input:hover {
+  border-color: var(--color-gray-200);
+}
+
+.catalogue-search input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.catalogue-filters {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.catalogue-filters select {
+  padding: 0.7rem 2rem 0.7rem 0.9rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--color-ink-800);
+  background-color: #fff;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%236f6f69' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 10px;
+  border: 1px solid var(--color-gray-150);
+  border-radius: 999px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.catalogue-filters select:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.catalogue-count {
+  font-size: 0.8rem;
+  color: var(--color-gray-400);
+  letter-spacing: 0.04em;
+  margin-left: auto;
+}
+
+@media (max-width: 600px) {
+  .catalogue-controls {
+    gap: 0.6rem;
+  }
+  .catalogue-search {
+    flex: 1 1 100%;
+  }
+  .catalogue-filters {
+    flex: 1 1 100%;
+  }
+  .catalogue-filters select {
+    flex: 1;
+  }
+  .catalogue-count {
+    margin-left: 0;
+  }
+}
+
+/* Returns page: the exchange card kept its 2rem desktop padding on phones,
+   pushing its list items ~24px past the viewport. */
+@media (max-width: 600px) {
+  .exchange-section {
+    padding: 1.25rem;
+  }
+  .exchange-features li {
+    word-break: break-word;
+  }
+}
