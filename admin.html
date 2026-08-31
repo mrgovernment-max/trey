@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Portal - OJ Studios</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Admin Portal — OJ || studios</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -414,14 +415,19 @@
       </div>
     </div>
 
+    <script src="app-core.js"></script>
     <script>
       const API_BASE = "https://backendroutes-lcpt.onrender.com";
 
-      // Check if already logged in
-      if (
-        sessionStorage.getItem("isAdmin") === "true" &&
-        sessionStorage.getItem("adminId")
-      ) {
+      function showLogin(message) {
+        document.getElementById("admin-dashboard").style.display = "none";
+        document.getElementById("admin-login").style.display = "flex";
+        if (message) {
+          document.getElementById("login-error").textContent = message;
+        }
+      }
+
+      function showDashboard() {
         document.getElementById("admin-login").style.display = "none";
         document.getElementById("admin-dashboard").style.display = "block";
         loadDashboard();
@@ -429,6 +435,44 @@
         loadProducts();
         loadCustomers();
       }
+
+      function adminLogout(message) {
+        sessionStorage.removeItem("isAdmin");
+        sessionStorage.removeItem("adminId");
+        sessionStorage.removeItem("adminName");
+        sessionStorage.removeItem("authToken");
+        showLogin(message);
+      }
+
+      // Re-validate with the server on every load. A client-side flag is not
+      // proof of anything — if the server will not answer an admin route,
+      // this page shows the login form and nothing else.
+      async function restoreAdminSession() {
+        if (
+          sessionStorage.getItem("isAdmin") !== "true" ||
+          !sessionStorage.getItem("adminId")
+        ) {
+          showLogin();
+          return;
+        }
+
+        try {
+          const res = await OJ.api("/admin/stats", {
+            method: "POST",
+            body: { userId: sessionStorage.getItem("adminId") },
+          });
+          if (!res.ok) throw new Error(`stats ${res.status}`);
+          showDashboard();
+        } catch (err) {
+          adminLogout(
+            err && err.unauthorized
+              ? "Your admin session expired. Please sign in again."
+              : ""
+          );
+        }
+      }
+
+      restoreAdminSession();
 
       // Admin Login
       document
@@ -446,10 +490,9 @@
           errorDiv.textContent = "Logging in...";
 
           try {
-            const res = await fetch(`${API_BASE}/admin/login`, {
+            const res = await OJ.api("/admin/login", {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, password }),
+              body: { email, password },
             });
 
             const data = await res.json();
@@ -458,15 +501,11 @@
               sessionStorage.setItem("isAdmin", "true");
               sessionStorage.setItem("adminId", data.userId);
               sessionStorage.setItem("adminName", data.userName);
+              // picks up data.token when the backend starts issuing one
+              OJ.Auth.setSession(data);
 
-              document.getElementById("admin-login").style.display = "none";
-              document.getElementById("admin-dashboard").style.display =
-                "block";
-
-              loadDashboard();
-              loadOrders();
-              loadProducts();
-              loadCustomers();
+              errorDiv.textContent = "";
+              showDashboard();
             } else {
               errorDiv.textContent = data.message || "Login failed";
             }
@@ -478,11 +517,7 @@
 
       // Logout
       document.getElementById("admin-logout").addEventListener("click", () => {
-        sessionStorage.removeItem("isAdmin");
-        sessionStorage.removeItem("adminId");
-        sessionStorage.removeItem("adminName");
-        document.getElementById("admin-dashboard").style.display = "none";
-        document.getElementById("admin-login").style.display = "flex";
+        adminLogout();
         document.getElementById("admin-email").value = "";
         document.getElementById("admin-password").value = "";
       });
@@ -514,14 +549,11 @@
       // Load Dashboard Stats
       async function loadDashboard() {
         try {
-          const res = await fetch(`${API_BASE}/admin/stats`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              userId: sessionStorage.getItem("adminId"),
-              isAdmin: true,
-            }),
-          });
+          const res = await OJ.api("/admin/stats", {
+              method: "POST",
+              body: { userId: sessionStorage.getItem("adminId"),
+              isAdmin: true },
+            });
           const stats = await res.json();
 
           document.getElementById("stats-container").innerHTML = `
@@ -534,9 +566,7 @@
                     <div class="stat-card"><h3>Total Products</h3><div class="stat-number">${
                       stats.totalProducts || 0
                     }</div></div>
-                    <div class="stat-card"><h3>Revenue</h3><div class="stat-number">${`${
-                      stats.totalRevenue || 0
-                    } GH₵`} </div></div>
+                    <div class="stat-card"><h3>Revenue</h3><div class="stat-number">${OJ.money(stats.totalRevenue || 0)}</div></div>
                     <div class="stat-card"><h3>Pending Orders</h3><div class="stat-number">${
                       stats.pendingOrders || 0
                     }</div></div>
@@ -555,14 +585,11 @@
         container.innerHTML = '<div class="loading">loading orders...</div>';
 
         try {
-          const res = await fetch(`${API_BASE}/admin/orders`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              userId: sessionStorage.getItem("adminId"),
-              isAdmin: true,
-            }),
-          });
+          const res = await OJ.api("/admin/orders", {
+              method: "POST",
+              body: { userId: sessionStorage.getItem("adminId"),
+              isAdmin: true },
+            });
           const orders = await res.json();
 
           if (!orders.length) {
@@ -588,18 +615,16 @@
             const statusClass = `status-${order.status || "pending"}`;
             html += `
                         <tr>
-                            <td>${order.payment_reference || "-"}</td>
-                            <td>${
+                            <td>${OJ.escapeHtml(order.payment_reference || "-")}</td>
+                            <td>${OJ.escapeHtml(
                               order.full_name ||
-                              `${order.first_name} ${order.surname}`
-                            }</td>
-                            <td>${order.email || "-"}</td>
-                            <td>$${parseFloat(order.total_amount).toFixed(
-                              2
+                                `${order.first_name || ""} ${order.surname || ""}`.trim()
                             )}</td>
-                            <td><span class="status-badge ${statusClass}">${
+                            <td>${OJ.escapeHtml(order.email || "-")}</td>
+                            <td>${OJ.money(order.total_amount)}</td>
+                            <td><span class="status-badge ${statusClass}">${OJ.escapeHtml(
               order.status || "pending"
-            }</span></td>
+            )}</span></td>
                             <td>${new Date(
                               order.created_at
                             ).toLocaleDateString()}</td>
@@ -648,29 +673,28 @@
               const newStatus = e.target.value;
 
               try {
-                const res = await fetch(
-                  `${API_BASE}/admin/order/${orderId}/status`,
+                const res = await OJ.api(
+                  `/admin/order/${orderId}/status`,
                   {
                     method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
+                    body: {
                       status: newStatus,
                       userId: sessionStorage.getItem("adminId"),
                       isAdmin: true,
-                    }),
+                    },
                   }
                 );
 
                 if (res.ok) {
-                  alert("Order status updated!");
+                  OJ.toast("Order status updated.", "success");
                   loadOrders();
                   loadDashboard();
                 } else {
-                  alert("Failed to update status");
+                  OJ.toast("Failed to update status.", "error");
                 }
               } catch (err) {
                 console.error(err);
-                alert("Error updating status");
+                OJ.toast("Error updating status.", "error");
               }
             });
           });
@@ -687,14 +711,11 @@
         container.innerHTML = '<div class="loading">loading products...</div>';
 
         try {
-          const res = await fetch(`${API_BASE}/admin/products`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              userId: sessionStorage.getItem("adminId"),
-              isAdmin: true,
-            }),
-          });
+          const res = await OJ.api("/admin/products", {
+              method: "POST",
+              body: { userId: sessionStorage.getItem("adminId"),
+              isAdmin: true },
+            });
           const products = await res.json();
 
           if (!products.length) {
@@ -712,14 +733,17 @@
           products.forEach((p) => {
             html += `
                         <tr>
-                            <td>${p.id}</td>
-                            <td><img src="${
-                              p.img_url
-                            }" style="width: 50px; height: 60px; object-fit: cover;"></td>
-                            <td>${p.name}</td>
-                            <td>${parseFloat(p.price).toFixed(2)} GH₵</td>
-                            <td>${p.color || "-"}</td>
-                            <td>${p.rating || "-"}</td>
+                            <td>${OJ.escapeHtml(p.id)}</td>
+                            <td><img src="${OJ.safeUrl(
+                              p.img_url,
+                              OJ.BRAND_FALLBACK
+                            )}" alt="${OJ.escapeHtml(
+              p.name
+            )}" width="50" height="60" loading="lazy" style="width: 50px; height: 60px; object-fit: cover;"></td>
+                            <td>${OJ.escapeHtml(p.name)}</td>
+                            <td>${OJ.money(p.price)}</td>
+                            <td>${OJ.escapeHtml(p.color || "-")}</td>
+                            <td>${OJ.escapeHtml(p.rating || "-")}</td>
                         </tr>
                     `;
           });
@@ -739,14 +763,11 @@
         container.innerHTML = '<div class="loading">loading customers...</div>';
 
         try {
-          const res = await fetch(`${API_BASE}/admin/customers`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              userId: sessionStorage.getItem("adminId"),
-              isAdmin: true,
-            }),
-          });
+          const res = await OJ.api("/admin/customers", {
+              method: "POST",
+              body: { userId: sessionStorage.getItem("adminId"),
+              isAdmin: true },
+            });
           const customers = await res.json();
 
           if (!customers.length) {
@@ -762,10 +783,10 @@
           customers.forEach((c) => {
             html += `
                         <tr>
-                            <td>${c.id}</td>
-                            <td>${c.first_name}</td>
-                            <td>${c.surname}</td>
-                            <td>${c.email}</td>
+                            <td>${OJ.escapeHtml(c.id)}</td>
+                            <td>${OJ.escapeHtml(c.first_name)}</td>
+                            <td>${OJ.escapeHtml(c.surname)}</td>
+                            <td>${OJ.escapeHtml(c.email)}</td>
                             <td>${new Date(
                               c.created_at
                             ).toLocaleDateString()}</td>
@@ -787,13 +808,10 @@
         .getElementById("export-orders")
         ?.addEventListener("click", async () => {
           try {
-            const res = await fetch(`${API_BASE}/admin/export/orders`, {
+            const res = await OJ.api("/admin/export/orders", {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                userId: sessionStorage.getItem("adminId"),
-                isAdmin: true,
-              }),
+              body: { userId: sessionStorage.getItem("adminId"),
+                isAdmin: true },
             });
 
             const blob = await res.blob();
@@ -805,7 +823,7 @@
             window.URL.revokeObjectURL(url);
           } catch (err) {
             console.error("Export error:", err);
-            alert("Failed to export orders");
+            OJ.toast("Failed to export orders.", "error");
           }
         });
     </script>

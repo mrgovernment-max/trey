@@ -90,13 +90,13 @@
       .map(
         (p) => `
               <div class="featured-item" data-product-id="${p.id}">
-                  <img src="${p.img_url}" alt="${p.name}" loading="lazy">
-                  <h3>${p.name}</h3>
-                  <span>${
+                  <img src="${OJ.safeUrl(p.img_url, OJ.BRAND_FALLBACK)}" alt="${OJ.escapeHtml(p.name)}" loading="lazy" width="600" height="750" decoding="async">
+                  <h3>${OJ.escapeHtml(p.name)}</h3>
+                  <span>${OJ.escapeHtml(
                     p.color
                       ? p.color.split(",").slice(0, 2).join(" · ")
                       : "signature"
-                  }</span>
+                  )}</span>
               </div>
           `
       )
@@ -191,39 +191,41 @@
 
     showProductDetailcontainer.innerHTML = `
         <div class="detail-gallery">
-            <img src="${images[0]}" class="main-img" id="detail-main-img">
+            <img src="${OJ.safeUrl(images[0], OJ.BRAND_FALLBACK)}" class="main-img" id="detail-main-img" alt="${OJ.escapeHtml(product.name)}">
             <div class="thumbnails" id="detail-thumbs">
                 ${images
                   .map(
                     (img, i) =>
-                      `<img src="${img}" class="thumb ${
+                      `<img src="${OJ.safeUrl(img, OJ.BRAND_FALLBACK)}" class="thumb ${
                         i === 0 ? "active-thumb" : ""
-                      }" data-img="${img}">`
+                      }" data-img="${OJ.safeUrl(img, OJ.BRAND_FALLBACK)}" alt="${OJ.escapeHtml(
+                        product.name
+                      )} view ${i + 1}">`
                   )
                   .join("")}
             </div>
         </div>
         <div class="detail-info" >
-            <h2>${product.name}</h2>
+            <h2>${OJ.escapeHtml(product.name)}</h2>
             <div id="detail-id" class="detail-id" style="${
               product.release === "Launching Soon" ? "display:none" : ""
-            }">${parseFloat(product.price).toFixed(2)} GH₵
+            }">${OJ.money(product.price)}
                 <span class="rating-stars">${"★".repeat(
                   Math.floor(product.rating || 0)
                 )}${product.rating % 1 >= 0.5 ? "½" : ""}</span>
             </div>
-            <div class="detail-description">${
+            <div class="detail-description">${OJ.escapeHtml(
               product.description || "timeless design"
-            }</div>
+            )}</div>
             <ul class="detail-meta">
-                <li><span class="meta-label">material</span><span class="meta-value">${material}</span></li>
-                <li><span class="meta-label">color</span><span class="meta-value">${color}</span></li>
-                <li><span class="meta-label">weight</span><span class="meta-value">${weight}</span></li>
-                <li><span class="meta-label">warranty</span><span class="meta-value">${warranty}</span></li>
-                <li><span class="meta-label">release</span><span class="meta-value">${releaseDate}</span></li>
+                <li><span class="meta-label">material</span><span class="meta-value">${OJ.escapeHtml(material)}</span></li>
+                <li><span class="meta-label">color</span><span class="meta-value">${OJ.escapeHtml(color)}</span></li>
+                <li><span class="meta-label">weight</span><span class="meta-value">${OJ.escapeHtml(weight)}</span></li>
+                <li><span class="meta-label">warranty</span><span class="meta-value">${OJ.escapeHtml(warranty)}</span></li>
+                <li><span class="meta-label">release</span><span class="meta-value">${OJ.escapeHtml(releaseDate)}</span></li>
                 <li><span class="meta-label">availability</span><span style="${
                   product.release === "Launching Soon" ? "color:orange" : ""
-                }" class="meta-value">${availability}</span></li>
+                }" class="meta-value">${OJ.escapeHtml(availability)}</span></li>
             </ul>
 
             <!-- === TREY size selector - minimal, professional === -->
@@ -507,21 +509,21 @@
       html += `
         <div class="cart-item" data-cart-id="${item.cartId}">
             <div class="cart-img">
-                <img src="${item.img_url}"  data-item-id="${
+                <img src="${OJ.safeUrl(item.img_url, OJ.BRAND_FALLBACK)}"  data-item-id="${
         item.product_id
-      }" alt="${item.name}">
+      }" alt="${OJ.escapeHtml(item.name)}" width="120" height="150" loading="lazy">
             </div>
             <div class="cart-name">
-                <h4>${item.name}</h4>
+                <h4>${OJ.escapeHtml(item.name)}</h4>
             </div>
             <div class="cart-price">
-                <span>$${parseFloat(item.price).toFixed(2)}</span>
+                <span>${OJ.money(item.price)}</span>
             </div>
             <div class="cart-quantity">
                 <span class="size-badge">${item.quantity}</span>
             </div>
             <div class="cart-size">
-                <span class="size-badge">${item.size || "M"}</span>
+                <span class="size-badge">${OJ.escapeHtml(item.size || "M")}</span>
             </div>
             <div class="cart-remove">
                 <i class="fa-regular fa-trash-can remove-item" data-cart-id="${
