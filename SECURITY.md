@@ -1,61 +1,74 @@
 # Security notes — OJ || studios
 
-This file records the security issues found in the frontend, what was fixed
-here, and what **must** be fixed in the backend (`backendroutes-lcpt.onrender.com`,
-a separate repository) before this store can be considered safe.
+This file records the security issues found across the storefront and its API
+(`backendroutes-lcpt.onrender.com`, a separate repository), what has been
+fixed, and what is still outstanding.
 
-The frontend has been prepared for every backend change listed below, so the
-server side can be done without touching this repo again.
-
----
-
-## 1. There is no authentication — only a claimed `userId` ⚠️ BACKEND REQUIRED
-
-**Status: NOT FIXED. This is the most serious issue.**
-
-Login stores a user id and every privileged request sends that id in the JSON
-body. A user id is not a secret. Any visitor can open devtools and send:
-
-```js
-fetch("https://backendroutes-lcpt.onrender.com/admin/orders", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ userId: 1, isAdmin: true }),
-});
-```
-
-If the server answers, your entire order and customer list is public. The same
-applies to every user route: passing someone else's `userId` to `/ojcartget`,
-`/ojorders`, or `/ojuser` returns their data (an IDOR).
-
-**The client cannot fix this.** It has no secret to prove who it is.
-
-### What the backend must do
-
-1. On successful `/loginoj` and `/admin/login`, issue a signed token
-   (JWT with a short expiry, or a `HttpOnly; Secure; SameSite=Strict` session
-   cookie) and return it as `token` in the JSON response.
-2. On **every** protected route, read the token, verify the signature, and
-   derive the user id **from the token** — never from the request body.
-3. Check the role server-side for `/admin/*`. Never trust an `isAdmin` field
-   sent by the client.
-4. Reply `401` for a missing/invalid token and `403` for a valid token without
-   permission.
-
-### What the frontend already does
-
-- `OJ.Auth.setSession()` in `app-core.js` stores `token`, `accessToken`, or
-  `jwt` from the login response automatically.
-- `OJ.api()` sends it as `Authorization: Bearer <token>` on every request.
-- A `401`/`403` clears the session and surfaces a "please sign in again"
-  message instead of silently showing a broken page.
-- `admin.html` no longer trusts `sessionStorage.isAdmin`. On load it calls
-  `/admin/stats` and only reveals the dashboard if the **server** answers.
-  It fails closed.
-
-Once the backend issues tokens, no frontend change is needed.
+Item 1 (authentication) is now done on both sides. Item 2 (order totals) is
+the remaining critical one.
 
 ---
+
+## 1. Token authentication ✅ FIXED
+
+**Status: DONE — backend and frontend.**
+
+Routes used to identify the caller by a `userId` in the request body. A user
+id is an identifier, not a secret, so anyone could send any id and read another
+customer's cart, orders or saved address (an IDOR). `verifyAdmin` did check
+`is_admin` in the database, but the id it checked was whatever the caller
+typed — and ids are sequential, so guessing an admin's id granted the whole
+admin portal.
+
+### What changed on the server
+
+`/loginoj` and `/admin/login` now return a signed JWT alongside the existing
+fields. `requireAuth` verifies the bearer token and populates `req.user` from
+the payload; every protected route takes the user id from there and ignores
+the body value. `requireAdmin` adds a database re-check of `is_admin` on every
+call, so revoking admin takes effect immediately rather than at token expiry.
+
+Protected: `/cartoj`, `/ojcartget`, `/ojcartrmv`, `/verify-payment`,
+`/ojuser`, `/ojuser/update`, `/ojuser/address`, `/ojuser/password`,
+`/ojuser/delete`, `/ojorders`, `/ojorderitems`, `/ojtrack`, and all
+`/admin/*` routes.
+
+Still public, by design: `/ojmerch` (the catalogue), `/register`, `/loginoj`,
+`/admin/login`, `/ojsub` (newsletter).
+
+Two routes needed more than authentication, because they take an identifier
+belonging to someone else:
+
+- `/ojorderitems` took an `orderId` and returned its contents to anyone.
+  It now confirms the order belongs to the caller.
+- `/ojtrack` had an ownership check that only ran `if (userId)` — omitting
+  the field skipped it entirely. It now always applies.
+
+### Configuration
+
+`JWT_SECRET` must be set in the environment. If it is missing the
+authenticated OJ routes fail closed with 503 and log an error; the server does
+not exit, because it also hosts unrelated projects.
+
+Optional: `JWT_EXPIRES_IN` (default `7d`).
+
+### Verified
+
+The middleware was extracted and exercised against 13 cases, all passing:
+requests with no token, malformed tokens, tokens signed with the wrong secret,
+expired tokens, and `alg:none` forgeries are all rejected; a customer token is
+refused on admin routes; a payload with a forged `role: "admin"` is still
+refused because the database is re-checked; a token for a deleted user is
+refused; and the public catalogue is unaffected.
+
+### Frontend
+
+No changes were needed — `OJ.Auth.setSession()` already picked up the `token`
+field and `OJ.api()` already sent it as `Authorization: Bearer`.
+
+Note that this invalidates existing sessions: anyone signed in before the
+deploy gets a 401 on their next action, which the client handles by clearing
+the session and asking them to sign in again.
 
 ## 2. Order totals are computed in the browser ⚠️ BACKEND REQUIRED
 
@@ -143,11 +156,11 @@ Two caveats worth acting on:
 
 ## Priority order
 
-| # | Issue | Owner | Severity |
-|---|-------|-------|----------|
-| 1 | Token auth on all routes | backend | **Critical** |
-| 2 | Server-side total verification | backend | **Critical** |
-| 5 | Password reset / email verification | backend | High |
-| 4 | Server-side password rules | backend | Medium |
-| 6 | EmailJS domain lock | dashboard | Low |
-| 3 | Admin XSS | frontend | ✅ done |
+| # | Issue | Owner | Severity | Status |
+|---|-------|-------|----------|--------|
+| 2 | Server-side total verification | backend | **Critical** | open |
+| 5 | Password reset / email verification | backend | High | open |
+| 4 | Server-side password rules | backend | Medium | open |
+| 6 | EmailJS domain lock | dashboard | Low | open |
+| 1 | Token auth on all routes | backend | Critical | ✅ done |
+| 3 | Admin XSS | frontend | High | ✅ done |
