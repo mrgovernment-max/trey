@@ -1,0 +1,10 @@
+# OJ || studios
+
+User-agent: *
+Allow: /
+
+# Not useful in search results
+Disallow: /admin.html
+Disallow: /acc.html
+
+Sitemap: https://blacksheep-mu.vercel.app/sitemap.xml
