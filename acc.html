@@ -9,12 +9,16 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    <link rel="stylesheet" href="theme.css" />
     <link rel="stylesheet" href="acc.css" />
   </head>
   <body>
     <nav class="navbar">
       <a href="index.html" class="logo">OJ || studios</a>
-      <button class="logout-btn" id="logoutBtn">logout</button>
+      <button class="logout-btn" id="logoutBtn">
+        <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+        <span>logout</span>
+      </button>
     </nav>
 
     <div class="account-container">
@@ -26,23 +30,23 @@
       <div class="account-grid">
         <!-- Sidebar -->
         <aside class="account-sidebar">
-          <div class="sidebar-nav">
+          <nav class="sidebar-nav" aria-label="account sections">
             <button class="sidebar-item active" data-tab="profile">
-              <i class="fa-regular fa-user"></i> profile
+              <i class="fa-regular fa-user" aria-hidden="true"></i> profile
             </button>
             <button class="sidebar-item" data-tab="orders">
-              <i class="fa-solid fa-gift"></i> orders
+              <i class="fa-solid fa-gift" aria-hidden="true"></i> orders
             </button>
             <button class="sidebar-item" data-tab="tracking">
-              <i class="fa-solid fa-truck"></i> track order
+              <i class="fa-solid fa-truck" aria-hidden="true"></i> track order
             </button>
             <button class="sidebar-item" data-tab="addresses">
-              <i class="fa-solid fa-location-dot"></i> addresses
+              <i class="fa-solid fa-location-dot" aria-hidden="true"></i> addresses
             </button>
             <button class="sidebar-item" data-tab="security">
-              <i class="fa-solid fa-lock"></i> security
+              <i class="fa-solid fa-lock" aria-hidden="true"></i> security
             </button>
-          </div>
+          </nav>
         </aside>
 
         <!-- Main Content -->
@@ -51,36 +55,42 @@
           <div id="profile-tab" class="tab-content">
             <h2 class="section-title">profile information</h2>
             <form class="profile-form" id="profileForm">
-              <div class="form-group">
-                <label>first name</label>
-                <input type="text" id="profileFirstName" disabled />
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="profileFirstName">first name</label>
+                  <input type="text" id="profileFirstName" disabled />
+                </div>
+                <div class="form-group">
+                  <label for="profileSurname">surname</label>
+                  <input type="text" id="profileSurname" disabled />
+                </div>
               </div>
               <div class="form-group">
-                <label>surname</label>
-                <input type="text" id="profileSurname" disabled />
-              </div>
-              <div class="form-group">
-                <label>email</label>
+                <label for="profileEmail">email</label>
                 <input type="email" id="profileEmail" disabled />
               </div>
-              <button type="button" class="btn-primary" id="editProfileBtn">
-                edit profile
-              </button>
-              <button
-                type="submit"
-                class="btn-primary"
-                id="saveProfileBtn"
-                style="display: none"
-              >
-                save changes
-              </button>
+              <div class="form-actions">
+                <button type="button" class="btn-primary" id="editProfileBtn">
+                  edit profile
+                </button>
+                <button
+                  type="submit"
+                  class="btn-primary"
+                  id="saveProfileBtn"
+                  style="display: none"
+                >
+                  save changes
+                </button>
+              </div>
             </form>
           </div>
 
           <!-- Orders Tab -->
           <div id="orders-tab" class="tab-content" style="display: none">
             <h2 class="section-title">order history</h2>
-            <div id="ordersContainer"></div>
+            <div class="orders-table-wrap">
+              <div id="ordersContainer" aria-live="polite"></div>
+            </div>
           </div>
 
           <!-- Tracking Tab -->
@@ -89,6 +99,9 @@
             <div class="tracking-section">
               <p>enter your order reference to check status</p>
               <div class="tracking-input-group">
+                <label for="trackingReference" class="visually-hidden"
+                  >order reference</label
+                >
                 <input
                   type="text"
                   id="trackingReference"
@@ -99,14 +112,14 @@
                   track order
                 </button>
               </div>
-              <div id="trackingResult"></div>
+              <div id="trackingResult" aria-live="polite"></div>
             </div>
           </div>
 
           <!-- Addresses Tab -->
           <div id="addresses-tab" class="tab-content" style="display: none">
             <h2 class="section-title">saved addresses</h2>
-            <div id="addressesContainer"></div>
+            <div id="addressesContainer" aria-live="polite"></div>
           </div>
 
           <!-- Security Tab -->
@@ -114,22 +127,30 @@
             <h2 class="section-title">change password</h2>
             <form class="profile-form" id="passwordForm">
               <div class="form-group">
-                <label>current password</label>
+                <label for="currentPassword">current password</label>
                 <input type="password" id="currentPassword" required />
               </div>
               <div class="form-group">
-                <label>new password</label>
+                <label for="newPassword">new password</label>
                 <input type="password" id="newPassword" required />
               </div>
               <div class="form-group">
-                <label>confirm new password</label>
+                <label for="confirmPassword">confirm new password</label>
                 <input type="password" id="confirmPassword" required />
               </div>
-              <button type="submit" class="btn-primary">update password</button>
+              <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                  update password
+                </button>
+              </div>
             </form>
 
             <div class="danger-zone">
               <h4>danger zone</h4>
+              <p class="danger-zone-copy">
+                this permanently deletes your account and all associated
+                data. this cannot be undone.
+              </p>
               <button class="btn-danger" id="deleteAccountBtn">
                 delete my account
               </button>
@@ -309,7 +330,7 @@
             const items = await itemsResponse.json();
             const firstItem = items[0];
 
-            const statusClass = `status-${status || "pending"}`;
+            const statusClass = `status-${order.status || "pending"}`;
 
             html += `
                         <tr>
