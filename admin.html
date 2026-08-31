@@ -490,27 +490,35 @@
           errorDiv.textContent = "Logging in...";
 
           try {
-            const res = await OJ.api("/admin/login", {
+            // Deliberately a plain fetch, not OJ.api: that helper treats
+            // 401/403 as "your session expired" and throws, which would turn
+            // the server's real "Invalid credentials" / "Not authorized as
+            // admin" reply into a misleading "Connection error". A login
+            // request has no session to expire.
+            const res = await fetch(`${API_BASE}/admin/login`, {
               method: "POST",
-              body: { email, password },
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
             });
 
-            const data = await res.json();
+            const data = await res.json().catch(() => ({}));
 
             if (res.ok && data.success) {
               sessionStorage.setItem("isAdmin", "true");
               sessionStorage.setItem("adminId", data.userId);
               sessionStorage.setItem("adminName", data.userName);
-              // picks up data.token when the backend starts issuing one
+              // stores the bearer token OJ.api sends on every admin request
               OJ.Auth.setSession(data);
 
               errorDiv.textContent = "";
               showDashboard();
             } else {
-              errorDiv.textContent = data.message || "Login failed";
+              errorDiv.textContent =
+                data.message || `Login failed (${res.status})`;
             }
           } catch (err) {
-            errorDiv.textContent = "Connection error";
+            // only reached if the request never completed
+            errorDiv.textContent = "Could not reach the server";
             console.error(err);
           }
         });

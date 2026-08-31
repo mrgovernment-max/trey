@@ -135,6 +135,10 @@
    *  - still sends userId in the body so the current backend keeps working
    *  - treats 401/403 as "session is gone": clears it and reports failure
    *
+   * Do NOT use this for login routes (/loginoj, /admin/login). There a 401
+   * means "wrong credentials", not "session expired" — routing it through
+   * here throws and hides the server's actual message. Use plain fetch.
+   *
    * IMPORTANT: the userId in the body is NOT authentication. Until the
    * backend validates the bearer token, any client can claim any userId.
    */
