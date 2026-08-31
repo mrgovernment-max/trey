@@ -544,11 +544,11 @@
       const shippingElem = document.getElementById("shipping-amount");
       const totalElem = document.getElementById("total-amount");
 
-      if (subtotalElem) subtotalElem.textContent = `GH₵ ${subtotal.toFixed(2)}`;
+      if (subtotalElem) subtotalElem.textContent = OJ.money(subtotal);
       if (shippingElem)
-        shippingElem.textContent = `GH₵ ${shippingCost.toFixed(2)}`;
+        shippingElem.textContent = OJ.money(shippingCost);
       if (totalElem)
-        totalElem.textContent = `GH₵ ${(subtotal + shippingCost).toFixed(2)}`;
+        totalElem.textContent = OJ.money(subtotal + shippingCost);
 
       //  store the total in GH₵ for Paystack
       total = subtotal + shippingCost;
@@ -608,14 +608,14 @@
     <!-- Subtotal -->
     <div class="summary-row">
         <span>subtotal</span>
-        <span id="subtotal-amount">$0.00</span>
+        <span id="subtotal-amount">GH₵ 0.00</span>
     </div>
     
     <!-- Shipping Section -->
     <div class="shipping-section">
         <div class="summary-row shipping-header">
             <span>shipping</span>
-            <span id="shipping-amount">$0.00</span>
+            <span id="shipping-amount">GH₵ 0.00</span>
         </div>
         
         <div class="shipping-options">
@@ -663,11 +663,11 @@
     <!-- Total -->
     <div class="summary-row total-row">
         <span>total</span>
-        <span id="total-amount" class="total-price">$0.00</span>
+        <span id="total-amount" class="total-price">GH₵ 0.00</span>
     </div>
     
     <!-- Currency Note -->
-    <p class="currency-note">* All prices in Ghana Cedis (GH₵) / USD conversion at checkout</p>
+    <p class="currency-note">* All prices and charges are in Ghana Cedis (GH₵)</p>
     
     <button class="checkout-btn" id="paystack-checkout-btn">proceed to payment</button>
     <p class="secure-note"><i class="fa-solid fa-shield"></i> secure payment via Paystack</p>
@@ -802,7 +802,7 @@
       {
         display_name: "Total Amount",
         variable_name: "total_amount",
-        value: `GHS ${paymentData.total.toFixed(2)}`,
+        value: OJ.money(paymentData.total),
       },
       {
         display_name: "━━━━━━━━━━━━━━━━━━━━━",
@@ -818,7 +818,7 @@
         variable_name: `product_${idx + 1}`,
         value: `${item.name} | Size: ${item.size || "N/A"} | Qty: ${
           item.quantity
-        } | Price: $${parseFloat(item.price).toFixed(2)}`,
+        } | Price: ${OJ.money(item.price)}`,
       });
     });
 
